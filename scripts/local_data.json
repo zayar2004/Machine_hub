@@ -1,0 +1,2122 @@
+{
+  "shops": [
+    {
+      "id": 1,
+      "shop_code": "A3",
+      "shop_name": "Shop A3",
+      "status": "ACTIVE"
+    },
+    {
+      "id": 2,
+      "shop_code": "A4",
+      "shop_name": "Shop A4",
+      "status": "ACTIVE"
+    },
+    {
+      "id": 3,
+      "shop_code": "A1",
+      "shop_name": "Alibaba 1",
+      "status": "ACTIVE"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "name": "System Admin",
+      "password_hash": "scrypt:32768:8:1$R1y2ogYfXFAdlenE$4b672e95081b7152aff7518e594fef7d9b5d914c25fbbdff812f361a0d9ca9950eb57dae1a844cd1092e5e65f181165659522c560f1f37a43ef6709a25b395b3",
+      "role": "ADMIN",
+      "status": "ACTIVE",
+      "shop_id": null
+    },
+    {
+      "id": 2,
+      "username": "a3user",
+      "name": "A3 Staff",
+      "password_hash": "scrypt:32768:8:1$dvqIVWwoz6Epb5hU$b98d89a914becd1889d6cdf8ab13e16126f6a4a49d2ab708b0a66ebe985323ba11b451f21176be73147373c5b11eb817dc1850af02d780ce51c467870f92a46f",
+      "role": "USER",
+      "status": "ACTIVE",
+      "shop_id": 1
+    },
+    {
+      "id": 3,
+      "username": "zayar",
+      "name": "Zayar",
+      "password_hash": "scrypt:32768:8:1$SgDrUdaIWPGk0h9e$339c47274cb472cebf139ed0b2df7089b1b1dbb8ce8f92fb78ae42659591e10a1c5805606fd24c1c64d32e190790ad44e2189d0f279976026d3c6f11bcd9a357",
+      "role": "USER",
+      "status": "ACTIVE",
+      "shop_id": 1
+    },
+    {
+      "id": 4,
+      "username": "kee",
+      "name": "Kee",
+      "password_hash": "scrypt:32768:8:1$ZaJVgkWzGkRoKvrX$62fdad3a4eeb0013635d7c4b55541e4ef672c08eab3de2b5b9b0675637c80ec19add026370a78ba8deb154cfd5b393f5aaf452291fa66103c56a1d3f1c9810b1",
+      "role": "USER",
+      "status": "ACTIVE",
+      "shop_id": 2
+    }
+  ],
+  "machines": [
+    {
+      "id": 1,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_RAMPAGE_001",
+      "machine_name": "R_ACTIVITY_RAMPAGE_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 2,
+      "shop_id": 1,
+      "machine_code": "M_SLOT_ALADDIN_008",
+      "machine_name": "M_SLOT_ALADDIN_008",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 3,
+      "shop_id": 1,
+      "machine_code": "M_SLOT_ALADDIN_009",
+      "machine_name": "M_SLOT_ALADDIN_009",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 4,
+      "shop_id": 1,
+      "machine_code": "M_SLOT_ALADDIN_010",
+      "machine_name": "M_SLOT_ALADDIN_010",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 5,
+      "shop_id": 1,
+      "machine_code": "M_SLOT_ALADDIN_011",
+      "machine_name": "M_SLOT_ALADDIN_011",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 6,
+      "shop_id": 1,
+      "machine_code": "M_BIG_GOLD FISH (8 PERSON)_017",
+      "machine_name": "M_BIG_GOLD FISH (8 PERSON)_017",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 7,
+      "shop_id": 1,
+      "machine_code": "R_MEDAL_AVENGERS_006",
+      "machine_name": "R_MEDAL_AVENGERS_006",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 8,
+      "shop_id": 1,
+      "machine_code": "A_KID GAMES_BABY AIR_001",
+      "machine_name": "A_KID GAMES_BABY AIR_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 9,
+      "shop_id": 1,
+      "machine_code": "R_QUICK_BLACK HOLE_001",
+      "machine_name": "R_QUICK_BLACK HOLE_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 10,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_CROSSY ROAD_001",
+      "machine_name": "R_ACTIVITY_CROSSY ROAD_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 11,
+      "shop_id": 1,
+      "machine_code": "A_KIDDIE RIDES_DEEP EXPLORER_001",
+      "machine_name": "A_KIDDIE RIDES_DEEP EXPLORER_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 12,
+      "shop_id": 1,
+      "machine_code": "O_SHOW _DISPLAY STAND_005",
+      "machine_name": "O_SHOW _DISPLAY STAND_005",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 13,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_DOWN THE CLOWN _001",
+      "machine_name": "R_ACTIVITY_DOWN THE CLOWN _001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 14,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_DOWN THE CLOWN _002",
+      "machine_name": "R_ACTIVITY_DOWN THE CLOWN _002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 15,
+      "shop_id": 1,
+      "machine_code": "R_FUN_DRUMMER KID_001",
+      "machine_name": "R_FUN_DRUMMER KID_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 16,
+      "shop_id": 1,
+      "machine_code": "R_FUN_DUO DRIVE_001",
+      "machine_name": "R_FUN_DUO DRIVE_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 17,
+      "shop_id": 1,
+      "machine_code": "A_FUN_EXTREME AIR FX HOCKEY_002",
+      "machine_name": "A_FUN_EXTREME AIR FX HOCKEY_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 18,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_FLYING TICKETS_001",
+      "machine_name": "R_ACTIVITY_FLYING TICKETS_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 19,
+      "shop_id": 1,
+      "machine_code": "R_FUN_FUNNY EGGS_002",
+      "machine_name": "R_FUN_FUNNY EGGS_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 20,
+      "shop_id": 1,
+      "machine_code": "A_KIDDIE RIDES_GALAXY SPACE FLIGHT_001",
+      "machine_name": "A_KIDDIE RIDES_GALAXY SPACE FLIGHT_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 21,
+      "shop_id": 1,
+      "machine_code": "M_BIG_GOLD FISH (8 PERSON)_015",
+      "machine_name": "M_BIG_GOLD FISH (8 PERSON)_015",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 22,
+      "shop_id": 1,
+      "machine_code": "M_BIG_GOLD FISH(8P-2022)_022",
+      "machine_name": "M_BIG_GOLD FISH(8P-2022)_022",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 23,
+      "shop_id": 1,
+      "machine_code": "M_BIG_GOLD FISH(8P-2022)_023",
+      "machine_name": "M_BIG_GOLD FISH(8P-2022)_023",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 24,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_GOLD FISHIN_001",
+      "machine_name": "R_ACTIVITY_GOLD FISHIN_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 25,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_GOLD FISHIN_002",
+      "machine_name": "R_ACTIVITY_GOLD FISHIN_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 26,
+      "shop_id": 1,
+      "machine_code": "A_SHOOTING_HOUSE OF THE DEAD_001",
+      "machine_name": "A_SHOOTING_HOUSE OF THE DEAD_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 27,
+      "shop_id": 1,
+      "machine_code": "R_QUICK_HYPERPITCH_002",
+      "machine_name": "R_QUICK_HYPERPITCH_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 28,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_ICE BALL_001",
+      "machine_name": "R_ACTIVITY_ICE BALL_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 29,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_ICE BALL_002",
+      "machine_name": "R_ACTIVITY_ICE BALL_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 30,
+      "shop_id": 1,
+      "machine_code": "A_RACING_INITIAL D THE ARCADE_001",
+      "machine_name": "A_RACING_INITIAL D THE ARCADE_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 31,
+      "shop_id": 1,
+      "machine_code": "A_RACING_INITIAL D THE ARCADE_002",
+      "machine_name": "A_RACING_INITIAL D THE ARCADE_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 32,
+      "shop_id": 1,
+      "machine_code": "A_RACING_INITIAL D THE ARCADE_003",
+      "machine_name": "A_RACING_INITIAL D THE ARCADE_003",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 33,
+      "shop_id": 1,
+      "machine_code": "A_RACING_INITIAL D THE ARCADE_004",
+      "machine_name": "A_RACING_INITIAL D THE ARCADE_004",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 34,
+      "shop_id": 1,
+      "machine_code": "A_CARD GAME_INJUSTICE_001",
+      "machine_name": "A_CARD GAME_INJUSTICE_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 35,
+      "shop_id": 1,
+      "machine_code": "M_BIG_INSECT KILLER_002",
+      "machine_name": "M_BIG_INSECT KILLER_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 36,
+      "shop_id": 1,
+      "machine_code": "M_BIG_INVINCIBLE(GOLD FISH 8P-2022)_019",
+      "machine_name": "M_BIG_INVINCIBLE(GOLD FISH 8P-2022)_019",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 37,
+      "shop_id": 1,
+      "machine_code": "M_BIG_INVINCIBLE(GOLD FISH 8P-2022)_020",
+      "machine_name": "M_BIG_INVINCIBLE(GOLD FISH 8P-2022)_020",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 38,
+      "shop_id": 1,
+      "machine_code": "A_SHOOTING_JURASSIC PARK_001",
+      "machine_name": "A_SHOOTING_JURASSIC PARK_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 39,
+      "shop_id": 1,
+      "machine_code": "R_QUICK_LITTLE TICKET MONSTERS_001",
+      "machine_name": "R_QUICK_LITTLE TICKET MONSTERS_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 40,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_MAGIC ARROW_001",
+      "machine_name": "P_OTHER_MAGIC ARROW_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 41,
+      "shop_id": 1,
+      "machine_code": "A_MUSIC_MAI MAI DX UNIVERSE_013",
+      "machine_name": "A_MUSIC_MAI MAI DX UNIVERSE_013",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 42,
+      "shop_id": 1,
+      "machine_code": "A_MUSIC_MAI MAI DX UNIVERSE_014",
+      "machine_name": "A_MUSIC_MAI MAI DX UNIVERSE_014",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 43,
+      "shop_id": 1,
+      "machine_code": "A_CARD GAME_MINECRAFT DUNGEONS_001",
+      "machine_name": "A_CARD GAME_MINECRAFT DUNGEONS_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 44,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_MINI WINDOW_003",
+      "machine_name": "P_CLAW_MINI WINDOW_003",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 45,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_MINI WINDOW_004",
+      "machine_name": "P_CLAW_MINI WINDOW_004",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 46,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_MINI WINDOW_005",
+      "machine_name": "P_CLAW_MINI WINDOW_005",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 47,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_MINI WINDOW_006",
+      "machine_name": "P_CLAW_MINI WINDOW_006",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 48,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_MINI WINDOW_007",
+      "machine_name": "P_CLAW_MINI WINDOW_007",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 49,
+      "shop_id": 1,
+      "machine_code": "R_QUICK_MONOPOLY _001",
+      "machine_name": "R_QUICK_MONOPOLY _001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 50,
+      "shop_id": 1,
+      "machine_code": "R_FUN_NBA HOOP TROOP_001",
+      "machine_name": "R_FUN_NBA HOOP TROOP_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 51,
+      "shop_id": 1,
+      "machine_code": "A_VR_OVERTAKE VR_001",
+      "machine_name": "A_VR_OVERTAKE VR_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 52,
+      "shop_id": 1,
+      "machine_code": "R_MEDAL_PEARL FISHERY_002",
+      "machine_name": "R_MEDAL_PEARL FISHERY_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 53,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_PINK PANTHER_001",
+      "machine_name": "R_ACTIVITY_PINK PANTHER_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 54,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_PRIZE BOXER II_002",
+      "machine_name": "P_OTHER_PRIZE BOXER II_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 55,
+      "shop_id": 1,
+      "machine_code": "A_DANCE_PUMP IT UP_002",
+      "machine_name": "A_DANCE_PUMP IT UP_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 56,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_RING TOSS_001",
+      "machine_name": "R_ACTIVITY_RING TOSS_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 57,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_RING TOSS_002",
+      "machine_name": "R_ACTIVITY_RING TOSS_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 58,
+      "shop_id": 1,
+      "machine_code": "A_KIDDIE RIDES_ROYAL CAROUSEL_002",
+      "machine_name": "A_KIDDIE RIDES_ROYAL CAROUSEL_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 59,
+      "shop_id": 1,
+      "machine_code": "R_MEDAL_SKY TOWER_005",
+      "machine_name": "R_MEDAL_SKY TOWER_005",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 60,
+      "shop_id": 1,
+      "machine_code": "R_MEDAL_SOLAR SYSTEM 2PL_002",
+      "machine_name": "R_MEDAL_SOLAR SYSTEM 2PL_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 61,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_SUBWAY SURFERS_001",
+      "machine_name": "R_ACTIVITY_SUBWAY SURFERS_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 62,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_SWEET LAND 5_002",
+      "machine_name": "P_OTHER_SWEET LAND 5_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 63,
+      "shop_id": 1,
+      "machine_code": "A_MUSIC_TAIKO NO TATSUJIN_002",
+      "machine_name": "A_MUSIC_TAIKO NO TATSUJIN_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 64,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_TEMPLE RUN 2_001",
+      "machine_name": "R_ACTIVITY_TEMPLE RUN 2_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 65,
+      "shop_id": 1,
+      "machine_code": "M_SMALL_THE ANCIENT BINGO WILD HUNGRY HEART_002",
+      "machine_name": "M_SMALL_THE ANCIENT BINGO WILD HUNGRY HEART_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 66,
+      "shop_id": 1,
+      "machine_code": "R_QUICK_TICKET COASTER_001",
+      "machine_name": "R_QUICK_TICKET COASTER_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 67,
+      "shop_id": 1,
+      "machine_code": "O_TICKET EATER_TICKET EATER (THREE DIMENSION)_001",
+      "machine_name": "O_TICKET EATER_TICKET EATER (THREE DIMENSION)_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 68,
+      "shop_id": 1,
+      "machine_code": "O_TICKET EATER_TICKET EATER (THREE DIMENSION)_005",
+      "machine_name": "O_TICKET EATER_TICKET EATER (THREE DIMENSION)_005",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 69,
+      "shop_id": 1,
+      "machine_code": "A_KIDDIE RIDES_TOM AND JERRY CHOPPER_002",
+      "machine_name": "A_KIDDIE RIDES_TOM AND JERRY CHOPPER_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 70,
+      "shop_id": 1,
+      "machine_code": "O_TOP UP MACHINE_TOP UP_004",
+      "machine_name": "O_TOP UP MACHINE_TOP UP_004",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 71,
+      "shop_id": 1,
+      "machine_code": "O_TOP UP MACHINE_TOP UP_005",
+      "machine_name": "O_TOP UP MACHINE_TOP UP_005",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 72,
+      "shop_id": 1,
+      "machine_code": "O_TOP UP MACHINE_TOP UP_022",
+      "machine_name": "O_TOP UP MACHINE_TOP UP_022",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 73,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_TRIPLE TURN_001",
+      "machine_name": "R_ACTIVITY_TRIPLE TURN_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 74,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_TRYPOD_009",
+      "machine_name": "P_OTHER_TRYPOD_009",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 75,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_TRYPOD_020",
+      "machine_name": "P_OTHER_TRYPOD_020",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 76,
+      "shop_id": 1,
+      "machine_code": "O_VENDING MACHINE_VENDING MACHINE_003",
+      "machine_name": "O_VENDING MACHINE_VENDING MACHINE_003",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 77,
+      "shop_id": 1,
+      "machine_code": "R_QUICK_WHACK N WIN_002",
+      "machine_name": "R_QUICK_WHACK N WIN_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 78,
+      "shop_id": 1,
+      "machine_code": "R_QUICK_WHEEL OF FORTUNE _001",
+      "machine_name": "R_QUICK_WHEEL OF FORTUNE _001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 79,
+      "shop_id": 1,
+      "machine_code": "R_MEDAL_DRAGON ORB_005",
+      "machine_name": "R_MEDAL_DRAGON ORB_005",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 80,
+      "shop_id": 1,
+      "machine_code": "R_MEDAL_SHOCK WAVE_001",
+      "machine_name": "R_MEDAL_SHOCK WAVE_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 81,
+      "shop_id": 1,
+      "machine_code": "R_MEDAL_DREAM CASTLE_005",
+      "machine_name": "R_MEDAL_DREAM CASTLE_005",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 82,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_TAKARA_001",
+      "machine_name": "P_CLAW_TAKARA_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 83,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_EPIC MINI_052",
+      "machine_name": "P_CLAW_EPIC MINI_052",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 84,
+      "shop_id": 1,
+      "machine_code": "R_MEDAL_DEMON TOWER_001",
+      "machine_name": "R_MEDAL_DEMON TOWER_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 85,
+      "shop_id": 1,
+      "machine_code": "R_MEDAL KID_SCOOPING FUN_002",
+      "machine_name": "R_MEDAL KID_SCOOPING FUN_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 86,
+      "shop_id": 1,
+      "machine_code": "R_FUN_NBA HOOP MARTIX _019",
+      "machine_name": "R_FUN_NBA HOOP MARTIX _019",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 87,
+      "shop_id": 1,
+      "machine_code": "R_FUN_NBA HOOP MARTIX _020",
+      "machine_name": "R_FUN_NBA HOOP MARTIX _020",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 88,
+      "shop_id": 1,
+      "machine_code": "R_FUN_NBA HOOP MARTIX _021",
+      "machine_name": "R_FUN_NBA HOOP MARTIX _021",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 89,
+      "shop_id": 1,
+      "machine_code": "R_FUN_NBA HOOP MARTIX _022",
+      "machine_name": "R_FUN_NBA HOOP MARTIX _022",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 90,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_SHIP WRECK_001",
+      "machine_name": "R_ACTIVITY_SHIP WRECK_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 91,
+      "shop_id": 1,
+      "machine_code": "A_MUSIC_CHUNITHM SUPER STAR_005",
+      "machine_name": "A_MUSIC_CHUNITHM SUPER STAR_005",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 92,
+      "shop_id": 1,
+      "machine_code": "A_MUSIC_CHUNITHM SUPER STAR_006",
+      "machine_name": "A_MUSIC_CHUNITHM SUPER STAR_006",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 93,
+      "shop_id": 1,
+      "machine_code": "A_MUSIC_SOUND VOLTEX(NEW)_012",
+      "machine_name": "A_MUSIC_SOUND VOLTEX(NEW)_012",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 94,
+      "shop_id": 1,
+      "machine_code": "A_VR_GODZILLA KAIJU WARS VR_001",
+      "machine_name": "A_VR_GODZILLA KAIJU WARS VR_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 95,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_SPACE WARP_002",
+      "machine_name": "R_ACTIVITY_SPACE WARP_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 96,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_POLOR PROTECTOR_001",
+      "machine_name": "R_ACTIVITY_POLOR PROTECTOR_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 97,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_001",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 98,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_002",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 99,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_003",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_003",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 100,
+      "shop_id": 1,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_004",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_004",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 101,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_001",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 102,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_002",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_002",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 103,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_003",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_003",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 104,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_012",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_012",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 105,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE S)_001",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE S)_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 106,
+      "shop_id": 1,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE S)_006",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE S)_006",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 107,
+      "shop_id": 1,
+      "machine_code": "R_ACTIVITY_ZOMBIES READY DEADY GO_001",
+      "machine_name": "R_ACTIVITY_ZOMBIES READY DEADY GO_001",
+      "status": "ACTIVE",
+      "description": "A- A3"
+    },
+    {
+      "id": 108,
+      "shop_id": 2,
+      "machine_code": "R_FUN_AIR FX_003",
+      "machine_name": "R_FUN_AIR FX_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 109,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_RAMPAGE_001",
+      "machine_name": "R_ACTIVITY_RAMPAGE_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 110,
+      "shop_id": 2,
+      "machine_code": "M_SLOT_ALADDIN_009",
+      "machine_name": "M_SLOT_ALADDIN_009",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 111,
+      "shop_id": 2,
+      "machine_code": "M_SLOT_ALADDIN_028",
+      "machine_name": "M_SLOT_ALADDIN_028",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 112,
+      "shop_id": 2,
+      "machine_code": "M_SLOT_ALADDIN_035",
+      "machine_name": "M_SLOT_ALADDIN_035",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 113,
+      "shop_id": 2,
+      "machine_code": "A_SHOOTING_ALIENS ARMAGEDDON_003",
+      "machine_name": "A_SHOOTING_ALIENS ARMAGEDDON_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 114,
+      "shop_id": 2,
+      "machine_code": "M_BIG_GOLD FISH(8 PERSON)_024",
+      "machine_name": "M_BIG_GOLD FISH(8 PERSON)_024",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 115,
+      "shop_id": 2,
+      "machine_code": "M_SLOT_APOLLO_027",
+      "machine_name": "M_SLOT_APOLLO_027",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 116,
+      "shop_id": 2,
+      "machine_code": "M_SLOT_APOLLO_028",
+      "machine_name": "M_SLOT_APOLLO_028",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 117,
+      "shop_id": 2,
+      "machine_code": "M_SLOT_CASTLE_003",
+      "machine_name": "M_SLOT_CASTLE_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 118,
+      "shop_id": 2,
+      "machine_code": "M_SLOT_CASTLE_018",
+      "machine_name": "M_SLOT_CASTLE_018",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 119,
+      "shop_id": 2,
+      "machine_code": "M_SLOT_CASTLE (GOLDEN MAYA)_002",
+      "machine_name": "M_SLOT_CASTLE (GOLDEN MAYA)_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 120,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_CRAZY TOWER_005",
+      "machine_name": "R_ACTIVITY_CRAZY TOWER_005",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 121,
+      "shop_id": 2,
+      "machine_code": "A_DANCE_DANCE RUSH_002",
+      "machine_name": "A_DANCE_DANCE RUSH_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 122,
+      "shop_id": 2,
+      "machine_code": "A_KIDDIE RIDES_DEEP EXPLORER_001",
+      "machine_name": "A_KIDDIE RIDES_DEEP EXPLORER_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 123,
+      "shop_id": 2,
+      "machine_code": "R_FUN_FUNNY EGGS_002",
+      "machine_name": "R_FUN_FUNNY EGGS_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 124,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_GOLD FISHIN_005",
+      "machine_name": "R_ACTIVITY_GOLD FISHIN_005",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 125,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_GOLD FISHIN_008",
+      "machine_name": "R_ACTIVITY_GOLD FISHIN_008",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 126,
+      "shop_id": 2,
+      "machine_code": "M_SLOT_GOLDEN CROWN_029",
+      "machine_name": "M_SLOT_GOLDEN CROWN_029",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 127,
+      "shop_id": 2,
+      "machine_code": "M_SLOT_GOLDEN CROWN_030",
+      "machine_name": "M_SLOT_GOLDEN CROWN_030",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 128,
+      "shop_id": 2,
+      "machine_code": "A_SHOOTING_HOUSE OF THE DEAD_005",
+      "machine_name": "A_SHOOTING_HOUSE OF THE DEAD_005",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 129,
+      "shop_id": 2,
+      "machine_code": "A_RACING_INITIAL D THE ARCADE_013",
+      "machine_name": "A_RACING_INITIAL D THE ARCADE_013",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 130,
+      "shop_id": 2,
+      "machine_code": "A_RACING_INITIAL D THE ARCADE_014",
+      "machine_name": "A_RACING_INITIAL D THE ARCADE_014",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 131,
+      "shop_id": 2,
+      "machine_code": "A_RACING_INITIAL D THE ARCADE_015",
+      "machine_name": "A_RACING_INITIAL D THE ARCADE_015",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 132,
+      "shop_id": 2,
+      "machine_code": "A_RACING_INITIAL D THE ARCADE_016",
+      "machine_name": "A_RACING_INITIAL D THE ARCADE_016",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 133,
+      "shop_id": 2,
+      "machine_code": "A_CARD GAME_INJUSTICE_003",
+      "machine_name": "A_CARD GAME_INJUSTICE_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 134,
+      "shop_id": 2,
+      "machine_code": "M_BIG_INVINCIBLE_003",
+      "machine_name": "M_BIG_INVINCIBLE_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 135,
+      "shop_id": 2,
+      "machine_code": "A_KID GAMES_LET'S GO SAFARI_003",
+      "machine_name": "A_KID GAMES_LET'S GO SAFARI_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 136,
+      "shop_id": 2,
+      "machine_code": "R_QUICK_LITTLE TICKET MONSTERS_001",
+      "machine_name": "R_QUICK_LITTLE TICKET MONSTERS_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 137,
+      "shop_id": 2,
+      "machine_code": "A_MUSIC_MAI MAI DX UNIVERSE_010",
+      "machine_name": "A_MUSIC_MAI MAI DX UNIVERSE_010",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 138,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_MILK JUG TOSS_001",
+      "machine_name": "R_ACTIVITY_MILK JUG TOSS_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 139,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_MILK JUG TOSS_002",
+      "machine_name": "R_ACTIVITY_MILK JUG TOSS_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 140,
+      "shop_id": 2,
+      "machine_code": "M_BIG_GOLD FISH(8 PERSON)_018",
+      "machine_name": "M_BIG_GOLD FISH(8 PERSON)_018",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 141,
+      "shop_id": 2,
+      "machine_code": "A_VR_OVERTAKE VR_008",
+      "machine_name": "A_VR_OVERTAKE VR_008",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 142,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_PINK PANTHER_001",
+      "machine_name": "R_ACTIVITY_PINK PANTHER_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 143,
+      "shop_id": 2,
+      "machine_code": "A_DANCE_PUMP IT UP_001",
+      "machine_name": "A_DANCE_PUMP IT UP_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 144,
+      "shop_id": 2,
+      "machine_code": "A_KIDDIE RIDES_RANCH COGAN_001",
+      "machine_name": "A_KIDDIE RIDES_RANCH COGAN_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 145,
+      "shop_id": 2,
+      "machine_code": "A_MUSIC_SOUND VOLTEX_003",
+      "machine_name": "A_MUSIC_SOUND VOLTEX_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 146,
+      "shop_id": 2,
+      "machine_code": "A_MUSIC_SOUND VOLTEX_005",
+      "machine_name": "A_MUSIC_SOUND VOLTEX_005",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 147,
+      "shop_id": 2,
+      "machine_code": "O_SUPPLY_SOUND VOLTEX GENERATOR_003",
+      "machine_name": "O_SUPPLY_SOUND VOLTEX GENERATOR_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 148,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_SWEET LAND 5_006",
+      "machine_name": "P_OTHER_SWEET LAND 5_006",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 149,
+      "shop_id": 2,
+      "machine_code": "A_MUSIC_TAIKO NO TATSUJIN_004",
+      "machine_name": "A_MUSIC_TAIKO NO TATSUJIN_004",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 150,
+      "shop_id": 2,
+      "machine_code": "A_SHOOTING_TARGET BRAVO_002",
+      "machine_name": "A_SHOOTING_TARGET BRAVO_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 151,
+      "shop_id": 2,
+      "machine_code": "M_SMALL_THE ANCIENT BINGO WILD HUNGRY HEART_001",
+      "machine_name": "M_SMALL_THE ANCIENT BINGO WILD HUNGRY HEART_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 152,
+      "shop_id": 2,
+      "machine_code": "A_SHOOTING_THE WALKING DEAD_002",
+      "machine_name": "A_SHOOTING_THE WALKING DEAD_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 153,
+      "shop_id": 2,
+      "machine_code": "R_MEDAL_DRAGON ORB_001",
+      "machine_name": "R_MEDAL_DRAGON ORB_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 154,
+      "shop_id": 2,
+      "machine_code": "R_MEDAL_ZODIAC SIGN_001",
+      "machine_name": "R_MEDAL_ZODIAC SIGN_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 155,
+      "shop_id": 2,
+      "machine_code": "R_MEDAL_DREAM CASTLE_006",
+      "machine_name": "R_MEDAL_DREAM CASTLE_006",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 156,
+      "shop_id": 2,
+      "machine_code": "A_DANCE_DANCE RUSH_010",
+      "machine_name": "A_DANCE_DANCE RUSH_010",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 157,
+      "shop_id": 2,
+      "machine_code": "R_MEDAL_DEMON TOWER_002",
+      "machine_name": "R_MEDAL_DEMON TOWER_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 158,
+      "shop_id": 2,
+      "machine_code": "R_QUICK_BLACK HOLE_007",
+      "machine_name": "R_QUICK_BLACK HOLE_007",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 159,
+      "shop_id": 2,
+      "machine_code": "R_PRIZE_BOMB BOMB DIAMOND_001",
+      "machine_name": "R_PRIZE_BOMB BOMB DIAMOND_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 160,
+      "shop_id": 2,
+      "machine_code": "R_PRIZE_JUMP IN SUPER LUCK _001",
+      "machine_name": "R_PRIZE_JUMP IN SUPER LUCK _001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 161,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE S)_008",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE S)_008",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 162,
+      "shop_id": 2,
+      "machine_code": "A_PHOTO_PHOTO BOOTH_001",
+      "machine_name": "A_PHOTO_PHOTO BOOTH_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 163,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_023",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_023",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 164,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_024",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_024",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 165,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_026",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_026",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 166,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_027",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_027",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 167,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_028",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_028",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 168,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_029",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_029",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 169,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_030",
+      "machine_name": "P_CLAW_FUTURE FIELD X (EPIC CLAW)_030",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 170,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND CHALLENGER_001",
+      "machine_name": "P_CLAW_TREND CHALLENGER_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 171,
+      "shop_id": 2,
+      "machine_code": "M_BIG_THUNDER WINGS_007",
+      "machine_name": "M_BIG_THUNDER WINGS_007",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 172,
+      "shop_id": 2,
+      "machine_code": "M_BIG_BATTED PIONEER_008",
+      "machine_name": "M_BIG_BATTED PIONEER_008",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 173,
+      "shop_id": 2,
+      "machine_code": "R_FUN_ULTIMATE BIG PUNCH_006",
+      "machine_name": "R_FUN_ULTIMATE BIG PUNCH_006",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 174,
+      "shop_id": 2,
+      "machine_code": "R_MEDAL_DRAGON'S BANE_001",
+      "machine_name": "R_MEDAL_DRAGON'S BANE_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 175,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_SUPER DRILL_002",
+      "machine_name": "R_ACTIVITY_SUPER DRILL_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 176,
+      "shop_id": 2,
+      "machine_code": "R_MEDAL_LIGHTING BALL_001",
+      "machine_name": "R_MEDAL_LIGHTING BALL_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 177,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_JUICY BEATS_002",
+      "machine_name": "R_ACTIVITY_JUICY BEATS_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 178,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_ROYAL ARCHER_003",
+      "machine_name": "R_ACTIVITY_ROYAL ARCHER_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 179,
+      "shop_id": 2,
+      "machine_code": "R_MEDAL_MARBLE WORLD ADVENTURE_001",
+      "machine_name": "R_MEDAL_MARBLE WORLD ADVENTURE_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 180,
+      "shop_id": 2,
+      "machine_code": "R_MEDAL_SOLAR SYSTEM 2PL_007",
+      "machine_name": "R_MEDAL_SOLAR SYSTEM 2PL_007",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 181,
+      "shop_id": 2,
+      "machine_code": "R_MEDAL_SHOCK WAVE_004",
+      "machine_name": "R_MEDAL_SHOCK WAVE_004",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 182,
+      "shop_id": 2,
+      "machine_code": "P_GASHAPON_EPIC CAPS MINI_001",
+      "machine_name": "P_GASHAPON_EPIC CAPS MINI_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 183,
+      "shop_id": 2,
+      "machine_code": "P_GASHAPON_EPIC CAPS PRO_001",
+      "machine_name": "P_GASHAPON_EPIC CAPS PRO_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 184,
+      "shop_id": 2,
+      "machine_code": "P_GASHAPON_EPIC CAPS PRO_002",
+      "machine_name": "P_GASHAPON_EPIC CAPS PRO_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 185,
+      "shop_id": 2,
+      "machine_code": "P_GASHAPON_EPIC CAPS PRO_003",
+      "machine_name": "P_GASHAPON_EPIC CAPS PRO_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 186,
+      "shop_id": 2,
+      "machine_code": "P_GASHAPON_EPIC CAPS PRO_004",
+      "machine_name": "P_GASHAPON_EPIC CAPS PRO_004",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 187,
+      "shop_id": 2,
+      "machine_code": "P_GASHAPON_EPIC CAPS PRO_005",
+      "machine_name": "P_GASHAPON_EPIC CAPS PRO_005",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 188,
+      "shop_id": 2,
+      "machine_code": "P_GASHAPON_EPIC CAPS PRO_006",
+      "machine_name": "P_GASHAPON_EPIC CAPS PRO_006",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 189,
+      "shop_id": 2,
+      "machine_code": "M_BIG_CROCODILE TYCOON_015",
+      "machine_name": "M_BIG_CROCODILE TYCOON_015",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 190,
+      "shop_id": 2,
+      "machine_code": "O_ATM_ATM(SELF SERVICE KIOSK)_001",
+      "machine_name": "O_ATM_ATM(SELF SERVICE KIOSK)_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 191,
+      "shop_id": 2,
+      "machine_code": "O_ATM_ATM(SELF SERVICE KIOSK)_002",
+      "machine_name": "O_ATM_ATM(SELF SERVICE KIOSK)_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 192,
+      "shop_id": 2,
+      "machine_code": "O_ATM_ATM(SELF SERVICE KIOSK)_007",
+      "machine_name": "O_ATM_ATM(SELF SERVICE KIOSK)_007",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 193,
+      "shop_id": 2,
+      "machine_code": "O_TICKET EATER_ TICKET EATER (TICKET HOUSE)_001",
+      "machine_name": "O_TICKET EATER_ TICKET EATER (TICKET HOUSE)_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 194,
+      "shop_id": 2,
+      "machine_code": "O_TICKET EATER_ TICKET EATER (TICKET HOUSE)_002",
+      "machine_name": "O_TICKET EATER_ TICKET EATER (TICKET HOUSE)_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 195,
+      "shop_id": 2,
+      "machine_code": "A_RACING_TOP GUN MAVERICK_001",
+      "machine_name": "A_RACING_TOP GUN MAVERICK_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 196,
+      "shop_id": 2,
+      "machine_code": "A_RACING_TOP GUN MAVERICK_002",
+      "machine_name": "A_RACING_TOP GUN MAVERICK_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 197,
+      "shop_id": 2,
+      "machine_code": "A_RACING_ FAST & FURIOUS_001",
+      "machine_name": "A_RACING_ FAST & FURIOUS_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 198,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_GODZILLA VS KONG SMASHER_001",
+      "machine_name": "R_ACTIVITY_GODZILLA VS KONG SMASHER_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 199,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_ SPIN CITY_001",
+      "machine_name": "R_ACTIVITY_ SPIN CITY_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 200,
+      "shop_id": 2,
+      "machine_code": "A_FUN_TOM & JERRY KITCHEN CHAOS_001",
+      "machine_name": "A_FUN_TOM & JERRY KITCHEN CHAOS_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 201,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_ZOMBIE INVADERS_001",
+      "machine_name": "R_ACTIVITY_ZOMBIE INVADERS_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 202,
+      "shop_id": 2,
+      "machine_code": "R_FUN_NBA HOOPS BALLER_001",
+      "machine_name": "R_FUN_NBA HOOPS BALLER_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 203,
+      "shop_id": 2,
+      "machine_code": "R_FUN_NBA HOOPS BALLER_002",
+      "machine_name": "R_FUN_NBA HOOPS BALLER_002",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 204,
+      "shop_id": 2,
+      "machine_code": "R_FUN_NBA HOOPS BALLER_003",
+      "machine_name": "R_FUN_NBA HOOPS BALLER_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 205,
+      "shop_id": 2,
+      "machine_code": "R_FUN_NBA HOOPS BALLER_004",
+      "machine_name": "R_FUN_NBA HOOPS BALLER_004",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 206,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_YETI GO_001",
+      "machine_name": "R_ACTIVITY_YETI GO_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 207,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_DOWN THE CLOWN_010",
+      "machine_name": "R_ACTIVITY_DOWN THE CLOWN_010",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 208,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_DOWN THE CLOWN_011",
+      "machine_name": "R_ACTIVITY_DOWN THE CLOWN_011",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 209,
+      "shop_id": 2,
+      "machine_code": "R_QUICK_TONS OF TICKET CRANE_003",
+      "machine_name": "R_QUICK_TONS OF TICKET CRANE_003",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 210,
+      "shop_id": 2,
+      "machine_code": "R_QUICK_TONS OF TICKET CRANE_004",
+      "machine_name": "R_QUICK_TONS OF TICKET CRANE_004",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 211,
+      "shop_id": 2,
+      "machine_code": "R_QUICK_ODINS HAMMERSTRIKE_001",
+      "machine_name": "R_QUICK_ODINS HAMMERSTRIKE_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 212,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS MINI (CLAW)_007",
+      "machine_name": "P_CLAW_INS MINI (CLAW)_007",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 213,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS MINI (CLAW)_008",
+      "machine_name": "P_CLAW_INS MINI (CLAW)_008",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 214,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS MINI (CLAW)_009",
+      "machine_name": "P_CLAW_INS MINI (CLAW)_009",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 215,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS MINI (CLAW)_010",
+      "machine_name": "P_CLAW_INS MINI (CLAW)_010",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 216,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS MINI (CLAW)_011",
+      "machine_name": "P_CLAW_INS MINI (CLAW)_011",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 217,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS MINI (CLAW)_012",
+      "machine_name": "P_CLAW_INS MINI (CLAW)_012",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 218,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS MINI (CLAW)_013",
+      "machine_name": "P_CLAW_INS MINI (CLAW)_013",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 219,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS MINI (CLAW)_016",
+      "machine_name": "P_CLAW_INS MINI (CLAW)_016",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 220,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_027",
+      "machine_name": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_027",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 221,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_028",
+      "machine_name": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_028",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 222,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_029",
+      "machine_name": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_029",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 223,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_031",
+      "machine_name": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_031",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 224,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_032",
+      "machine_name": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_032",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 225,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_033",
+      "machine_name": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_033",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 226,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_037",
+      "machine_name": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_037",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 227,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_038",
+      "machine_name": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_038",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 228,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_039",
+      "machine_name": "P_CLAW_TREND CHALLENGER (LUCK VERSION)_039",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 229,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS LOOSE_005",
+      "machine_name": "P_CLAW_INS LOOSE_005",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 230,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS LOOSE_006",
+      "machine_name": "P_CLAW_INS LOOSE_006",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 231,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_INS LOOSE_007",
+      "machine_name": "P_CLAW_INS LOOSE_007",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 232,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND BOX_004",
+      "machine_name": "P_CLAW_TREND BOX_004",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 233,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND BOX_005",
+      "machine_name": "P_CLAW_TREND BOX_005",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 234,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND MASTER (COLOUR 4WD)_007",
+      "machine_name": "P_CLAW_TREND MASTER (COLOUR 4WD)_007",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 235,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND MASTER (COLOUR 4WD)_008",
+      "machine_name": "P_CLAW_TREND MASTER (COLOUR 4WD)_008",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 236,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND MASTER (COLOUR 4WD)_009",
+      "machine_name": "P_CLAW_TREND MASTER (COLOUR 4WD)_009",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 237,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND MASTER (COLOUR 4WD)_010",
+      "machine_name": "P_CLAW_TREND MASTER (COLOUR 4WD)_010",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 238,
+      "shop_id": 2,
+      "machine_code": "P_CLAW_TREND MASTER (COLOUR 4WD)_011",
+      "machine_name": "P_CLAW_TREND MASTER (COLOUR 4WD)_011",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 239,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_021",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_021",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 240,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_022",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_022",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 241,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_023",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_023",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 242,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_024",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_024",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 243,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_025",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_025",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 244,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_026",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_026",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 245,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_027",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_027",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 246,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_028",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_028",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 247,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_029",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_029",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 248,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_030",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_030",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 249,
+      "shop_id": 2,
+      "machine_code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_031",
+      "machine_name": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_031",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 250,
+      "shop_id": 2,
+      "machine_code": "R_ACTIVITY_WORLD LARGEST PAC-MAN_001",
+      "machine_name": "R_ACTIVITY_WORLD LARGEST PAC-MAN_001",
+      "status": "ACTIVE",
+      "description": "Time City"
+    },
+    {
+      "id": 251,
+      "shop_id": 2,
+      "machine_code": "M_BIG_GOLD FISH(8 PERSON)_035",
+      "machine_name": "M_BIG_GOLD FISH(8 PERSON)_035",
+      "status": "ACTIVE",
+      "description": "Time City"
+    }
+  ],
+  "errors": [
+    {
+      "id": 1,
+      "error_code": "ERROR 2",
+      "error_name": "Coin Error",
+      "error_fix": "Coin \u1019\u101b\u103e\u102d\u104d \u1011\u100a\u1037\u103a\u1015\u1031\u1038\u1011\u102c\u1038",
+      "explanation": null,
+      "category": "ERROR",
+      "status": "ACTIVE",
+      "machine_name": "Dream Castle"
+    },
+    {
+      "id": 2,
+      "error_code": "ERROR 1",
+      "error_name": "Coin Error",
+      "error_fix": "Coin \u1019\u101b\u103e\u102d\u104d \u1011\u100a\u1037\u103a\u1015\u1031\u1038\u1011\u102c\u1038",
+      "explanation": null,
+      "category": "ERROR",
+      "status": "ACTIVE",
+      "machine_name": "Dream Castle"
+    }
+  ],
+  "error_images": [
+    {
+      "id": 1,
+      "error_id": 2,
+      "image_path": "errors/ERROR_1/b08cf12328a39e1dd9776659.jpg",
+      "caption": null,
+      "sort_order": 0
+    },
+    {
+      "id": 2,
+      "error_id": 2,
+      "image_path": "errors/ERROR_1/d9cd8b1692200d7831d204e7.jpg",
+      "caption": null,
+      "sort_order": 1
+    },
+    {
+      "id": 3,
+      "error_id": 2,
+      "image_path": "errors/ERROR_1/d578697e1e401e61158c8f2a.jpg",
+      "caption": null,
+      "sort_order": 2
+    },
+    {
+      "id": 4,
+      "error_id": 1,
+      "image_path": "errors/ERROR_2/b4a88e5009e23d5196a371b2.jpg",
+      "caption": null,
+      "sort_order": 0
+    }
+  ]
+}

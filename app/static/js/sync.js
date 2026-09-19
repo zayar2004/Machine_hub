@@ -7,7 +7,7 @@
   var LOCAL_VERSION_KEY = 'local_version';
   var LAST_SYNC_KEY = 'last_sync';
   var MAX_ITERATIONS = 20;
-  var AUTO_SYNC_INTERVAL = 3 * 60 * 1000;
+  var AUTO_SYNC_INTERVAL = 60 * 1000;  // 1 min (was 3 min)
 
   var syncing = false;
 
