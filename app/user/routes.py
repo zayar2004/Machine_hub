@@ -28,13 +28,14 @@ def _machine_visible_to_user(machine):
 @user_bp.route("/uploads/<path:rel_path>")
 @login_required
 def serve_upload(rel_path):
-    """Serve uploaded error photos for authenticated users.
+    """Serve uploaded error photos — file OR base64 fallback.
 
-    Files live under UPLOAD_FOLDER (e.g. uploads/errors/ERROR_1/xxx.jpg).
-    We prevent path traversal and require login.
+    Priority:
+      1. Local file (uploads/errors/...)
+      2. DB image_data (base64) — Render persistent
     """
-    from flask import current_app, send_from_directory, abort
-    import os
+    from flask import current_app, send_from_directory, abort, Response
+    import os, base64
 
     root = current_app.config.get("UPLOAD_FOLDER")
     if not root:
@@ -46,10 +47,38 @@ def serve_upload(rel_path):
         abort(404)
 
     full = os.path.join(root, safe)
-    if not os.path.isfile(full):
-        abort(404)
 
-    return send_from_directory(root, safe)
+    # 1) Try local file
+    if os.path.isfile(full):
+        return send_from_directory(root, safe)
+
+    # 2) Fallback — DB base64
+    # rel_path: 'errors/ERROR_1/xxx.jpg'
+    from ..models import ErrorImage
+    img = ErrorImage.query.filter_by(image_path=safe).first()
+    if img is None:
+        # Try with 'uploads/' prefix stripped
+        alt = safe
+        if alt.startswith("uploads/"):
+            alt = alt[8:]
+        img = ErrorImage.query.filter_by(image_path=alt).first()
+
+    if img and img.image_data:
+        try:
+            raw = base64.b64decode(img.image_data)
+            mime = img.mime_type or "image/jpeg"
+            return Response(
+                raw,
+                mimetype=mime,
+                headers={
+                    "Cache-Control": "public, max-age=86400",
+                    "Content-Length": str(len(raw)),
+                },
+            )
+        except Exception:
+            abort(500)
+
+    abort(404)
 
 
 @user_bp.route("/")

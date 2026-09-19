@@ -14,6 +14,12 @@ class ErrorImage(TimestampMixin, db.Model):
         index=True,
     )
     image_path = db.Column(db.String(255), nullable=False)
+
+    # 🆕 Base64 image data (for Render persistence — 386K small photos)
+    # Format: raw base64 string WITHOUT data: prefix
+    image_data = db.Column(db.Text, nullable=True)
+    mime_type = db.Column(db.String(60), nullable=True, default="image/jpeg")
+
     caption = db.Column(db.String(200), nullable=True)
     sort_order = db.Column(db.Integer, default=0, nullable=False)
     file_size = db.Column(db.Integer, nullable=True)  # bytes
