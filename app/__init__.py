@@ -138,6 +138,19 @@ def _register_core_routes(app: Flask) -> None:
         return jsonify(info)
 
 
+    @app.route("/warmup")
+    def warmup():
+        """Warm-up endpoint — touches DB to keep Neon awake."""
+        from flask import jsonify
+        from sqlalchemy import text
+        from .extensions import db
+        try:
+            shops = db.session.execute(text("SELECT COUNT(*) FROM shops")).scalar()
+            machines = db.session.execute(text("SELECT COUNT(*) FROM machines")).scalar()
+            return jsonify({"ok": True, "shops": shops, "machines": machines})
+        except Exception as e:
+            return jsonify({"ok": False, "error": str(e)[:100]}), 500
+
     @app.route("/health")
     def health():
         return jsonify(
