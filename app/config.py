@@ -44,13 +44,17 @@ class Config:
                 base = _db_url.split("?")[0]
                 _db_url = base + "?sslmode=require"
         except ImportError:
-            # Termux — pg8000 — strip query params
+            # Termux — pg8000 — MUST strip query params
             if "?" in _db_url:
                 _db_url = _db_url.split("?")[0]
             _db_url = _db_url.replace(
                 "postgresql://", "postgresql+pg8000://", 1
             )
             _db_driver = "pg8000"
+    else:
+        # Already pg8000 in URL — strip query
+        if _db_url.startswith("postgresql+pg8000://") and "?" in _db_url:
+            _db_url = _db_url.split("?")[0]
 
     SQLALCHEMY_DATABASE_URI = _db_url
 
