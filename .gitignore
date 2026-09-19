@@ -46,3 +46,13 @@ ios/
 
 # Logs
 *.log
+
+# Ignore all .bak variants
+*.bak.*
+*.bak_*
+*.bak2
+*.bak3
+*.bak4
+*.bak5
+*.before_*
+*.broken
