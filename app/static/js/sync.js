@@ -193,6 +193,35 @@
               if (result.deletes > 0) msg += ' (' + result.deletes + ' deleted)';
               setStatus('synced', msg);
             }
+
+            // 🆕 Auto-reload on new data (dedup per version)
+            try {
+              var _seenKey = 'mh_reload_seen_version';
+              var _seenVer = localStorage.getItem(_seenKey);
+              var _ver = (cursor != null) ? String(cursor) : null;
+              var _hasNew = false;
+
+              if (result) {
+                if ((result.added || 0) > 0) _hasNew = true;
+                if ((result.updated || 0) > 0) _hasNew = true;
+                if ((result.new_count || 0) > 0) _hasNew = true;
+                if ((result.deletes || 0) > 0) _hasNew = true;
+              }
+
+              // Fallback — version changed since last reload
+              if (!_hasNew && _ver && _seenVer !== _ver) {
+                _hasNew = true;
+              }
+
+              if (_hasNew && _ver && _seenVer !== _ver) {
+                localStorage.setItem(_seenKey, _ver);
+                console.log('[Sync] New data — reload in 800ms (v' + _ver + ')');
+                setTimeout(function () { location.reload(); }, 800);
+              }
+            } catch (e) {
+              console.warn('[Sync] auto-reload failed:', e);
+            }
+
             return result;
           });
         });
