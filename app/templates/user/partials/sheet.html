@@ -83,12 +83,7 @@
     </a>
 
     <!-- INSTALL -->
-    <button type="button" class="sheet-item" id="mh-install-btn" style="display:none;">
-      <svg class="icon"><use href="#i-download"/></svg>
-      <span>Install App</span>
-    </button>
-
-    {% if current_user.is_admin %}
+{% if current_user.is_admin %}
     <!-- ADMIN -->
     <div class="sheet-group">ADMIN</div>
 
