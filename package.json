@@ -4,9 +4,8 @@
   "description": "Machine Knowledge & Error Fix — offline-first PWA",
   "private": true,
   "scripts": {
-    "cap:add": "cap add android",
-    "cap:sync": "cap sync android",
-    "cap:open": "cap open android"
+    "postinstall": "echo 'ready'",
+    "patch:android": "bash scripts/patch-android.sh"
   },
   "dependencies": {
     "@capacitor/android": "^6.1.2",

@@ -33,6 +33,9 @@ jobs:
             npx cap add android
           fi
 
+      - name: Patch Android native (persistent WebView cache)
+        run: bash scripts/patch-android.sh
+
       - name: Sync Capacitor
         run: npx cap sync android
 
