@@ -692,6 +692,8 @@ def error_create():
             img = ErrorImage(
                 error_id=error.id,
                 image_path=meta["image_path"],
+                image_data=meta.get("image_data"),
+                mime_type=meta.get("mime_type"),
                 caption=caption,
                 sort_order=next_order,
                 file_size=meta["file_size"],
@@ -793,6 +795,8 @@ def error_edit(error_id: int):
             img = ErrorImage(
                 error_id=error.id,
                 image_path=meta["image_path"],
+                image_data=meta.get("image_data"),
+                mime_type=meta.get("mime_type"),
                 caption=caption,
                 sort_order=next_order,
                 file_size=meta["file_size"],
@@ -1394,6 +1398,8 @@ def error_photos(error_id: int):
             img = ErrorImage(
                 error_id=error.id,
                 image_path=meta["image_path"],
+                image_data=meta.get("image_data"),
+                mime_type=meta.get("mime_type"),
                 caption=caption,
                 sort_order=next_order,
                 file_size=meta["file_size"],

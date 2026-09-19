@@ -1,5 +1,6 @@
 """Image upload + compression helpers for error photos."""
 import os
+import base64
 import secrets
 from io import BytesIO
 from pathlib import Path
@@ -118,11 +119,27 @@ def save_error_image(
 
     size = abs_path.stat().st_size
 
+    # 🆕 Base64 encode for persistent DB storage (Render ephemeral fix)
+    try:
+        raw = abs_path.read_bytes()
+        b64 = base64.b64encode(raw).decode("ascii")
+    except Exception:
+        b64 = None
+
+    # MIME type
+    mime = "image/jpeg"
+    if ext == ".webp":
+        mime = "image/webp"
+    elif ext == ".png":
+        mime = "image/png"
+
     return {
         "image_path": rel_path,
         "file_size": size,
         "width": img.width,
         "height": img.height,
+        "image_data": b64,   # 🆕
+        "mime_type": mime,   # 🆕
     }
 
 
