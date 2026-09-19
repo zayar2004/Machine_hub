@@ -106,6 +106,17 @@ def _register_blueprints(app: Flask) -> None:
 
 
 def _register_core_routes(app: Flask) -> None:
+    @app.route("/api/db-info")
+    def db_info():
+        from flask import jsonify
+        db_url = app.config.get("SQLALCHEMY_DATABASE_URI", "")
+        host = db_url.split("@")[1].split("/")[0] if "@" in db_url else "?"
+        driver = "pg8000" if "pg8000" in db_url else ("psycopg2" if "postgresql://" in db_url else "?")
+        return jsonify({
+            "host": host,
+            "driver": driver,
+        })
+
     @app.route("/health")
     def health():
         return jsonify(
