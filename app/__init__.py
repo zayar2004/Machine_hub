@@ -20,6 +20,7 @@ def create_app(config_name: str | None = None) -> Flask:
     _bind_extensions(app)
     _register_models()
     _auto_migrate(app)
+    _auto_seed(app)
     _register_blueprints(app)
     _register_core_routes(app)
 
@@ -53,18 +54,38 @@ def _register_models() -> None:
 
 
 def _auto_migrate(app: Flask) -> None:
-    """Create tables on first run (for fresh Postgres on Render).
-
-    For existing deployments with data, use flask db upgrade manually.
-    """
-    if app.config.get("ENV") != "production":
-        return
+    """Create tables on first run (idempotent — always safe)."""
     try:
         from .extensions import db
         with app.app_context():
             db.create_all()
+            app.logger.info("[auto-migrate] tables ensured")
     except Exception as e:
-        app.logger.warning(f"[auto-migrate] {e}")
+        app.logger.error(f"[auto-migrate] FAILED: {e}")
+
+
+def _auto_seed(app: Flask) -> None:
+    """Seed default admin user (idempotent)."""
+    try:
+        from .extensions import db
+        from .models import User
+        with app.app_context():
+            admin = User.query.filter_by(username="admin").first()
+            if not admin:
+                admin = User(
+                    username="admin",
+                    name="Admin",
+                    role="ADMIN",
+                    status="ACTIVE",
+                )
+                admin.set_password("admin123")
+                db.session.add(admin)
+                db.session.commit()
+                app.logger.info("[auto-seed] admin created")
+            else:
+                app.logger.info("[auto-seed] admin exists")
+    except Exception as e:
+        app.logger.error(f"[auto-seed] FAILED: {e}")
 
 
 def _register_blueprints(app: Flask) -> None:
