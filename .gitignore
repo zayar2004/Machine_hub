@@ -39,7 +39,6 @@ Thumbs.db
 
 # Node (for Capacitor)
 node_modules/
-package-lock.json
 android/
 ios/
 .gradle/
