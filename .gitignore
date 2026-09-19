@@ -56,3 +56,8 @@ ios/
 *.bak5
 *.before_*
 *.broken
+
+# Allow www/ for Capacitor
+!www/
+!www/index.html
+

@@ -1,0 +1,27 @@
+{
+  "appId": "com.machinehub.app",
+  "appName": "Machine Hub",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://machine-hub.onrender.com",
+    "cleartext": true,
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "backgroundColor": "#09090b",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#09090b"
+    }
+  }
+}
