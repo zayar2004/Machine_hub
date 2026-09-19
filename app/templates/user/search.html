@@ -69,44 +69,45 @@
     <div class="section-label">MACHINES ({{ machines|length }})</div>
 
     {% for m in machines %}
-    <div class="result-row">
-      <a href="{{ url_for('user.machine_detail', machine_id=m.id) }}" class="result-main">
-        <div class="result-icon result-icon-machine">
+    <div class="result-card result-card-machine">
+      <a href="{{ url_for('user.machine_detail', machine_id=m.id) }}" class="result-card-header">
+        <div class="result-card-icon">
           <svg class="icon"><use href="#i-package"/></svg>
         </div>
-
-        <div class="result-body">
-          <div class="result-code">{{ m.machine_code }}</div>
-          <div class="result-name">{{ m.machine_name }}</div>
-
-          {% if m.all_errors %}
-          <div class="result-meta">
-            {% for e in m.all_errors[:3] %}
-              <span class="result-badge result-badge-error">{{ e.error_code }}</span>
-            {% endfor %}
-            {% if m.all_errors|length > 3 %}
-              <span class="result-badge-more">+{{ m.all_errors|length - 3 }}</span>
-            {% endif %}
-          </div>
-          {% endif %}
+        <div class="result-card-title">
+          <div class="result-card-code">{{ m.machine_code }}</div>
+          <div class="result-card-name">{{ m.machine_name }}</div>
         </div>
-
         {% if m.shop %}
         <span class="result-shop">{{ m.shop.shop_code }}</span>
         {% endif %}
       </a>
 
-      <button type="button" class="result-copy-btn"
-              data-copy="{{ m.machine_code }}"
-              aria-label="Copy machine code"
-              title="Copy code">
-        <svg class="icon icon-sm"><use href="#i-copy"/></svg>
-      </button>
+      {% if m.all_errors %}
+      <div class="result-card-photos">
+        <div class="result-card-label">⚠️ LINKED ERRORS ({{ m.all_errors|length }})</div>
+        <div class="result-meta">
+          {% for e in m.all_errors[:6] %}
+            <span class="result-badge result-badge-error">{{ e.error_code }}</span>
+          {% endfor %}
+          {% if m.all_errors|length > 6 %}
+            <span class="result-badge-more">+{{ m.all_errors|length - 6 }}</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
 
-      <a href="{{ url_for('user.machine_detail', machine_id=m.id) }}"
-         class="result-arrow-btn" aria-label="View details">
-        <svg class="icon icon-sm"><use href="#i-chevron-right"/></svg>
-      </a>
+      <div class="result-card-actions">
+        <button type="button" class="result-action-btn copy"
+                data-copy="{{ m.machine_code }}">
+          <svg class="icon"><use href="#i-copy"/></svg>
+          Copy Code
+        </button>
+        <a href="{{ url_for('user.machine_detail', machine_id=m.id) }}"
+           class="result-action-btn primary">
+          View Details →
+        </a>
+      </div>
     </div>
     {% endfor %}
   </section>
@@ -120,49 +121,56 @@
     </div>
 
     {% for e in errors %}
-    <div class="result-row result-row-error">
-      <a href="{{ url_for('user.error_detail', error_id=e.id) }}" class="result-main">
-        <div class="result-icon result-icon-error">
+    <div class="result-card result-card-error">
+      <a href="{{ url_for('user.error_detail', error_id=e.id) }}" class="result-card-header">
+        <div class="result-card-icon">
           <svg class="icon"><use href="#i-alert"/></svg>
         </div>
-
-        <div class="result-body">
-          <div class="result-code result-code-error">{{ e.error_code }}</div>
-          <div class="result-name">{{ e.error_name }}</div>
-
-          {% if e.error_fix %}
-          <div class="result-fix">{{ e.error_fix[:100] }}{% if e.error_fix|length > 100 %}…{% endif %}</div>
-          {% endif %}
-
-          {% if e.photo_previews %}
-          <div class="result-photos">
-            {% for p in e.photo_previews[:3] %}
-            <button type="button" class="result-photo"
-                    data-photo-url="{{ p.url }}"
-                    data-photo-caption="{{ p.caption or '' }}"
-                    aria-label="View photo">
-              <img src="{{ p.url }}" alt="" loading="lazy">
-            </button>
-            {% endfor %}
-            {% if e.photo_total > 3 %}
-            <div class="result-photo-more">+{{ e.photo_total - 3 }}</div>
-            {% endif %}
-          </div>
-          {% endif %}
+        <div class="result-card-title">
+          <div class="result-card-code">{{ e.error_code }}</div>
+          <div class="result-card-name">{{ e.error_name }}</div>
         </div>
       </a>
 
-      <button type="button" class="result-copy-btn"
-              data-copy="{{ e.error_code }}"
-              aria-label="Copy error code"
-              title="Copy code">
-        <svg class="icon icon-sm"><use href="#i-copy"/></svg>
-      </button>
+      {% if e.error_fix %}
+      <div class="result-card-fix">
+        <div class="result-card-label">🔧 FIX</div>
+        <div class="result-card-fix-text">
+          {{ e.error_fix[:220] }}{% if e.error_fix|length > 220 %}…{% endif %}
+        </div>
+      </div>
+      {% endif %}
 
-      <a href="{{ url_for('user.error_detail', error_id=e.id) }}"
-         class="result-arrow-btn" aria-label="View details">
-        <svg class="icon icon-sm"><use href="#i-chevron-right"/></svg>
-      </a>
+      {% if e.photo_previews %}
+      <div class="result-card-photos">
+        <div class="result-card-label">📸 PHOTOS ({{ e.photo_total }})</div>
+        <div class="result-photo-grid">
+          {% for p in e.photo_previews[:4] %}
+          <button type="button" class="result-photo-lg"
+                  data-photo-url="{{ p.url }}"
+                  data-photo-caption="{{ p.caption or '' }}"
+                  aria-label="View photo">
+            <img src="{{ p.url }}" alt="" loading="lazy">
+          </button>
+          {% endfor %}
+          {% if e.photo_total > 4 %}
+          <div class="result-photo-more">+{{ e.photo_total - 4 }}</div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="result-card-actions">
+        <button type="button" class="result-action-btn copy"
+                data-copy="{{ e.error_code }}">
+          <svg class="icon"><use href="#i-copy"/></svg>
+          Copy Code
+        </button>
+        <a href="{{ url_for('user.error_detail', error_id=e.id) }}"
+           class="result-action-btn primary">
+          View Details →
+        </a>
+      </div>
     </div>
     {% endfor %}
   </section>
@@ -189,8 +197,8 @@
     });
   }
 
-  // Copy buttons — inline (search results)
-  document.querySelectorAll('.result-copy-btn[data-copy]').forEach(function (btn) {
+  // Copy buttons — inline (search results — both old + new)
+  document.querySelectorAll('.result-action-btn.copy[data-copy], .result-copy-btn[data-copy]').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
