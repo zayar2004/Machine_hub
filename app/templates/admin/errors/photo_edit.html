@@ -1,0 +1,40 @@
+{% extends "admin/base.html" %}
+{% block title %}Edit Photo — {{ error.error_code }}{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Edit Photo</h1>
+    <p class="page-sub">
+      Error: <strong class="mono">{{ error.error_code }}</strong>
+    </p>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:800px;align-items:start;">
+  <img src="{{ url_for('admin.serve_upload', rel_path=image.image_path) }}"
+       alt="{{ image.caption or 'photo' }}"
+       style="width:100%;border-radius:var(--r);border:1.5px solid var(--border);">
+
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      {{ form.caption.label(class_="field-label") }}
+      {{ form.caption(class_="field-input") }}
+    </div>
+
+    <div class="field">
+      {{ form.sort_order.label(class_="field-label") }}
+      {{ form.sort_order(class_="field-input") }}
+      <p class="field-help">Lower numbers appear first.</p>
+    </div>
+
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" type="submit">Save</button>
+      <a class="btn btn-secondary" href="{{ url_for('admin.error_photos', error_id=error.id) }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

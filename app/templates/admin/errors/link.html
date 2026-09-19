@@ -1,0 +1,61 @@
+{% extends "admin/base.html" %}
+{% block title %}Link Machines — {{ error.error_code }}{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Link Machines</h1>
+    <p class="page-sub">
+      Error: <strong class="mono">{{ error.error_code }}</strong> — {{ error.error_name }}
+    </p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_list') }}">← Back</a>
+</div>
+
+{% if form.machine_id.choices %}
+<form method="POST" class="filter-bar">
+  {{ form.hidden_tag() }}
+  <div class="field" style="flex:1;">
+    {{ form.machine_id.label(class_="field-label") }}
+    {{ form.machine_id(class_="field-select") }}
+  </div>
+  <button class="btn btn-primary btn-sm" type="submit">Link</button>
+</form>
+{% else %}
+<div class="banner banner-info" style="padding:12px 14px;background:var(--accent-soft);color:var(--accent);border-radius:var(--r);font-size:13px;">
+  All active machines are already linked.
+</div>
+{% endif %}
+
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Linked Machines ({{ error.machines|length }})</h2>
+  </div>
+  {% if error.machines %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Shop</th><th>Code</th><th>Name</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for m in error.machines %}
+        <tr>
+          <td>{% if m.shop %}<span class="chip chip-accent">{{ m.shop.shop_code }}</span>{% endif %}</td>
+          <td><strong class="mono">{{ m.machine_code }}</strong></td>
+          <td>{{ m.machine_name }}</td>
+          <td>
+            <form method="POST" style="display:inline;"
+                  action="{{ url_for('admin.error_unlink_machine', error_id=error.id, machine_id=m.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-secondary btn-sm" type="submit">Unlink</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-sm text-muted">No machines linked yet.</p>
+  {% endif %}
+</section>
+
+{% endblock %}

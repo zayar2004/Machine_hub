@@ -1,0 +1,97 @@
+{% extends "admin/base.html" %}
+{% block title %}Shops — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Shops</h1>
+    <p class="page-sub">Manage shop locations</p>
+  </div>
+  <a class="btn btn-primary btn-sm" href="{{ url_for('admin.shop_create') }}">
+    <svg class="icon icon-sm"><use href="#i-plus"/></svg>
+    New Shop
+  </a>
+</div>
+
+{% if rows %}
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Users</th>
+        <th>Machines</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>
+          <a href="{{ url_for('admin.shop_detail', shop_id=r.shop.id) }}"
+             style="color:inherit;text-decoration:none;">
+            <strong class="mono">{{ r.shop.shop_code }}</strong>
+          </a>
+        </td>
+        <td>
+          <a href="{{ url_for('admin.shop_detail', shop_id=r.shop.id) }}"
+             style="color:inherit;text-decoration:none;">
+            {{ r.shop.shop_name }}
+          </a>
+        </td>
+        <td>
+          {% if r.shop.status == 'ACTIVE' %}<span class="chip chip-success">Active</span>
+          {% elif r.shop.status == 'INACTIVE' %}<span class="chip chip-warning">Inactive</span>
+          {% else %}<span class="chip">Archived</span>{% endif %}
+        </td>
+        <td>{{ r.user_count }}</td>
+        <td>{{ r.machine_count }}</td>
+        <td>
+          <div class="actions">
+            <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.shop_edit', shop_id=r.shop.id) }}">Edit</a>
+            {% if r.shop.status != 'ACTIVE' %}
+            <form method="POST" style="display:inline;"
+                  action="{{ url_for('admin.shop_set_status', shop_id=r.shop.id, new_status='ACTIVE') }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-primary btn-sm" type="submit">Activate</button>
+            </form>
+            {% endif %}
+            {% if r.shop.status != 'INACTIVE' %}
+            <form method="POST" style="display:inline;"
+                  action="{{ url_for('admin.shop_set_status', shop_id=r.shop.id, new_status='INACTIVE') }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-secondary btn-sm" type="submit">Deactivate</button>
+            </form>
+            {% endif %}
+            {% if r.shop.status != 'ARCHIVED' %}
+            <form method="POST" style="display:inline;"
+                  action="{{ url_for('admin.shop_set_status', shop_id=r.shop.id, new_status='ARCHIVED') }}"
+                  onsubmit="return confirm('Archive this shop?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-secondary btn-sm" type="submit">Archive</button>
+            </form>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">
+  <div class="empty-icon">
+    <svg class="icon icon-lg"><use href="#i-shop"/></svg>
+  </div>
+  <h2 class="empty-title">No shops yet</h2>
+  <p class="empty-desc">Create your first shop to get started.</p>
+  <a class="btn btn-primary" href="{{ url_for('admin.shop_create') }}">
+    <svg class="icon icon-sm"><use href="#i-plus"/></svg>
+    Create Shop
+  </a>
+</div>
+{% endif %}
+
+{% endblock %}

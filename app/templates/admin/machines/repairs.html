@@ -1,0 +1,81 @@
+{% extends "admin/base.html" %}
+{% block title %}Repairs — {{ machine.machine_code }}{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Repair History</h1>
+    <p class="page-sub">
+      Machine: <strong class="mono">{{ machine.machine_code }}</strong> — {{ machine.machine_name }}
+    </p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.machine_list') }}">← Back</a>
+</div>
+
+<div class="card" style="margin-bottom:20px;">
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="field" style="grid-column:1 / -1;">
+        {{ form.description.label(class_="field-label") }}
+        {{ form.description(class_="field-input", placeholder="e.g. Replaced HDMI cable") }}
+        {% for e in form.description.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      </div>
+
+      <div class="field">
+        {{ form.error_id.label(class_="field-label") }}
+        {{ form.error_id(class_="field-select") }}
+      </div>
+
+      <div class="field">
+        {{ form.repaired_at.label(class_="field-label") }}
+        {{ form.repaired_at(class_="field-input", placeholder="2026-09-18 14:30") }}
+        {% for e in form.repaired_at.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      </div>
+
+      <div class="field" style="grid-column:1 / -1;">
+        {{ form.notes.label(class_="field-label") }}
+        {{ form.notes(class_="field-textarea", rows=2, placeholder="Optional notes") }}
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Add Repair Entry</button>
+  </form>
+</div>
+
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Entries ({{ repairs|length }})</h2>
+  </div>
+  {% if repairs %}
+  <div class="list">
+    {% for r in repairs %}
+    <div class="list-item" style="align-items:flex-start;cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-history"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">{{ r.description }}</div>
+        <div class="list-item-sub">
+          {{ r.repaired_at.strftime('%Y-%m-%d %H:%M') }}
+          {% if r.error %} · {{ r.error.error_code }}{% endif %}
+          {% if r.performed_by_user %} · @{{ r.performed_by_user.username }}{% endif %}
+        </div>
+        {% if r.notes %}<p class="text-sm text-muted" style="margin-top:6px;">{{ r.notes }}</p>{% endif %}
+      </div>
+      <form method="POST"
+            action="{{ url_for('admin.machine_repair_delete', machine_id=machine.id, repair_id=r.id) }}"
+            onsubmit="return confirm('Delete this entry?');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-secondary btn-sm" type="submit">Delete</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-sm text-muted">No repair entries yet.</p>
+  {% endif %}
+</section>
+
+{% endblock %}

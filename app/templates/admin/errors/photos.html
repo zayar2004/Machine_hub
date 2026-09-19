@@ -1,0 +1,74 @@
+{% extends "admin/base.html" %}
+{% block title %}Photos — {{ error.error_code }}{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Photos</h1>
+    <p class="page-sub">
+      Error: <strong class="mono">{{ error.error_code }}</strong> — {{ error.error_name }}
+    </p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_list') }}">← Back</a>
+</div>
+
+<div class="card" style="margin-bottom:20px;">
+  <form method="POST" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      {{ form.images.label(class_="field-label") }}
+      {{ form.images(class_="field-input", accept=".jpg,.jpeg,.png,.webp", multiple=true) }}
+      {% for e in form.images.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      <p class="field-help">Max 10 MB per file. Auto-resized to 1600px, JPEG-compressed.</p>
+    </div>
+
+    <div class="field">
+      {{ form.caption.label(class_="field-label") }}
+      {{ form.caption(class_="field-input", placeholder="Optional caption") }}
+    </div>
+
+    <button class="btn btn-primary" type="submit">Upload Photos</button>
+  </form>
+</div>
+
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Uploaded ({{ error.images|length }})</h2>
+  </div>
+
+  {% if error.images %}
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;">
+    {% for img in error.images %}
+    <div class="card" style="padding:0;overflow:hidden;">
+      <img src="{{ url_for('admin.serve_upload', rel_path=img.image_path) }}"
+           alt="{{ img.caption or 'photo' }}"
+           style="width:100%;aspect-ratio:1;object-fit:cover;display:block;">
+      <div style="padding:10px;">
+        {% if img.caption %}
+          <p class="text-xs" style="margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ img.caption }}</p>
+        {% endif %}
+        <p class="text-xs text-muted" style="margin-bottom:8px;">
+          #{{ img.sort_order }}
+          {% if img.width %} · {{ img.width }}×{{ img.height }}{% endif %}
+          {% if img.file_size %} · {{ (img.file_size / 1024)|int }} KB{% endif %}
+        </p>
+        <div class="actions">
+          <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_photo_edit', error_id=error.id, image_id=img.id) }}">Edit</a>
+          <form method="POST" style="display:inline;"
+                action="{{ url_for('admin.error_photo_delete', error_id=error.id, image_id=img.id) }}"
+                onsubmit="return confirm('Delete this photo?');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-secondary btn-sm" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-sm text-muted">No photos uploaded yet.</p>
+  {% endif %}
+</section>
+
+{% endblock %}

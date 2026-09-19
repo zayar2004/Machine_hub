@@ -1,0 +1,60 @@
+{% extends "admin/base.html" %}
+{% block title %}Link Errors — {{ machine.machine_code }}{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Link Errors</h1>
+    <p class="page-sub">
+      Machine: <strong class="mono">{{ machine.machine_code }}</strong> — {{ machine.machine_name }}
+    </p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.machine_list') }}">← Back</a>
+</div>
+
+{% if form.error_id.choices %}
+<form method="POST" class="filter-bar">
+  {{ form.hidden_tag() }}
+  <div class="field" style="flex:1;">
+    {{ form.error_id.label(class_="field-label") }}
+    {{ form.error_id(class_="field-select") }}
+  </div>
+  <button class="btn btn-primary btn-sm" type="submit">Link</button>
+</form>
+{% else %}
+<div style="padding:12px 14px;background:var(--accent-soft);color:var(--accent);border-radius:var(--r);font-size:13px;margin-bottom:16px;">
+  All active errors are already linked.
+</div>
+{% endif %}
+
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Linked Errors ({{ machine.errors|length }})</h2>
+  </div>
+  {% if machine.errors %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Code</th><th>Name</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for e in machine.errors %}
+        <tr>
+          <td><strong class="mono">{{ e.error_code }}</strong></td>
+          <td>{{ e.error_name }}</td>
+          <td>
+            <form method="POST" style="display:inline;"
+                  action="{{ url_for('admin.machine_unlink_error', machine_id=machine.id, error_id=e.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-secondary btn-sm" type="submit">Unlink</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-sm text-muted">No errors linked yet.</p>
+  {% endif %}
+</section>
+
+{% endblock %}

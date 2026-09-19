@@ -1,0 +1,40 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Edit' if mode == 'edit' else 'New' }} Shop — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{{ 'Edit' if mode == 'edit' else 'New' }} Shop</h1>
+    <p class="page-sub">Shop locations are used to organize machines</p>
+  </div>
+</div>
+
+<div style="max-width:520px;">
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      {{ form.shop_code.label(class_="field-label") }}
+      {{ form.shop_code(class_="field-input", autofocus=true, placeholder="e.g. A3") }}
+      {% for e in form.shop_code.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.shop_name.label(class_="field-label") }}
+      {{ form.shop_name(class_="field-input", placeholder="e.g. Shop A3") }}
+      {% for e in form.shop_name.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.status.label(class_="field-label") }}
+      {{ form.status(class_="field-select") }}
+    </div>
+
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" type="submit">Save</button>
+      <a class="btn btn-secondary" href="{{ url_for('admin.shop_list') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

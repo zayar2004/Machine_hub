@@ -1,0 +1,28 @@
+{% extends "user/base.html" %}
+{% block title %}{{ code }} — Machine Hub{% endblock %}
+{% block content %}
+
+<div style="text-align:center;padding:60px 20px;">
+  <div style="font-size:64px;font-weight:800;color:var(--text-3);letter-spacing:-.04em;">
+    {{ code }}
+  </div>
+  <h1 style="font-size:20px;font-weight:700;margin:16px 0 8px;">
+    {{ title }}
+  </h1>
+  <p style="font-size:14px;color:var(--text-2);line-height:1.6;max-width:360px;margin:0 auto 24px;">
+    {{ message }}
+  </p>
+
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+    <a href="{{ url_for('user.home') }}" class="btn btn-primary">
+      <svg class="icon icon-sm"><use href="#i-home"/></svg>
+      Home
+    </a>
+    <button type="button" class="btn btn-secondary" onclick="history.back()">
+      <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+      Back
+    </button>
+  </div>
+</div>
+
+{% endblock %}

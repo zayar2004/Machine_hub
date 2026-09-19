@@ -1,0 +1,122 @@
+{% extends "user/base.html" %}
+{% block title %}{{ machine.machine_name }} — Machine Hub{% endblock %}
+{% block content %}
+
+<!-- Back -->
+<a href="javascript:history.back()" class="text-sm text-muted"
+   style="display:inline-flex;align-items:center;gap:4px;margin-bottom:var(--space-3);">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round"
+       stroke-linejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12"/>
+    <polyline points="12 19 5 12 12 5"/>
+  </svg>
+  Back
+</a>
+
+<!-- Header -->
+<header class="detail-header">
+  <h1 class="detail-title">{{ machine.machine_name }}</h1>
+
+  <!-- Machine code with copy -->
+  <div class="detail-code">
+    <span class="mono">{{ machine.machine_code }}</span>
+    <button type="button" class="copy-btn"
+            data-copy="{{ machine.machine_code }}"
+            aria-label="Copy code"
+            title="Copy code">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round"
+           stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+    </button>
+  </div>
+
+  <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;margin-top:var(--space-2);align-items:center;">
+    {% if machine.shop %}
+      <span class="badge badge-primary">{{ machine.shop.shop_code }} — {{ machine.shop.shop_name }}</span>
+    {% endif %}
+    {% if machine.status == 'ACTIVE' %}
+      <span class="badge badge-active">ACTIVE</span>
+    {% elif machine.status == 'INACTIVE' %}
+      <span class="badge badge-inactive">INACTIVE</span>
+    {% else %}
+      <span class="badge badge-archived">ARCHIVED</span>
+    {% endif %}
+
+    <button type="button" class="btn btn-sm btn-outline"
+            data-fav-toggle data-type="machine" data-id="{{ machine.id }}"
+            title="Favorite" aria-pressed="false">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round"
+           stroke-linejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      Favorite
+    </button>
+  </div>
+</header>
+
+<!-- Description -->
+{% if machine.description %}
+<section class="detail-section">
+  <h2 class="detail-section-title">Description</h2>
+  <p class="detail-content">{{ machine.description }}</p>
+</section>
+{% endif %}
+
+<!-- Related errors -->
+<section class="detail-section">
+  <h2 class="detail-section-title">
+    Related Errors ({{ machine.errors|length }})
+  </h2>
+
+  {% if machine.errors %}
+    <div class="list">
+      {% for e in machine.errors %}
+      <a class="row" href="{{ url_for('user.error_detail', error_id=e.id) }}">
+        <div class="row-main">
+          <div class="row-title">{{ e.error_name }}</div>
+          <div class="row-sub mono">{{ e.error_code }}</div>
+        </div>
+        <svg class="row-arrow" width="18" height="18" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-sm text-muted">No errors linked to this machine yet.</p>
+  {% endif %}
+</section>
+
+<!-- Repair History -->
+{% if machine.repair_history %}
+<section class="detail-section">
+  <h2 class="detail-section-title">
+    Repair History ({{ machine.repair_history|length }})
+  </h2>
+  <div class="list">
+    {% for r in machine.repair_history|sort(attribute='repaired_at', reverse=true) %}
+    <div class="card">
+      <div class="row-title" style="font-size:var(--text-sm);">
+        {{ r.description }}
+      </div>
+      <div class="row-sub" style="margin-top:4px;">
+        {{ r.repaired_at.strftime('%Y-%m-%d %H:%M') }}
+        {% if r.error %} · {{ r.error.error_code }}{% endif %}
+      </div>
+      {% if r.notes %}
+        <p class="text-sm text-muted mt-2">{{ r.notes }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

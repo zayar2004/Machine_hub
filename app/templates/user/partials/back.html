@@ -1,0 +1,8 @@
+{# Smart Back button — goes back in history, or to Home if no history #}
+<a href="{{ url_for('user.home') }}"
+   class="detail-back"
+   data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>

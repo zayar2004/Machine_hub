@@ -1,0 +1,37 @@
+<header class="header">
+  <div class="header-inner">
+
+    <!-- Left: Brand (MH + App Name) -->
+    <a href="{{ url_for('user.home') }}" class="brand" aria-label="Machine Hub Home">
+      <span class="brand-mark">MH</span>
+      <span class="brand-name">Machine Hub</span>
+    </a>
+
+    <!-- Right: Favorites + Sync + Menu -->
+    <div class="header-actions">
+
+      <!-- Favorites shortcut -->
+      <a href="{{ url_for('user.favorites') }}" class="icon-btn header-icon-btn"
+         aria-label="Favorites" title="Favorites">
+        <svg class="icon"><use href="#i-star"/></svg>
+      </a>
+
+      <!-- Sync dot -->
+      <button type="button" class="status-pill status-pill-compact"
+              id="sync-indicator"
+              data-sync-now title="Tap to sync" aria-label="Sync status">
+        <span class="status-dot" id="sync-dot"></span>
+        <span id="sync-label" class="status-label">Online</span>
+      </button>
+
+      <!-- Menu button -->
+      <button type="button" class="menu-btn" data-sheet-open
+              aria-label="Open menu" title="Menu">
+        <svg class="icon menu-btn-icon"><use href="#i-menu"/></svg>
+        <span class="menu-btn-label">Menu</span>
+      </button>
+
+    </div>
+
+  </div>
+</header>

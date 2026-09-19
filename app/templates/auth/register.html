@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#09090b">
+  <title>Register — Machine Hub</title>
+
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='icons/icon.svg') }}">
+
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('mh_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+</head>
+<body>
+
+<div class="login-page">
+  <div class="login-card">
+
+    <div class="login-brand">
+      <div class="login-brand-mark">MH</div>
+      <div>
+        <h1 class="login-title">Create Account</h1>
+        <p class="login-sub">Fill in your details</p>
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}" style="white-space:pre-line;">
+          <svg class="icon icon-sm"><use href="#i-info"/></svg>
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST" novalidate>
+      {{ form.hidden_tag() }}
+
+      <div class="field">
+        {{ form.name.label(class_="field-label") }}
+        {{ form.name(class_="field-input", autofocus=true, placeholder="Your full name") }}
+        <p class="field-help">Username ကို သင့်နာမည်ကနေ အလိုအလျောက် ဖန်တီးပါမယ်။</p>
+        {% for err in form.name.errors %}<p class="field-error">{{ err }}</p>{% endfor %}
+      </div>
+
+      <div class="field">
+        {{ form.password.label(class_="field-label") }}
+        {{ form.password(class_="field-input", placeholder="min 6 chars", autocomplete="new-password") }}
+        {% for err in form.password.errors %}<p class="field-error">{{ err }}</p>{% endfor %}
+      </div>
+
+      <div class="field">
+        {{ form.confirm_password.label(class_="field-label") }}
+        {{ form.confirm_password(class_="field-input", placeholder="repeat password", autocomplete="new-password") }}
+        {% for err in form.confirm_password.errors %}<p class="field-error">{{ err }}</p>{% endfor %}
+      </div>
+
+      <div class="flash flash-info" style="margin-bottom:16px;">
+        <svg class="icon icon-sm"><use href="#i-info"/></svg>
+        <span>Account ဖန်တီးပြီးရင် Admin က အတည်ပြုပါမယ်။</span>
+      </div>
+
+      {{ form.submit(class_="btn btn-primary btn-block") }}
+    </form>
+
+    <p class="login-footer">
+      Account ရှိပြီးသားလား?
+      <a href="{{ url_for('auth.login') }}">Sign in</a>
+    </p>
+
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/icons.js') }}"></script>
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+
+</body>
+</html>

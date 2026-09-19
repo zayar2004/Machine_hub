@@ -1,0 +1,106 @@
+{% extends "admin/base.html" %}
+{% block title %}Search — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Universal Search</h1>
+    <p class="page-sub">Find machines and errors across all shops</p>
+  </div>
+</div>
+
+<form method="GET" action="{{ url_for('admin.admin_search') }}" class="filter-bar">
+  <div class="field" style="flex:3;">
+    <input type="text" name="q" value="{{ query }}" class="field-input"
+           placeholder="Search code, name, or keyword..." autofocus>
+  </div>
+  <div class="field" style="flex:1;">
+    <select name="type" class="field-select">
+      <option value="all" {% if search_type == 'all' %}selected{% endif %}>All</option>
+      <option value="machine" {% if search_type == 'machine' %}selected{% endif %}>Machines</option>
+      <option value="error" {% if search_type == 'error' %}selected{% endif %}>Errors</option>
+    </select>
+  </div>
+  <button class="btn btn-primary btn-sm" type="submit">Search</button>
+</form>
+
+{% if query %}
+  <p class="text-sm text-muted" style="margin-bottom:16px;">
+    Results for "<strong>{{ query }}</strong>" — {{ machines|length }} machines, {{ errors|length }} errors
+  </p>
+
+  {% if machines %}
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Machines ({{ machines|length }})</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Shop</th><th>Code</th><th>Name</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for m in machines %}
+          <tr>
+            <td>{% if m.shop %}<span class="chip chip-accent">{{ m.shop.shop_code }}</span>{% endif %}</td>
+            <td><strong class="mono">{{ m.machine_code }}</strong></td>
+            <td>{{ m.machine_name }}</td>
+            <td>
+              {% if m.status == 'ACTIVE' %}<span class="chip chip-success">Active</span>
+              {% elif m.status == 'INACTIVE' %}<span class="chip chip-warning">Inactive</span>
+              {% else %}<span class="chip">Archived</span>{% endif %}
+            </td>
+            <td><a class="btn btn-secondary btn-sm" href="{{ url_for('admin.machine_edit', machine_id=m.id) }}">Edit</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if errors %}
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Errors ({{ errors|length }})</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Code</th><th>Name</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for e in errors %}
+          <tr>
+            <td><strong class="mono">{{ e.error_code }}</strong></td>
+            <td>{{ e.error_name }}</td>
+            <td>
+              {% if e.status == 'ACTIVE' %}<span class="chip chip-success">Active</span>
+              {% elif e.status == 'INACTIVE' %}<span class="chip chip-warning">Inactive</span>
+              {% else %}<span class="chip">Archived</span>{% endif %}
+            </td>
+            <td>
+              <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_edit', error_id=e.id) }}">Edit</a>
+              <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_machines', error_id=e.id) }}">Machines</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if not machines and not errors %}
+  <div class="empty">
+    <div class="empty-icon"><svg class="icon icon-lg"><use href="#i-search"/></svg></div>
+    <h2 class="empty-title">No results</h2>
+    <p class="empty-desc">No matches for "{{ query }}".</p>
+  </div>
+  {% endif %}
+
+{% else %}
+<div class="empty">
+  <div class="empty-icon"><svg class="icon icon-lg"><use href="#i-search"/></svg></div>
+  <h2 class="empty-title">Search</h2>
+  <p class="empty-desc">Type a machine or error code above.</p>
+</div>
+{% endif %}
+
+{% endblock %}

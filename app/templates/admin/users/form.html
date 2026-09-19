@@ -1,0 +1,64 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Edit' if mode == 'edit' else 'New' }} User — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{{ 'Edit' if mode == 'edit' else 'New' }} User</h1>
+    <p class="page-sub">Staff account details and permissions</p>
+  </div>
+</div>
+
+<div style="max-width:520px;">
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      {{ form.name.label(class_="field-label") }}
+      {{ form.name(class_="field-input", autofocus=true, placeholder="Full name") }}
+      {% for e in form.name.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.username.label(class_="field-label") }}
+      {{ form.username(class_="field-input", placeholder="username") }}
+      {% for e in form.username.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    {% if mode == 'create' %}
+    <div class="field">
+      {{ form.password.label(class_="field-label") }}
+      {{ form.password(class_="field-input", placeholder="min 6 chars") }}
+      {% for e in form.password.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+    <div class="field">
+      {{ form.confirm_password.label(class_="field-label") }}
+      {{ form.confirm_password(class_="field-input", placeholder="repeat") }}
+      {% for e in form.confirm_password.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="field">
+      {{ form.role.label(class_="field-label") }}
+      {{ form.role(class_="field-select") }}
+    </div>
+
+    <div class="field">
+      {{ form.shop_id.label(class_="field-label") }}
+      {{ form.shop_id(class_="field-select") }}
+      <p class="field-help">USER role requires a shop. ADMIN may have none.</p>
+    </div>
+
+    <div class="field">
+      {{ form.status.label(class_="field-label") }}
+      {{ form.status(class_="field-select") }}
+    </div>
+
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" type="submit">{{ 'Save' if mode == 'edit' else 'Create User' }}</button>
+      <a class="btn btn-secondary" href="{{ url_for('admin.user_list') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

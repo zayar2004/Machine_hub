@@ -1,0 +1,201 @@
+{% extends "admin/base.html" %}
+{% block title %}Errors — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Error Knowledge</h1>
+    <p class="page-sub">Global — shared across all shops</p>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+    <a class="btn btn-secondary btn-sm"
+       href="{{ url_for('admin.errors_export', q=filters.q, status=filters.status or None) }}">
+      <svg class="icon icon-sm"><use href="#i-download"/></svg>
+      Export
+    </a>
+    <a class="btn btn-primary btn-sm" href="{{ url_for('admin.error_create') }}">
+      <svg class="icon icon-sm"><use href="#i-plus"/></svg>
+      New Error
+    </a>
+    <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.import_errors_upload') }}">
+      📥 Import
+    </a>
+  </div>
+</div>
+
+<form method="GET" action="{{ url_for('admin.error_list') }}" class="filter-bar">
+  <div class="field" style="flex:2;">
+    <label class="field-label">Search</label>
+    <input type="text" name="q" value="{{ filters.q }}" class="field-input" placeholder="Code or name">
+  </div>
+  <div class="field" style="flex:1;">
+    <label class="field-label">Status</label>
+    <select name="status" class="field-select">
+      <option value="">All</option>
+      <option value="ACTIVE" {% if filters.status == 'ACTIVE' %}selected{% endif %}>Active</option>
+      <option value="INACTIVE" {% if filters.status == 'INACTIVE' %}selected{% endif %}>Inactive</option>
+      <option value="ARCHIVED" {% if filters.status == 'ARCHIVED' %}selected{% endif %}>Archived</option>
+    </select>
+  </div>
+  <button class="btn btn-primary btn-sm" type="submit">Filter</button>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_list') }}">Reset</a>
+</form>
+
+{% if errors %}
+  <form method="POST" action="{{ url_for('admin.errors_bulk_delete') }}" id="bulk-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <!-- Bulk bar -->
+    <div id="bulk-bar" style="display:none;padding:12px 16px;background:var(--danger-soft);border:1.5px solid var(--danger);border-radius:12px;margin-bottom:12px;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div style="flex:1;font-size:13px;font-weight:600;color:var(--danger);">
+        <span id="selected-count">0</span> error(s) selected
+      </div>
+      <button type="button" class="btn btn-secondary btn-sm" id="select-all">Select All</button>
+      <button type="button" class="btn btn-secondary btn-sm" id="clear-selection">Clear</button>
+      <button type="submit" class="btn btn-danger btn-sm"
+              onclick="return confirm('Archive selected errors?');">
+        <svg class="icon icon-sm"><use href="#i-trash"/></svg>
+        Archive Selected
+      </button>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:40px;">
+              <input type="checkbox" id="check-all" style="width:18px;height:18px;accent-color:var(--accent);">
+            </th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Machines</th>
+            <th>Photos</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in errors %}
+          <tr>
+            <td>
+              <input type="checkbox" name="error_ids" value="{{ e.id }}"
+                     class="row-checkbox"
+                     style="width:18px;height:18px;accent-color:var(--accent);">
+            </td>
+            <td><strong class="mono">{{ e.error_code }}</strong></td>
+            <td>{{ e.error_name }}</td>
+            <td>
+              <span class="chip" style="font-size:10px;
+                {% if e.category == 'TIP' %}background:var(--accent-soft);color:var(--accent);
+                {% elif e.category == 'INFO' %}background:var(--info-soft,#e0f2fe);color:var(--info,#0284c7);
+                {% elif e.category == 'HOW_TO' %}background:var(--success-soft);color:var(--success);
+                {% endif %}">{{ e.category or 'ERROR' }}</span>
+            </td>
+            <td>
+              {% if e.status == 'ACTIVE' %}<span class="chip chip-success">Active</span>
+              {% elif e.status == 'INACTIVE' %}<span class="chip chip-warning">Inactive</span>
+              {% else %}<span class="chip">Archived</span>{% endif %}
+            </td>
+            <td>{{ e.machines|length }}</td>
+            <td>{{ e.images|length }}</td>
+            <td>
+              <div class="actions">
+                <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_edit', error_id=e.id) }}">Edit</a>
+                <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_machines', error_id=e.id) }}">Machines</a>
+                <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_photos', error_id=e.id) }}">Photos</a>
+                {% if e.status == 'ARCHIVED' %}
+                  <form method="POST" style="display:inline;"
+                        action="{{ url_for('admin.error_restore', error_id=e.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-primary btn-sm" type="submit">Restore</button>
+                  </form>
+                  <button class="btn btn-danger btn-sm" type="button"
+                          onclick="permanentDeleteError({{ e.id }}, '{{ e.error_code }}')">
+                    Permanent Delete
+                  </button>
+                {% endif %}
+                <form method="POST" style="display:inline;"
+                      action="{{ url_for('admin.error_delete', error_id=e.id) }}"
+                      onsubmit="return confirm('Archive this error?');">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <input type="hidden" name="next" value="{{ request.url }}">
+                  <button class="btn btn-secondary btn-sm" type="submit">Archive</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <script>
+    (function() {
+      const checkAll = document.getElementById('check-all');
+      const checkboxes = document.querySelectorAll('.row-checkbox');
+      const bulkBar = document.getElementById('bulk-bar');
+      const countEl = document.getElementById('selected-count');
+      const selectAllBtn = document.getElementById('select-all');
+      const clearBtn = document.getElementById('clear-selection');
+
+      function updateBar() {
+        const checked = Array.from(checkboxes).filter(cb => cb.checked);
+        countEl.textContent = checked.length;
+        bulkBar.style.display = checked.length > 0 ? 'flex' : 'none';
+        if (checkAll) checkAll.checked = checked.length === checkboxes.length && checkboxes.length > 0;
+      }
+
+      if (checkAll) {
+        checkAll.addEventListener('change', () => {
+          checkboxes.forEach(cb => cb.checked = checkAll.checked);
+          updateBar();
+        });
+      }
+      checkboxes.forEach(cb => cb.addEventListener('change', updateBar));
+      if (selectAllBtn) selectAllBtn.addEventListener('click', () => {
+        checkboxes.forEach(cb => cb.checked = true);
+        updateBar();
+      });
+      if (clearBtn) clearBtn.addEventListener('click', () => {
+        checkboxes.forEach(cb => cb.checked = false);
+        updateBar();
+      });
+      updateBar();
+    })();
+  </script>
+
+{% else %}
+  <div class="empty">
+    <div class="empty-icon"><svg class="icon icon-lg"><use href="#i-alert"/></svg></div>
+    <h2 class="empty-title">No errors found</h2>
+    <p class="empty-desc">Try adjusting your filters or create a new error.</p>
+    <a class="btn btn-primary" href="{{ url_for('admin.error_create') }}">+ Create Error</a>
+  </div>
+{% endif %}
+
+
+    <script>
+      function permanentDeleteError(id, code) {
+        const input = prompt(
+          'PERMANENT DELETE — Cannot be undone!\n\n' +
+          'Type the error code to confirm:\n' +
+          '  ' + code
+        );
+        if (input === null) return;
+        if (input.trim().toUpperCase() !== code.toUpperCase()) {
+          alert('Code does not match. Delete cancelled.');
+          return;
+        }
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/admin/errors/' + id + '/permanent-delete';
+        form.innerHTML = '<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">' +
+                         '<input type="hidden" name="confirm_code" value="' + code + '">';
+        document.body.appendChild(form);
+        form.submit();
+      }
+    </script>
+    
+{% endblock %}

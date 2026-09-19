@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Flask
+instance/
+*.db
+*.db-journal
+*.sqlite3
+
+# Uploads (user data — don't commit)
+uploads/
+!uploads/.gitkeep
+
+# Backups
+*.bak
+*.bak_*
+*.bak2
+*.bak3
+*.bak4
+*.bak5
+*.broken
+*.before_*
+
+# Env
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (for Capacitor)
+node_modules/
+package-lock.json
+android/
+ios/
+.gradle/
+
+# Logs
+*.log

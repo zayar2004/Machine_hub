@@ -1,0 +1,209 @@
+{% extends "user/base.html" %}
+{% block title %}{{ error.error_name }} — Machine Hub{% endblock %}
+{% block content %}
+
+<!-- Back -->
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back><svg class="icon icon-sm"><use href="#i-arrow-left"/></svg><span>Back</span></a>
+
+<!-- Header -->
+<header class="detail-head">
+  <h1 class="detail-title">{{ error.error_name }}</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-top:-8px;margin-bottom:16px;line-height:1.6;">
+  Fix ကို အောက်မှာ ဖတ်ပါ။ Photos ကြည့်ဖို့ thumbnail ကို နှိပ်ပါ။
+  Related machines က သင့် shop ရဲ့ machine တွေပဲ ပြပါမယ်။
+</p>
+<p class="text-sm text-muted" style="margin-top:-12px;margin-bottom:20px;line-height:1.5;">
+    Fix ကို အောက်မှာ ဖတ်ပါ။ Photos ကြည့်ဖို့ thumbnail ကို နှိပ်ပါ။ Related machines က သင့် shop ပဲ ပြပါမယ်။
+  </p>
+
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+    <span class="code" style="font-size:14px;padding:4px 10px;">
+      {{ error.error_code }}
+    </span>
+    <button type="button" class="copy-btn" data-copy="{{ error.error_code }}"
+            title="Copy code">
+      <svg class="icon icon-sm"><use href="#i-copy"/></svg>
+    </button>
+  </div>
+
+  <div class="detail-meta">
+    {% if error.category and error.category != 'ERROR' %}
+      <span class="chip {% if error.category == 'TIP' %}chip-accent{% elif error.category == 'HOW_TO' %}chip-success{% endif %}" style="margin-right:6px;">
+        {% if error.category == 'TIP' %}💡 Tip
+        {% elif error.category == 'INFO' %}ℹ️ Info
+        {% elif error.category == 'HOW_TO' %}📖 How-To
+        {% else %}{{ error.category }}{% endif %}
+      </span>
+    {% endif %}
+    {% if error.status == 'ACTIVE' %}
+      <span class="chip chip-success">Active</span>
+    {% elif error.status == 'INACTIVE' %}
+      <span class="chip chip-warning">Inactive</span>
+    {% else %}
+      <span class="chip">Archived</span>
+    {% endif %}
+
+    <button type="button" class="chip" data-fav-toggle
+            data-type="error" data-id="{{ error.id }}"
+            style="cursor:pointer;">
+      <svg class="icon icon-xs"><use href="#i-star"/></svg>
+      <span>Favorite</span>
+    </button>
+  </div>
+</header>
+
+<!-- Fix / Solution -->
+{% if error.error_fix %}
+<section class="detail-section">
+  <h2 class="detail-section-title">Fix</h2>
+  <div class="fix-card mm">{{ error.error_fix }}</div>
+</section>
+{% else %}
+<section class="detail-section">
+  <h2 class="detail-section-title">Fix</h2>
+  <div class="card" style="padding:16px;">
+    <p class="text-sm text-muted mm">
+      ဒီ Error အတွက် သိမ်းဆည်းထားသော ဖြေရှင်းနည်း မရှိသေးပါ။
+    </p>
+  </div>
+</section>
+{% endif %}
+
+<!-- Photos -->
+{% if error.images %}
+<section class="detail-section">
+  <h2 class="detail-section-title">Photos ({{ error.images|length }})</h2>
+  <div class="photo-grid" id="photo-grid">
+    {% for img in error.images %}
+    <button type="button" class="photo-thumb" data-photo-index="{{ loop.index0 }}"
+            data-photo-src="{{ url_for('admin.serve_upload', rel_path=img.image_path) }}">
+      <img src="{{ url_for('admin.serve_upload', rel_path=img.image_path) }}"
+           alt="{{ img.caption or 'photo' }}" loading="lazy">
+    </button>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- Explanation -->
+{% if error.explanation %}
+<section class="detail-section">
+  <h2 class="detail-section-title">Explanation</h2>
+  <p class="detail-body mm">{{ error.explanation }}</p>
+</section>
+{% endif %}
+
+<!-- Related machines -->
+<section class="detail-section">
+  <h2 class="detail-section-title">
+    Related Machines ({{ visible_machines|length }})
+  </h2>
+  {% if visible_machines %}
+    <div class="list">
+      {% for m in visible_machines %}
+      <a class="list-item" href="{{ url_for('user.machine_detail', machine_id=m.id) }}">
+        <div class="list-item-icon accent">
+          <svg class="icon"><use href="#i-package"/></svg>
+        </div>
+        <div class="list-item-main">
+          <div class="list-item-title">{{ m.machine_name }}</div>
+          <div class="list-item-sub">
+            <span class="code">{{ m.machine_code }}</span>
+            {% if m.shop %}<span>{{ m.shop.shop_code }}</span>{% endif %}
+          </div>
+        </div>
+        <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+      </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-sm text-muted">No related machines in your shop.</p>
+  {% endif %}
+</section>
+
+<!-- Photo viewer -->
+<div class="photo-viewer" id="photo-viewer">
+  <span class="photo-viewer-counter" id="pv-counter">1 / 1</span>
+  <button type="button" class="photo-viewer-close" id="pv-close">
+    <svg class="icon icon-lg" style="color:#fff;"><use href="#i-x"/></svg>
+  </button>
+  <button type="button" class="photo-viewer-nav photo-viewer-prev" id="pv-prev">
+    <svg class="icon" style="color:#fff;"><use href="#i-chevron-left"/></svg>
+  </button>
+  <img id="pv-img" alt="">
+  <button type="button" class="photo-viewer-nav photo-viewer-next" id="pv-next">
+    <svg class="icon" style="color:#fff;"><use href="#i-chevron-right"/></svg>
+  </button>
+</div>
+
+<script>
+  (function () {
+    const thumbs = Array.from(document.querySelectorAll('[data-photo-index]'));
+    if (!thumbs.length) return;
+
+    const sources = thumbs.map(t => t.getAttribute('data-photo-src'));
+    const viewer = document.getElementById('photo-viewer');
+    const img = document.getElementById('pv-img');
+    const counter = document.getElementById('pv-counter');
+    const closeBtn = document.getElementById('pv-close');
+    const prevBtn = document.getElementById('pv-prev');
+    const nextBtn = document.getElementById('pv-next');
+
+    let idx = 0;
+
+    function show(i) {
+      idx = (i + sources.length) % sources.length;
+      img.src = sources[idx];
+      counter.textContent = (idx + 1) + ' / ' + sources.length;
+    }
+
+    function open(i) {
+      show(i);
+      viewer.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      viewer.classList.remove('open');
+      document.body.style.overflow = '';
+      img.src = '';
+    }
+
+    thumbs.forEach((t, i) => {
+      t.addEventListener('click', () => open(i));
+    });
+
+    closeBtn.addEventListener('click', close);
+    prevBtn.addEventListener('click', () => show(idx - 1));
+    nextBtn.addEventListener('click', () => show(idx + 1));
+
+    viewer.addEventListener('click', (e) => {
+      if (e.target === viewer) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!viewer.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') show(idx - 1);
+      if (e.key === 'ArrowRight') show(idx + 1);
+    });
+
+    // Swipe
+    let touchX = null;
+    viewer.addEventListener('touchstart', (e) => {
+      touchX = e.touches[0].clientX;
+    }, { passive: true });
+    viewer.addEventListener('touchend', (e) => {
+      if (touchX == null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 50) {
+        if (dx > 0) show(idx - 1);
+        else show(idx + 1);
+      }
+      touchX = null;
+    });
+  })();
+</script>
+
+{% endblock %}

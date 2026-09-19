@@ -1,0 +1,334 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Edit' if mode == 'edit' else 'New' }} Error — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{{ 'Edit' if mode == 'edit' else 'New' }} Error</h1>
+    <p class="page-sub">Global error knowledge — shared across all shops</p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_list') }}">← Back</a>
+</div>
+
+<div style="max-width:720px;">
+  <form method="POST" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      {{ form.error_code.label(class_="field-label") }}
+      {{ form.error_code(class_="field-input", autofocus=true, placeholder="e.g. E81") }}
+      {% for e in form.error_code.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.error_name.label(class_="field-label") }}
+      {{ form.error_name(class_="field-input", placeholder="e.g. Screen Error") }}
+      {% for e in form.error_name.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.error_fix.label(class_="field-label") }}
+      {{ form.error_fix(class_="field-textarea", rows=5, placeholder="Step-by-step fix") }}
+    </div>
+
+    <div class="field">
+      {{ form.explanation.label(class_="field-label") }}
+      {{ form.explanation(class_="field-textarea", rows=4, placeholder="Additional context") }}
+
+      {{ form.machine_name.label(class_="field-label") }}
+      {{ form.machine_name(class_="field-input", placeholder="e.g. R_MEDAL_DREAM — full name, partial, or keyword") }}
+      {% if form.machine_name.description %}
+        <div style="font-size:12px;color:var(--text-3);margin-top:6px;line-height:1.4;">
+          {{ form.machine_name.description }}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Machines Picker -->
+    <div class="field">
+      <label class="field-label">
+        Related Machines
+        <span class="field-label-optional">(optional)</span>
+      </label>
+
+      <div style="border:1.5px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface);">
+        <!-- Search box -->
+        <div style="padding:10px;border-bottom:1px solid var(--border);background:var(--surface-2);">
+          <div style="position:relative;">
+            <svg class="icon icon-sm" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-3);pointer-events:none;">
+              <use href="#i-search"/>
+            </svg>
+            <input type="text" id="machine-search"
+                   placeholder="Search machine name or code..."
+                   style="width:100%;height:36px;padding:0 12px 0 34px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-size:13px;font-family:inherit;">
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:11px;color:var(--text-3);">
+            <span><span id="machines-count">{{ machines|length }}</span> machines</span>
+            <span>
+              Selected: <strong id="machines-selected-count" style="color:var(--accent);">0</strong>
+              <button type="button" id="refresh-machines"
+                      style="margin-left:8px;background:none;border:none;color:var(--accent);cursor:pointer;font-size:11px;padding:2px 6px;">
+                ↻ Refresh
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <!-- List -->
+        <div id="machines-list" style="max-height:240px;overflow-y:auto;">
+          {% for m in machines %}
+          <label class="machine-item" data-search="{{ (m.machine_code ~ ' ' ~ m.machine_name ~ ' ' ~ (m.shop.shop_code if m.shop else ''))|lower }}"
+                 style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 150ms;">
+            <input type="checkbox" name="machines" value="{{ m.id }}"
+                   class="machine-checkbox"
+                   {% if mode == 'edit' and m in error.machines %}checked{% endif %}
+                   style="width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;">
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                {{ m.machine_name }}
+              </div>
+              <div style="font-size:11px;color:var(--text-3);font-family:var(--mono);margin-top:1px;">
+                {{ m.machine_code }}
+                {% if m.shop %} · {{ m.shop.shop_code }}{% endif %}
+              </div>
+            </div>
+          </label>
+          {% endfor %}
+
+          {% if not machines %}
+          <div style="padding:20px;text-align:center;font-size:12px;color:var(--text-3);">
+            No machines available
+          </div>
+          {% endif %}
+        </div>
+
+        <div id="no-results" style="display:none;padding:20px;text-align:center;font-size:12px;color:var(--text-3);">
+          No machines match your search
+        </div>
+      </div>
+
+      <p class="field-help" style="margin-top:6px;">
+        Checkbox တွေ နှိပ်ပြီး machine တွေ ရွေးပါ။ Search box နဲ့ လျင်မြန်စွာ ရှာနိုင်တယ်။
+      </p>
+    </div>
+
+    <style>
+      .machine-item:hover {
+        background: var(--surface-2);
+      }
+      .machine-item:last-child {
+        border-bottom: none;
+      }
+    </style>
+
+    <!-- Photos -->
+    <div class="field">
+      <label class="field-label">
+        {{ form.photos.label.text }}
+      </label>
+      {{ form.photos(class_="field-input", accept=".jpg,.jpeg,.png,.webp", multiple=true) }}
+      <p class="field-help">
+        <strong>Max 10 files</strong> per upload ·
+        <strong>Max 10 MB</strong> per file ·
+        JPG / PNG / WEBP ·
+        Auto-resized to 1600px
+      </p>
+    </div>
+
+    <div class="field">
+      {{ form.photo_caption.label(class_="field-label") }}
+      {{ form.photo_caption(class_="field-input", placeholder="Optional caption") }}
+    </div>
+
+    <div class="field">
+      {{ form.category.label(class_="field-label") }}
+      {{ form.category(class_="field-select") }}
+      <p class="field-help">
+        ⚠️ <strong>Error</strong> — ပျက်စီး/ချို့ယွင်း problem အတွက်<br>
+        💡 <strong>Tip</strong> — အသုံးဝင်တဲ့ အကြံပြုချက်<br>
+        ℹ️ <strong>Info</strong> — အချက်အလက် (machine အကြောင်း)<br>
+        📖 <strong>How-To</strong> — အဆင့်ဆင့် လမ်းညွှန် (လုပ်နည်း)
+      </p>
+    </div>
+
+    <div class="field">
+      {{ form.status.label(class_="field-label") }}
+      {{ form.status(class_="field-select") }}
+    </div>
+
+    {% if mode == 'edit' %}
+    <!-- Related Machines -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h3 style="font-size:14px;font-weight:700;">
+          Related Machines ({{ error.machines|length }})
+        </h3>
+        <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.error_machines', error_id=error.id) }}">
+          Manage →
+        </a>
+      </div>
+
+      {% if error.machines %}
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          {% for m in error.machines %}
+            <span class="chip chip-accent">
+              <svg class="icon icon-xs"><use href="#i-package"/></svg>
+              {{ m.machine_code }} — {{ m.machine_name }}
+            </span>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-sm text-muted">
+          No machines linked yet.
+          <a href="{{ url_for('admin.error_machines', error_id=error.id) }}"
+             style="color:var(--accent);font-weight:600;">
+            Link Machines →
+          </a>
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- Photos -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h3 style="font-size:14px;font-weight:700;">
+          Photos ({{ error.images|length }})
+        </h3>
+        <a class="btn btn-primary btn-sm" href="{{ url_for('admin.error_photos', error_id=error.id) }}">
+          <svg class="icon icon-sm"><use href="#i-upload"/></svg>
+          Upload Photos
+        </a>
+      </div>
+
+      {% if error.images %}
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;">
+          {% for img in error.images[:6] %}
+            <img src="{{ url_for('admin.serve_upload', rel_path=img.image_path) }}"
+                 alt="{{ img.caption or 'photo' }}"
+                 style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--border);">
+          {% endfor %}
+        </div>
+        {% if error.images|length > 6 %}
+          <p class="text-xs text-muted" style="margin-top:8px;">
+            ... and {{ error.images|length - 6 }} more
+          </p>
+        {% endif %}
+      {% else %}
+        <p class="text-sm text-muted">
+          No photos yet.
+          <a href="{{ url_for('admin.error_photos', error_id=error.id) }}"
+             style="color:var(--accent);font-weight:600;">
+            Add Photos →
+          </a>
+        </p>
+      {% endif %}
+    </div>
+    {% else %}
+    <!-- New error — hint -->
+    <div class="card" style="margin-bottom:16px;background:var(--accent-soft);border-color:transparent;">
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <svg class="icon" style="color:var(--accent);flex-shrink:0;"><use href="#i-info"/></svg>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px;">
+            Save ပြီးရင်
+          </div>
+          <div style="font-size:12px;color:var(--accent);line-height:1.5;">
+            • Machine တွေ ချိတ်ဆက်နိုင်မယ်<br>
+            • Photo တွေ တင်နိုင်မယ်
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div style="display:flex;gap:8px;margin-top:20px;">
+      <button class="btn btn-primary" type="submit">Save</button>
+      <a class="btn btn-secondary" href="{{ url_for('admin.error_list') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+
+<script>
+  (function () {
+    'use strict';
+
+    var search = document.getElementById('machine-search');
+    var list = document.getElementById('machines-list');
+    var noResults = document.getElementById('no-results');
+    var selectedCount = document.getElementById('machines-selected-count');
+
+    if (!list) return;
+
+    var items = list.querySelectorAll('.machine-item');
+    var checkboxes = list.querySelectorAll('.machine-checkbox');
+
+    // Search filter
+    if (search) {
+      search.addEventListener('input', function () {
+        var q = search.value.trim().toLowerCase();
+        var visible = 0;
+
+        items.forEach(function (item) {
+          var haystack = item.getAttribute('data-search') || '';
+          var match = !q || haystack.indexOf(q) !== -1;
+          item.style.display = match ? 'flex' : 'none';
+          if (match) visible++;
+        });
+
+        if (noResults) {
+          noResults.style.display = visible === 0 ? 'block' : 'none';
+        }
+        if (list) {
+          list.style.display = visible === 0 ? 'none' : 'block';
+        }
+      });
+    }
+
+    // Selection counter
+    function updateCount() {
+      var count = 0;
+      checkboxes.forEach(function (cb) {
+        if (cb.checked) count++;
+      });
+      if (selectedCount) selectedCount.textContent = count;
+    }
+
+    checkboxes.forEach(function (cb) {
+      cb.addEventListener('change', updateCount);
+    });
+
+    updateCount();
+
+    // Refresh handler
+    var refreshBtn = document.getElementById('refresh-machines');
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', function () {
+        if (confirm('Refresh machine list? Unsaved selections will be preserved.')) {
+          // Save current selections
+          var selected = [];
+          checkboxes.forEach(function (cb) {
+            if (cb.checked) selected.push(cb.value);
+          });
+          sessionStorage.setItem('mh_selected_machines', JSON.stringify(selected));
+          location.reload();
+        }
+      });
+    }
+
+    // Restore selections after reload
+    try {
+      var saved = sessionStorage.getItem('mh_selected_machines');
+      if (saved) {
+        var ids = JSON.parse(saved);
+        checkboxes.forEach(function (cb) {
+          if (ids.indexOf(cb.value) !== -1) cb.checked = true;
+        });
+        sessionStorage.removeItem('mh_selected_machines');
+        updateCount();
+      }
+    } catch (e) {}
+  })();
+</script>
+
+{% endblock %}

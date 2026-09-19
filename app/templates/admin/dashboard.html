@@ -1,0 +1,219 @@
+{% extends "admin/base.html" %}
+{% block title %}Dashboard — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-sub">Overview of your machine knowledge system</p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.setup_guide') }}">
+    <svg class="icon icon-sm"><use href="#i-help"/></svg>
+    Setup Guide
+  </a>
+</div>
+
+<!-- Live Activity Widget -->
+<div id="live-widget" style="background:linear-gradient(135deg,var(--accent) 0%,var(--accent-hover) 100%);border-radius:16px;padding:20px;margin-bottom:20px;color:#fff;">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="width:10px;height:10px;border-radius:50%;background:#22c55e;animation:pulse 1.5s infinite;"></span>
+      <div>
+        <div style="font-weight:700;font-size:15px;">Live Activity</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.8);">Real-time user actions</div>
+      </div>
+    </div>
+    <a href="{{ url_for('admin.activity_log') }}" class="btn btn-sm"
+       style="background:rgba(255,255,255,0.2);color:#fff;border:none;">
+      View All →
+    </a>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:12px;margin-bottom:16px;">
+    <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:12px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:0.8;">Online Now</div>
+      <div id="online-count" style="font-size:24px;font-weight:800;margin-top:4px;">—</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:12px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:0.8;">Last 5 min</div>
+      <div id="recent-count" style="font-size:24px;font-weight:800;margin-top:4px;">—</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:12px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:0.8;">Today</div>
+      <div id="today-count" style="font-size:24px;font-weight:800;margin-top:4px;">—</div>
+    </div>
+  </div>
+
+  <div id="live-feed" style="background:rgba(0,0,0,0.15);border-radius:10px;padding:12px;font-size:12px;line-height:1.7;max-height:180px;overflow-y:auto;">
+    <div style="color:rgba(255,255,255,0.7);text-align:center;padding:20px;">Loading…</div>
+  </div>
+</div>
+
+<style>
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+</style>
+
+<!-- Stats -->
+<div class="stats-grid">
+  <div class="stat">
+    <div class="stat-label">
+      <svg class="icon icon-xs"><use href="#i-shop"/></svg> Shops
+    </div>
+    <div class="stat-value">{{ stats.shops }}</div>
+    <div class="stat-sub">{{ stats.active_shops }} active</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">
+      <svg class="icon icon-xs"><use href="#i-users"/></svg> Users
+    </div>
+    <div class="stat-value">{{ stats.users }}</div>
+    <div class="stat-sub">{{ stats.active_users }} active</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">
+      <svg class="icon icon-xs"><use href="#i-package"/></svg> Machines
+    </div>
+    <div class="stat-value">{{ stats.machines }}</div>
+  </div>
+</div>
+
+{% if pending_count and pending_count > 0 %}
+<div class="card" style="margin-bottom:20px;border-color:var(--warning);background:var(--warning-soft);">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:40px;height:40px;border-radius:10px;background:var(--warning);color:white;display:flex;align-items:center;justify-content:center;">
+        <svg class="icon"><use href="#i-user"/></svg>
+      </div>
+      <div>
+        <div style="font-weight:700;color:var(--warning-fg);">Pending Users</div>
+        <div class="text-sm" style="color:var(--warning);">{{ pending_count }} request(s)</div>
+      </div>
+    </div>
+    <a class="btn btn-primary btn-sm" href="{{ url_for('admin.pending_users') }}">Review →</a>
+  </div>
+</div>
+{% endif %}
+
+<!-- Manage -->
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Manage</h2>
+  </div>
+  <div class="list">
+    <a class="list-item" href="{{ url_for('admin.shop_list') }}">
+      <div class="list-item-icon accent"><svg class="icon"><use href="#i-shop"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Shops</div>
+        <div class="list-item-sub">Manage shop locations</div>
+      </div>
+    </a>
+    <a class="list-item" href="{{ url_for('admin.user_list') }}">
+      <div class="list-item-icon accent"><svg class="icon"><use href="#i-users"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Users</div>
+        <div class="list-item-sub">Staff accounts</div>
+      </div>
+    </a>
+    <a class="list-item" href="{{ url_for('admin.machine_list') }}">
+      <div class="list-item-icon accent"><svg class="icon"><use href="#i-package"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Machines</div>
+        <div class="list-item-sub">All machines across shops</div>
+      </div>
+    </a>
+    <a class="list-item" href="{{ url_for('admin.error_list') }}">
+      <div class="list-item-icon accent"><svg class="icon"><use href="#i-alert"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Errors</div>
+        <div class="list-item-sub">Global error knowledge</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Tools -->
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Tools</h2>
+  </div>
+  <div class="list">
+    <a class="list-item" href="{{ url_for('admin.activity_log') }}">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-activity"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">User Activity</div>
+        <div class="list-item-sub">Real-time tracking</div>
+      </div>
+    </a>
+    <a class="list-item" href="{{ url_for('admin.admin_search') }}">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-search"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Universal Search</div>
+        <div class="list-item-sub">Find machines and errors</div>
+      </div>
+    </a>
+    <a class="list-item" href="{{ url_for('admin.import_machines_upload') }}">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-upload"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Import Machines</div>
+        <div class="list-item-sub">From Excel file</div>
+      </div>
+    </a>
+    <a class="list-item" href="{{ url_for('admin.change_logs') }}">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-activity"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Change Logs</div>
+        <div class="list-item-sub">System changes</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<script>
+  (function() {
+    const onlineEl = document.getElementById('online-count');
+    const recentEl = document.getElementById('recent-count');
+    const todayEl = document.getElementById('today-count');
+    const feedEl = document.getElementById('live-feed');
+
+    async function refresh() {
+      try {
+        const [live, stats] = await Promise.all([
+          fetch('/admin/api/activity/live?since=300', { credentials: 'same-origin' })
+            .then(r => r.ok ? r.json() : null),
+          fetch('/admin/api/activity/stats', { credentials: 'same-origin' })
+            .then(r => r.ok ? r.json() : null)
+        ]);
+
+        if (live) {
+          onlineEl.textContent = live.online_count || 0;
+          recentEl.textContent = live.count || 0;
+
+          if (live.logs && live.logs.length) {
+            feedEl.innerHTML = live.logs.slice(0, 8).map(l => `
+              <div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+                <span style="opacity:0.7;font-size:11px;">${l.created_at.slice(11, 19)}</span>
+                <strong style="margin-left:6px;">@${l.user_username || '?'}</strong>
+                <span style="opacity:0.9;margin-left:6px;">${l.action}</span>
+                ${l.target_label ? `<span style="opacity:0.8;margin-left:6px;">→ ${l.target_label}</span>` : ''}
+              </div>
+            `).join('');
+          } else {
+            feedEl.innerHTML = '<div style="color:rgba(255,255,255,0.7);text-align:center;padding:20px;">No recent activity</div>';
+          }
+        }
+
+        if (stats) {
+          todayEl.textContent = stats.today || 0;
+        }
+      } catch (e) {}
+    }
+
+    refresh();
+    setInterval(refresh, 15000);
+  })();
+</script>
+
+{% endblock %}

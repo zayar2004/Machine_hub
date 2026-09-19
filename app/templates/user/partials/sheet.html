@@ -1,0 +1,133 @@
+<div class="sheet-backdrop" id="sheet-backdrop"></div>
+
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+
+  <div class="sheet-header">
+    <h3 class="sheet-title">Menu</h3>
+    <button type="button" class="icon-btn" data-sheet-close>
+      <svg class="icon"><use href="#i-x"/></svg>
+    </button>
+  </div>
+
+  <div class="sheet-body">
+
+    <!-- User card -->
+    <div class="sheet-user">
+      <div class="sheet-user-name">{{ current_user.name }}</div>
+      <div class="sheet-user-sub">
+        @{{ current_user.username }}
+        {% if current_user.is_admin %} · Admin
+        {% elif shop %} · {{ shop.shop_code }} 🔒{% endif %}
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="sheet-group">MAIN</div>
+
+    <a class="sheet-item" href="{{ url_for('user.home') }}">
+      <svg class="icon"><use href="#i-home"/></svg>
+      <span>Home</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('user.search', type='machine') }}">
+      <svg class="icon"><use href="#i-package"/></svg>
+      <span>Machines</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('user.search', type='error') }}">
+      <svg class="icon"><use href="#i-alert"/></svg>
+      <span>Errors</span>
+    </a>
+
+    <!-- KNOWLEDGE -->
+    <div class="sheet-group">KNOWLEDGE</div>
+
+    <a class="sheet-item" href="{{ url_for('user.favorites') }}">
+      <svg class="icon"><use href="#i-star"/></svg>
+      <span>Favorites</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('user.recent') }}">
+      <svg class="icon"><use href="#i-history"/></svg>
+      <span>Recent Searches</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('user.history') }}">
+      <svg class="icon"><use href="#i-activity"/></svg>
+      <span>History</span>
+    </a>
+
+    <!-- OFFLINE -->
+    <div class="sheet-group">OFFLINE</div>
+
+    <a class="sheet-item" href="{{ url_for('user.offline') }}">
+      <svg class="icon"><use href="#i-download"/></svg>
+      <span>Offline Data</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('user.sync') }}">
+      <svg class="icon"><use href="#i-refresh"/></svg>
+      <span>Sync Status</span>
+    </a>
+
+    <!-- HELP -->
+    <div class="sheet-group">HELP</div>
+
+    <a class="sheet-item" href="{{ url_for('user.help_center') }}">
+      <svg class="icon"><use href="#i-help"/></svg>
+      <span>Help Center</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('user.docs') }}">
+      <svg class="icon"><use href="#i-book"/></svg>
+      <span>Documentation</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('user.about') }}">
+      <svg class="icon"><use href="#i-info"/></svg>
+      <span>About</span>
+    </a>
+
+    <!-- INSTALL -->
+    <button type="button" class="sheet-item" id="mh-install-btn" style="display:none;">
+      <svg class="icon"><use href="#i-download"/></svg>
+      <span>Install App</span>
+    </button>
+
+    {% if current_user.is_admin %}
+    <!-- ADMIN -->
+    <div class="sheet-group">ADMIN</div>
+
+    <a class="sheet-item" href="{{ url_for('admin.dashboard') }}">
+      <svg class="icon"><use href="#i-grid"/></svg>
+      <span>Admin Dashboard</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('admin.pending_users') }}">
+      <svg class="icon"><use href="#i-user"/></svg>
+      <span>Pending Users</span>
+    </a>
+    {% endif %}
+
+    <!-- ACCOUNT -->
+    <div class="sheet-group">ACCOUNT</div>
+
+    <a class="sheet-item" href="{{ url_for('user.profile') }}">
+      <svg class="icon"><use href="#i-user"/></svg>
+      <span>Profile</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('user.settings') }}">
+      <svg class="icon"><use href="#i-settings"/></svg>
+      <span>Settings</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('auth.logout') }}" style="color:var(--danger);">
+      <svg class="icon" style="color:var(--danger);"><use href="#i-log-out"/></svg>
+      <span>Logout</span>
+    </a>
+
+  </div>
+</div>
+
+<style>
+  .sheet-group {
+    padding: 14px 18px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+</style>

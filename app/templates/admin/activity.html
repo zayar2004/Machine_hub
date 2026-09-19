@@ -1,0 +1,190 @@
+{% extends "admin/base.html" %}
+{% block title %}Activity — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">User Activity</h1>
+    <p class="page-sub">Real-time tracking of all user actions</p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.dashboard') }}">← Dashboard</a>
+</div>
+
+<!-- Live indicator -->
+<div id="live-banner" style="background:var(--success-soft);border:1.5px solid var(--success);border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+  <span style="width:10px;height:10px;border-radius:50%;background:var(--success);animation:pulse 1.5s infinite;"></span>
+  <div style="flex:1;font-size:13px;font-weight:600;color:var(--success);">
+    LIVE · <span id="online-count">—</span> user(s) online · <span id="recent-count">—</span> action(s) in last 5 min
+  </div>
+  <button type="button" class="btn btn-secondary btn-sm" id="refresh-btn">↻ Refresh</button>
+</div>
+
+<style>
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+</style>
+
+<!-- Filters -->
+<form method="GET" action="{{ url_for('admin.activity_log') }}" class="filter-bar">
+  <div class="field">
+    <label class="field-label">User</label>
+    <select name="user_id" class="field-select">
+      <option value="0">All users</option>
+      {% for u in users %}
+        <option value="{{ u.id }}" {% if filters.user_id == u.id %}selected{% endif %}>
+          @{{ u.username }} — {{ u.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="field">
+    <label class="field-label">Action</label>
+    <select name="action" class="field-select">
+      <option value="">All actions</option>
+      {% for a in actions %}
+        <option value="{{ a }}" {% if filters.action == a %}selected{% endif %}>{{ a }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="field">
+    <label class="field-label">Shop</label>
+    <select name="shop_id" class="field-select">
+      <option value="0">All shops</option>
+      {% for s in shops %}
+        <option value="{{ s.id }}" {% if filters.shop_id == s.id %}selected{% endif %}>{{ s.shop_code }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button class="btn btn-primary btn-sm" type="submit">Filter</button>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.activity_log') }}">Reset</a>
+</form>
+
+{% if logs %}
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>User</th>
+        <th>Action</th>
+        <th>Target</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody id="activity-tbody">
+      {% for log in logs %}
+      <tr>
+        <td class="text-xs text-muted" style="white-space:nowrap;">
+          {{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+        </td>
+        <td>
+          {% if log.user %}
+            <a href="{{ url_for('admin.user_activity', user_id=log.user.id) }}"
+               style="color:inherit;text-decoration:none;">
+              <strong>@{{ log.user.username }}</strong>
+              <div style="font-size:11px;color:var(--text-3);">{{ log.user.name }}</div>
+            </a>
+          {% else %}
+            <span class="text-muted">—</span>
+          {% endif %}
+        </td>
+        <td>
+          {% set action_class = 'chip' %}
+          {% if log.action == 'LOGIN' %}{% set action_class = 'chip chip-success' %}
+          {% elif log.action == 'LOGOUT' %}{% set action_class = 'chip' %}
+          {% elif log.action == 'SEARCH' %}{% set action_class = 'chip chip-accent' %}
+          {% elif log.action == 'VIEW_MACHINE' %}{% set action_class = 'chip chip-accent' %}
+          {% elif log.action == 'VIEW_ERROR' %}{% set action_class = 'chip chip-warning' %}
+          {% elif log.action == 'FAVORITE' %}{% set action_class = 'chip chip-warning' %}
+          {% endif %}
+          <span class="{{ action_class }}" style="font-size:10px;">{{ log.action }}</span>
+        </td>
+        <td>
+          {% if log.target_label %}
+            <span class="mono text-sm">{{ log.target_label }}</span>
+          {% else %}—{% endif %}
+        </td>
+        <td class="text-xs text-muted">
+          {% if log.meta %}{{ log.meta }}{% else %}—{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination -->
+{% if total_pages > 1 %}
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;flex-wrap:wrap;">
+    <div class="text-sm text-muted">Page {{ page }} of {{ total_pages }} · {{ total }} total</div>
+    <div style="display:flex;gap:6px;">
+      {% if page > 1 %}
+        <a class="btn btn-secondary btn-sm"
+           href="{{ url_for('admin.activity_log', page=page-1, user_id=filters.user_id or None, action=filters.action or None, shop_id=filters.shop_id or None) }}">← Prev</a>
+      {% endif %}
+      {% if page < total_pages %}
+        <a class="btn btn-secondary btn-sm"
+           href="{{ url_for('admin.activity_log', page=page+1, user_id=filters.user_id or None, action=filters.action or None, shop_id=filters.shop_id or None) }}">Next →</a>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% else %}
+<div class="empty">
+  <div class="empty-icon"><svg class="icon icon-lg"><use href="#i-activity"/></svg></div>
+  <h2 class="empty-title">No activity yet</h2>
+  <p class="empty-desc">User actions will appear here as they use the app.</p>
+</div>
+{% endif %}
+
+<script>
+  (function() {
+    const onlineCount = document.getElementById('online-count');
+    const recentCount = document.getElementById('recent-count');
+    const tbody = document.getElementById('activity-tbody');
+    const refreshBtn = document.getElementById('refresh-btn');
+
+    async function refresh() {
+      try {
+        const res = await fetch('/admin/api/activity/live?since=300', {
+          credentials: 'same-origin',
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        onlineCount.textContent = data.online_count;
+        recentCount.textContent = data.count;
+
+        // Prepend new rows
+        if (tbody && data.logs) {
+          for (const log of data.logs.slice(0, 5)) {
+            const tr = document.createElement('tr');
+            tr.style.background = 'var(--accent-soft)';
+            tr.style.animation = 'fadeIn 0.5s';
+            tr.innerHTML = `
+              <td class="text-xs text-muted" style="white-space:nowrap;">${log.created_at.replace('T', ' ').slice(0, 19)}</td>
+              <td><strong>@${log.user_username || '?'}</strong><div style="font-size:11px;color:var(--text-3);">${log.user_name || ''}</div></td>
+              <td><span class="chip" style="font-size:10px;">${log.action}</span></td>
+              <td class="mono text-sm">${log.target_label || '—'}</td>
+              <td class="text-xs text-muted">${log.meta || '—'}</td>
+            `;
+            tbody.insertBefore(tr, tbody.firstChild);
+          }
+          // Limit to 100 rows
+          while (tbody.children.length > 100) {
+            tbody.removeChild(tbody.lastChild);
+          }
+        }
+      } catch (e) {}
+    }
+
+    refresh();
+    refreshBtn.addEventListener('click', refresh);
+    setInterval(refresh, 15000); // every 15 sec
+  })();
+</script>
+
+{% endblock %}

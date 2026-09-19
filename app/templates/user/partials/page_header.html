@@ -1,0 +1,11 @@
+{# Usage: {% include "user/partials/page_header.html" %} #}
+{# Requires: page_title, page_help (optional) #}
+{% if page_title %}
+<h1 class="detail-title" style="font-size:24px;margin-bottom:8px;">{{ page_title }}</h1>
+{% endif %}
+
+{% if page_help %}
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;">
+  {{ page_help }}
+</p>
+{% endif %}

@@ -1,0 +1,102 @@
+{% extends "admin/base.html" %}
+{% block title %}Setup Guide — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Setup Guide</h1>
+    <p class="page-sub">Follow these steps to set up your system</p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.dashboard') }}">← Dashboard</a>
+</div>
+
+<div class="list">
+  <div class="list-item" style="cursor:default;">
+    <div class="list-item-icon {% if progress.has_shop %}accent{% endif %}"
+         style="{% if progress.has_shop %}background:var(--success-soft);color:var(--success);{% endif %}">
+      {% if progress.has_shop %}
+        <svg class="icon"><use href="#i-check"/></svg>
+      {% else %}<span style="font-weight:800;">1</span>{% endif %}
+    </div>
+    <div class="list-item-main">
+      <div class="list-item-title">Create a Shop</div>
+      <div class="list-item-sub">Shops separate machine groups (e.g. A3, A4)</div>
+    </div>
+    {% if progress.has_shop %}
+      <span class="chip chip-success">Done</span>
+    {% else %}
+      <a class="btn btn-primary btn-sm" href="{{ url_for('admin.shop_create') }}">Create →</a>
+    {% endif %}
+  </div>
+
+  <div class="list-item" style="cursor:default;">
+    <div class="list-item-icon {% if progress.has_machine %}accent{% endif %}"
+         style="{% if progress.has_machine %}background:var(--success-soft);color:var(--success);{% endif %}">
+      {% if progress.has_machine %}
+        <svg class="icon"><use href="#i-check"/></svg>
+      {% else %}<span style="font-weight:800;">2</span>{% endif %}
+    </div>
+    <div class="list-item-main">
+      <div class="list-item-title">Add Machines</div>
+      <div class="list-item-sub">Manually or via Excel import</div>
+    </div>
+    {% if progress.has_machine %}
+      <span class="chip chip-success">Done</span>
+    {% else %}
+      <a class="btn btn-primary btn-sm" href="{{ url_for('admin.machine_create') }}">Add →</a>
+    {% endif %}
+  </div>
+
+  <div class="list-item" style="cursor:default;">
+    <div class="list-item-icon" style="{% if progress.has_error %}background:var(--success-soft);color:var(--success);{% endif %}">
+      {% if progress.has_error %}
+        <svg class="icon"><use href="#i-check"/></svg>
+      {% else %}<span style="font-weight:800;">3</span>{% endif %}
+    </div>
+    <div class="list-item-main">
+      <div class="list-item-title">Add Error Knowledge</div>
+      <div class="list-item-sub">Global error fixes and explanations</div>
+    </div>
+    {% if progress.has_error %}
+      <span class="chip chip-success">Done</span>
+    {% else %}
+      <a class="btn btn-primary btn-sm" href="{{ url_for('admin.error_create') }}">Add →</a>
+    {% endif %}
+  </div>
+
+  <div class="list-item" style="cursor:default;">
+    <div class="list-item-icon" style="{% if progress.has_linked %}background:var(--success-soft);color:var(--success);{% endif %}">
+      {% if progress.has_linked %}
+        <svg class="icon"><use href="#i-check"/></svg>
+      {% else %}<span style="font-weight:800;">4</span>{% endif %}
+    </div>
+    <div class="list-item-main">
+      <div class="list-item-title">Link Errors to Machines</div>
+      <div class="list-item-sub">So users can see related errors</div>
+    </div>
+    {% if progress.has_linked %}
+      <span class="chip chip-success">Done</span>
+    {% else %}
+      <a class="btn btn-primary btn-sm" href="{{ url_for('admin.machine_list') }}">Link →</a>
+    {% endif %}
+  </div>
+
+  <div class="list-item" style="cursor:default;">
+    <div class="list-item-icon" style="{% if progress.has_user %}background:var(--success-soft);color:var(--success);{% endif %}">
+      {% if progress.has_user %}
+        <svg class="icon"><use href="#i-check"/></svg>
+      {% else %}<span style="font-weight:800;">5</span>{% endif %}
+    </div>
+    <div class="list-item-main">
+      <div class="list-item-title">Create User Accounts</div>
+      <div class="list-item-sub">Assign users to shops</div>
+    </div>
+    {% if progress.has_user %}
+      <span class="chip chip-success">Done</span>
+    {% else %}
+      <a class="btn btn-primary btn-sm" href="{{ url_for('admin.user_create') }}">Add →</a>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

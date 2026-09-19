@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#09090b">
+  <meta name="color-scheme" content="dark light">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Machine Hub">
+  <title>{% block title %}Machine Hub{% endblock %}</title>
+
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='icons/icon.svg') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('mh_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+
+<div class="app">
+
+  {% include "user/partials/header.html" %}
+
+  <main class="page">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+          <svg class="icon icon-sm"><use href="#i-info"/></svg>
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+</div>
+
+{% include "user/partials/sheet.html" %}
+
+<script src="{{ url_for('static', filename='js/icons.js') }}"></script>
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+<script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+<script src="{{ url_for('static', filename='js/db.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sync.js') }}"></script>
+<script src="{{ url_for('static', filename='js/offline-search.js') }}"></script>
+<script src="{{ url_for('static', filename='js/recent.js') }}"></script>
+<script src="{{ url_for('static', filename='js/favorites.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/install.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/live-search.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/smart-back.js') }}"></script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/static/js/service-worker.js', { scope: '/' })
+        .then(function (r) { console.log('[PWA]', r.scope); })
+        .catch(function (e) { console.warn('[PWA]', e); });
+    });
+  }
+</script>
+
+{% block body_extra %}{% endblock %}
+
+<!-- ==================== SYNC ERROR TOAST + MODAL ==================== -->
+<div id="mh-toast-container" class="mh-toast-container" aria-live="polite"></div>
+
+<div id="sync-error-modal" class="mh-modal" aria-hidden="true">
+  <div class="mh-modal-backdrop" onclick="MH_Sync.hideSyncError()"></div>
+  <div class="mh-modal-panel" role="dialog" aria-modal="true">
+    <div class="mh-modal-header">
+      <div class="mh-modal-icon mh-modal-icon-warn">
+        <svg class="icon"><use href="#i-alert"/></svg>
+      </div>
+      <div class="mh-modal-title-wrap">
+        <h3 class="mh-modal-title">Sync Error</h3>
+        <p class="mh-modal-sub">Could not sync latest data</p>
+      </div>
+      <button type="button" class="mh-modal-close" onclick="MH_Sync.hideSyncError()" aria-label="Close">
+        <svg class="icon"><use href="#i-x"/></svg>
+      </button>
+    </div>
+
+    <div class="mh-modal-body">
+      <p class="mh-modal-warn" id="sync-error-message">
+        Something went wrong while syncing. Your offline data is still available.
+      </p>
+      <div class="mh-modal-info">
+        <div class="mh-modal-info-row">
+          <span class="mh-modal-info-label">Status</span>
+          <span class="mh-modal-info-value" id="sync-error-status">—</span>
+        </div>
+        <div class="mh-modal-info-row">
+          <span class="mh-modal-info-label">Local version</span>
+          <span class="mh-modal-info-value" id="sync-error-local">—</span>
+        </div>
+        <div class="mh-modal-info-row">
+          <span class="mh-modal-info-label">Server version</span>
+          <span class="mh-modal-info-value" id="sync-error-server">—</span>
+        </div>
+      </div>
+      <p class="text-xs text-subtle" style="margin-top:10px;">
+        Tip: App ကို reload လုပ်ပါ (သို့) Retry နှိပ်ပါ။ Data ဆုံးရှုံးမှု မရှိပါ။
+      </p>
+    </div>
+
+    <div class="mh-modal-footer">
+      <button type="button" class="btn btn-secondary" onclick="MH_Sync.hideSyncError()">Dismiss</button>
+      <button type="button" class="btn btn-primary" id="sync-retry-btn">
+        <svg class="icon icon-sm"><use href="#i-refresh"/></svg>
+        Retry Sync
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

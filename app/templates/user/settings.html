@@ -1,0 +1,230 @@
+{% extends "user/base.html" %}
+{% block title %}Settings — Machine Hub{% endblock %}
+{% block content %}
+
+<!-- Back -->
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  Settings
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;">
+  Theme, sync, offline data, နဲ့ account တွေကို ဒီမှာ စီမံပါ။
+</p>
+
+<!-- Account -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Account</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon accent">
+        <svg class="icon"><use href="#i-user"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">{{ current_user.name }}</div>
+        <div class="list-item-sub">@{{ current_user.username }}</div>
+      </div>
+    </div>
+    {% if shop %}
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-shop"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">{{ shop.shop_name }}</div>
+        <div class="list-item-sub">{{ shop.shop_code }} · 🔒 Assigned</div>
+      </div>
+    </div>
+    {% endif %}
+    <a class="list-item" href="{{ url_for('user.profile') }}">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-user"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">View Profile</div>
+        <div class="list-item-sub">Full account details</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- Preferences -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Preferences</h2>
+  <div class="list">
+    <button type="button" class="list-item" data-theme-toggle-row
+            style="cursor:pointer;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-moon"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Theme</div>
+        <div class="list-item-sub" id="theme-label">Dark</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- Offline -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Offline Data</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-download"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Local Cache</div>
+        <div class="list-item-sub" id="cache-info">Checking…</div>
+      </div>
+    </div>
+    <a class="list-item" href="{{ url_for('user.offline') }}">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-info"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Offline Data</div>
+        <div class="list-item-sub">View cached data</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </a>
+    <button type="button" class="list-item" id="sync-now-btn">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-refresh"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Sync Now</div>
+        <div class="list-item-sub">Fetch latest changes</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </button>
+    <button type="button" class="list-item" id="clear-cache-btn"
+            style="color:var(--danger);">
+      <div class="list-item-icon" style="color:var(--danger);">
+        <svg class="icon"><use href="#i-trash"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Clear Cache</div>
+        <div class="list-item-sub">Remove all offline data</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- Support -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Support</h2>
+  <div class="list">
+    <a class="list-item" href="{{ url_for('user.help_center') }}">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-help"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Help Center</div>
+        <div class="list-item-sub">How to use the app</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </a>
+    <a class="list-item" href="{{ url_for('user.docs') }}">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-book"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Documentation</div>
+        <div class="list-item-sub">Full guide</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </a>
+    <a class="list-item" href="{{ url_for('user.about') }}">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-info"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">About</div>
+        <div class="list-item-sub">App version & info</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- Logout -->
+<section class="detail-section">
+  <a class="btn btn-secondary btn-block" href="{{ url_for('auth.logout') }}"
+     style="color:var(--danger);">
+    <svg class="icon icon-sm"><use href="#i-log-out"/></svg>
+    Logout
+  </a>
+</section>
+
+<script>
+  (function () {
+    // Theme label
+    function updateThemeLabel() {
+      var t = document.documentElement.getAttribute('data-theme') || 'dark';
+      var el = document.getElementById('theme-label');
+      if (el) el.textContent = t === 'dark' ? 'Dark' : 'Light';
+    }
+    updateThemeLabel();
+
+    document.querySelectorAll('[data-theme-toggle-row]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var toggle = document.querySelector('[data-theme-toggle]');
+        if (toggle) toggle.click();
+        setTimeout(updateThemeLabel, 50);
+      });
+    });
+
+    // Cache info
+    (async function () {
+      var el = document.getElementById('cache-info');
+      if (!el) return;
+      try {
+        if (window.MH && window.MH.db) {
+          var mk = await window.MH.db.count('machines');
+          var er = await window.MH.db.count('errors');
+          el.textContent = mk + ' machines · ' + er + ' errors';
+        } else {
+          el.textContent = 'Not initialized';
+        }
+      } catch (e) {
+        el.textContent = 'Not initialized';
+      }
+    })();
+
+    // Sync now
+    var syncBtn = document.getElementById('sync-now-btn');
+    if (syncBtn) {
+      syncBtn.addEventListener('click', function () {
+        if (window.MH && window.MH.sync) {
+          window.MH.sync.now();
+          if (window.MH.toast) window.MH.toast('Syncing…');
+        }
+      });
+    }
+
+    // Clear cache
+    var clearBtn = document.getElementById('clear-cache-btn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', async function () {
+        if (!confirm('Clear all offline data? You will need internet to reload.')) return;
+        if (window.MH && window.MH.db) {
+          await window.MH.db.clearAll();
+          await window.MH.db.setMeta('local_version', 0);
+          if (window.MH.toast) window.MH.toast('Cache cleared');
+          setTimeout(function () { location.reload(); }, 800);
+        }
+      });
+    }
+  })();
+</script>
+
+{% endblock %}

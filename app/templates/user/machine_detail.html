@@ -1,0 +1,151 @@
+{% extends "user/base.html" %}
+{% block title %}{{ machine.machine_name }} — Machine Hub{% endblock %}
+{% block content %}
+
+<!-- Back -->
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<!-- Machine Name (small) -->
+<h1 class="detail-title" style="font-size:22px;font-weight:700;color:var(--text);margin-bottom:12px;letter-spacing:-.02em;">
+  {{ machine.machine_name }}
+</h1>
+
+<!-- Machine Code — BIG, prominent, copy-able -->
+<div style="
+  background: linear-gradient(135deg, var(--accent-soft) 0%, var(--surface-2) 100%);
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  padding: 20px 18px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">
+        Machine Code
+      </div>
+      <div style="font-family:var(--mono);font-size:28px;font-weight:800;color:var(--text);letter-spacing:-.02em;word-break:break-all;line-height:1.2;">
+        {{ machine.machine_code }}
+      </div>
+    </div>
+    <button type="button" class="copy-btn" data-copy="{{ machine.machine_code }}"
+            title="Copy machine code"
+            style="width:52px;height:52px;border-radius:14px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:none;cursor:pointer;">
+      <svg class="icon icon-lg"><use href="#i-copy"/></svg>
+    </button>
+  </div>
+
+  <!-- Copy help text -->
+  <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(91,91,214,0.15);display:flex;align-items:flex-start;gap:8px;">
+    <svg class="icon icon-sm" style="color:var(--accent);flex-shrink:0;margin-top:2px;"><use href="#i-info"/></svg>
+    <div style="font-size:12px;color:var(--text-2);line-height:1.5;">
+      Code copy လုပ်ဖို့ <strong style="color:var(--accent);">📋 button</strong> ကို နှိပ်ပါ။
+      <br>Copy ဖြစ်ရင် <em>"Copied"</em> toast ပေါ်လာမယ်။
+    </div>
+  </div>
+</div>
+
+<!-- Meta chips -->
+<div class="detail-meta" style="margin-bottom:24px;">
+  {% if machine.shop %}
+    <span class="chip chip-accent">
+      <svg class="icon icon-xs"><use href="#i-shop"/></svg>
+      {{ machine.shop.shop_code }}
+    </span>
+  {% endif %}
+  {% if machine.status == 'ACTIVE' %}
+    <span class="chip chip-success">Active</span>
+  {% elif machine.status == 'INACTIVE' %}
+    <span class="chip chip-warning">Inactive</span>
+  {% else %}
+    <span class="chip">Archived</span>
+  {% endif %}
+
+  <button type="button" class="chip" data-fav-toggle
+          data-type="machine" data-id="{{ machine.id }}"
+          style="cursor:pointer;">
+    <svg class="icon icon-xs"><use href="#i-star"/></svg>
+    <span>Favorite</span>
+  </button>
+
+  <a href="{{ url_for('user.search', q=machine.machine_code) }}"
+     class="chip" style="cursor:pointer;text-decoration:none;">
+    <svg class="icon icon-xs"><use href="#i-search"/></svg>
+    <span>Search</span>
+  </a>
+</div>
+
+<!-- Description -->
+{% if machine.description %}
+<section class="detail-section">
+  <h2 class="detail-section-title">Description</h2>
+  <p class="detail-body">{{ machine.description }}</p>
+</section>
+{% endif %}
+
+<!-- Errors -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Known Errors ({{ machine.errors|length }})</h2>
+  {% if machine.errors %}
+    <div class="list">
+      {% for e in machine.errors %}
+      <a class="list-item" href="{{ url_for('user.error_detail', error_id=e.id) }}" style="align-items:flex-start;">
+        <div class="list-item-icon" style="background:var(--warning-soft);color:var(--warning);flex-shrink:0;">
+          <svg class="icon"><use href="#i-alert"/></svg>
+        </div>
+        <div class="list-item-main">
+          <div class="list-item-title">
+            <strong style="color:var(--warning);">{{ e.error_code }}</strong>
+            — {{ e.error_name }}
+          </div>
+          {% if e.error_fix %}
+            <div style="font-size:11px;color:var(--text-2);margin-top:4px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;">
+              {{ e.error_fix }}
+            </div>
+          {% endif %}
+        </div>
+        <svg class="icon icon-sm list-item-arrow" style="align-self:center;"><use href="#i-chevron-right"/></svg>
+      </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="padding:24px;text-align:center;background:var(--surface-2);border-radius:12px;">
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:4px;">
+        ဒီ machine အတွက် error မရှိသေးပါ။
+      </div>
+      <div style="font-size:11px;color:var(--text-3);">
+        Admin က error ထည့်ပြီးရင် ဒီမှာ ပေါ်လာမယ်။
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+<!-- Repair history -->
+{% if machine.repair_history %}
+<section class="detail-section">
+  <h2 class="detail-section-title">Repair History ({{ machine.repair_history|length }})</h2>
+  <div class="list">
+    {% for r in machine.repair_history|sort(attribute='repaired_at', reverse=true) %}
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-history"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">{{ r.description }}</div>
+        <div class="list-item-sub">
+          {{ r.repaired_at.strftime('%Y-%m-%d %H:%M') }}
+          {% if r.error %} · {{ r.error.error_code }}{% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

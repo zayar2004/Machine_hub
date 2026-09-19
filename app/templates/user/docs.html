@@ -1,0 +1,226 @@
+{% extends "user/base.html" %}
+{% block title %}Documentation — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  Documentation
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:24px;line-height:1.6;">
+  Machine Hub အပြည့်အစုံ အသုံးပြုလမ်းညွှန်။
+</p>
+
+<!-- TOC -->
+<nav style="background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:24px;">
+  <div style="font-weight:700;font-size:13px;margin-bottom:10px;">အကြောင်းအရာ</div>
+  <ol style="margin-left:20px;color:var(--text-2);font-size:13px;line-height:2;">
+    <li><a href="#overview" style="color:var(--accent);text-decoration:none;">Overview</a></li>
+    <li><a href="#search" style="color:var(--accent);text-decoration:none;">Search လုပ်နည်း</a></li>
+    <li><a href="#machine" style="color:var(--accent);text-decoration:none;">Machine Detail</a></li>
+    <li><a href="#error" style="color:var(--accent);text-decoration:none;">Error Detail</a></li>
+    <li><a href="#favorites" style="color:var(--accent);text-decoration:none;">Favorites</a></li>
+    <li><a href="#offline" style="color:var(--accent);text-decoration:none;">Offline</a></li>
+    <li><a href="#faq" style="color:var(--accent);text-decoration:none;">FAQ</a></li>
+  </ol>
+</nav>
+
+<section id="overview" class="detail-section">
+  <h2 class="detail-section-title">1. Overview</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">Machine Hub ဆိုတာ ဘာလဲ?</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          Arcade/workplace technical staff အတွက် machine knowledge နဲ့ error fix ကို
+          လျင်မြန်စွာ ရှာနိုင်တဲ့ offline-first app။
+        </div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">အဓိက အချက် ၄ ချက်</div>
+        <ul style="margin-left:20px;color:var(--text-2);font-size:13px;line-height:1.8;">
+          <li><strong>Shop-based</strong> — ကိုယ့် shop ရဲ့ machine ပဲ မြင်</li>
+          <li><strong>Global errors</strong> — error က ဆိုင်အားလုံး share</li>
+          <li><strong>Offline-first</strong> — internet မရှိလည်း အလုပ်လုပ်</li>
+          <li><strong>Photos</strong> — error fix အတွက် ဓာတ်ပုံ</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="search" class="detail-section">
+  <h2 class="detail-section-title">2. Search လုပ်နည်း</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">ရှာနိုင်တဲ့ အရာများ</div>
+        <ul style="margin-left:20px;color:var(--text-2);font-size:13px;line-height:1.8;">
+          <li>Machine name — <span class="code">Dream</span></li>
+          <li>Machine code — <span class="code">DC001</span></li>
+          <li>Error code — <span class="code">E81</span></li>
+          <li>Error name — <span class="code">Screen</span></li>
+          <li>Error fix keyword — <span class="code">HDMI</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">Filter by Type</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          Search page မှာ <strong>All</strong>, <strong>Machines</strong>,
+          <strong>Errors</strong> — filter chips တွေ ရှိတယ်။
+        </div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">Multi-word Search</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          <span class="code">Dream Castle</span> လို့ ရိုက်ရင် — ၂ လုံးလုံး ပါတဲ့
+          results တွေပဲ ပြမယ်။ Partial match လည်း ရ — <span class="code">Dre</span>
+          ရိုက်ရင် <strong>Dream</strong> ရှာတွေ့မယ်။
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="machine" class="detail-section">
+  <h2 class="detail-section-title">3. Machine Detail</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">ဘာတွေ ပါလဲ</div>
+        <ul style="margin-left:20px;color:var(--text-2);font-size:13px;line-height:1.8;">
+          <li>Machine name + code</li>
+          <li>Shop code + status</li>
+          <li>Description</li>
+          <li><strong>Known Errors</strong> — related errors</li>
+          <li><strong>Repair History</strong> — repair log</li>
+        </ul>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">Code Copy လုပ်နည်း</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          Machine code ကို copy လုပ်ဖို့ <strong>📋 button</strong> ကို နှိပ်ပါ။
+          "Copied: DC001" toast ပေါ်လာမယ်။
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="error" class="detail-section">
+  <h2 class="detail-section-title">4. Error Detail</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">ဘာတွေ ပါလဲ</div>
+        <ul style="margin-left:20px;color:var(--text-2);font-size:13px;line-height:1.8;">
+          <li>Error code + name</li>
+          <li><strong>Fix / Solution</strong> — ဖြေရှင်းနည်း (green card)</li>
+          <li><strong>Explanation</strong> — ရှင်းလင်းချက်</li>
+          <li><strong>Photos</strong> — error ရဲ့ ဓာတ်ပုံများ</li>
+          <li><strong>Related Machines</strong> — သက်ဆိုင်တဲ့ စက်များ</li>
+        </ul>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">Photos ကြည့်နည်း</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          Thumbnail ကို နှိပ်ပါ — full screen viewer ပေါ်လာမယ်။
+          Swipe (left/right) နဲ့ next/prev — ESC or ✕ နဲ့ ပြန်။
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="favorites" class="detail-section">
+  <h2 class="detail-section-title">5. Favorites</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">သိမ်းနည်း</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          1. Machine or Error detail ကို ဖွင့်<br>
+          2. <strong>☆ Favorite</strong> button ကို နှိပ်<br>
+          3. Star ဝါရောင် ဖြစ်လာမယ်<br>
+          4. Sheet menu → <strong>Favorites</strong> မှာ ပြန်ကြည့်
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="offline" class="detail-section">
+  <h2 class="detail-section-title">6. Offline</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">Internet မရှိလည်း အလုပ်လုပ်</div>
+        <ul style="margin-left:20px;color:var(--text-2);font-size:13px;line-height:1.8;">
+          <li>Search (cached data)</li>
+          <li>Machine detail</li>
+          <li>Error detail + fix</li>
+          <li>Photos (viewed before)</li>
+          <li>Favorites</li>
+          <li>Recent searches</li>
+        </ul>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">Auto Sync</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          Internet ရလာတာနဲ့ auto sync ဖြစ်မယ်။ Topbar မှာ
+          <strong>Syncing… → Synced</strong> ပြမယ်။
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="detail-section">
+  <h2 class="detail-section-title">7. FAQ</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">Q: Machine မမြင်ရင်?</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          သင့် account က သင့် shop ရဲ့ machine တွေပဲ မြင်ရတယ်။
+          Admin ကို ဆက်သွယ်ပါ။
+        </div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">Q: Photos offline ကြည့်ရ?</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          Photo တစ်ခါ ကြည့်ပြီးရင် cache ဖြစ် — offline ဖြစ်လည်း ပြန်ကြည့်နိုင်။
+        </div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-title" style="margin-bottom:6px;">Q: Password ပြောင်းချင်ရင်?</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          Admin ကို ဆက်သွယ်ပါ — Admin က သင့် password reset လုပ်နိုင်။
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

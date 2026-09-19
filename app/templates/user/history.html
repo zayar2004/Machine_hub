@@ -1,0 +1,81 @@
+{% extends "user/base.html" %}
+{% block title %}History — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  History
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;">
+  သင့် shop ရဲ့ repair entries တွေ။
+</p>
+
+{% if repairs %}
+<section class="detail-section">
+  <h2 class="detail-section-title">Repair History ({{ repairs|length }})</h2>
+  <div class="list">
+    {% for r in repairs %}
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-icon accent">
+        <svg class="icon"><use href="#i-history"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">{{ r.description or 'Repair entry' }}</div>
+        <div class="list-item-sub" style="white-space:normal;">
+          {{ r.repaired_at.strftime('%Y-%m-%d %H:%M') }}
+          {% if r.machine %}
+            · <a href="{{ url_for('user.machine_detail', machine_id=r.machine.id) }}"
+                 style="color:var(--accent);text-decoration:none;font-weight:600;">
+              {{ r.machine.machine_code }}
+            </a>
+          {% endif %}
+          {% if r.error %} · {{ r.error.error_code }}{% endif %}
+        </div>
+        {% if r.notes %}
+          <div class="list-item-sub" style="white-space:normal;margin-top:6px;color:var(--text-2);">
+            {{ r.notes }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% else %}
+<!-- Empty state with helpful info -->
+<div class="empty">
+  <div class="empty-icon">
+    <svg class="icon icon-lg"><use href="#i-history"/></svg>
+  </div>
+  <h2 class="empty-title">No repair history yet</h2>
+  <p class="empty-desc">
+    Machine တွေရဲ့ repair entries တွေ ဒီမှာ ပေါ်လာမယ်။
+    Admin က repair log ထည့်ပြီးရင် ဒီ page မှာ ကြည့်နိုင်တယ်။
+  </p>
+</div>
+
+<!-- Help card: what you can do -->
+<div class="card" style="margin-top:20px;background:var(--surface-2);">
+  <div style="display:flex;gap:10px;align-items:flex-start;">
+    <div style="width:32px;height:32px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg class="icon icon-sm"><use href="#i-info"/></svg>
+    </div>
+    <div style="flex:1;">
+      <div style="font-weight:700;font-size:14px;margin-bottom:8px;">ဘာလုပ်နိုင်လဲ</div>
+      <ul style="margin-left:20px;color:var(--text-2);font-size:13px;line-height:1.8;">
+        <li>Machine detail page မှာ repair history ကြည့်နိုင်</li>
+        <li>Admin က repair entries ထည့်ပေးရင် ဒီမှာ ပေါ်လာမယ်</li>
+        <li>Error fix ကို error detail page မှာ ကြည့်နိုင်</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

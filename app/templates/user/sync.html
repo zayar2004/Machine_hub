@@ -1,0 +1,135 @@
+{% extends "user/base.html" %}
+{% block title %}Sync Status — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  Sync Status
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;">
+  Server နဲ့ data sync အခြေအနေ။ "Sync Now" နှိပ်ရင် ချက်ချင်း sync ဖြစ်မယ်။
+</p>
+
+<!-- Status card -->
+<div class="card" style="text-align:center;padding:32px 20px;margin-bottom:20px;">
+  <div id="status-icon" style="width:72px;height:72px;margin:0 auto 16px;border-radius:50%;background:var(--success-soft);color:var(--success);display:flex;align-items:center;justify-content:center;">
+    <svg class="icon icon-xl"><use href="#i-refresh"/></svg>
+  </div>
+  <div style="font-weight:800;font-size:18px;color:var(--text);margin-bottom:6px;" id="sync-status">
+    Checking…
+  </div>
+  <div style="font-size:13px;color:var(--text-2);" id="sync-sub">
+    —
+  </div>
+</div>
+
+<!-- Actions -->
+<section class="detail-section">
+  <button type="button" class="btn btn-primary btn-block" data-sync-now>
+    <svg class="icon icon-sm"><use href="#i-refresh"/></svg>
+    Sync Now
+  </button>
+</section>
+
+<!-- Details -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Details</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon accent">
+        <svg class="icon"><use href="#i-activity"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Local Version</div>
+        <div class="list-item-sub" id="local-version">—</div>
+      </div>
+    </div>
+
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-refresh"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Last Sync</div>
+        <div class="list-item-sub" id="last-sync-time">—</div>
+      </div>
+    </div>
+
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-wifi-off"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Network</div>
+        <div class="list-item-sub" id="network-status">—</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Info -->
+<section class="detail-section">
+  <h2 class="detail-section-title">How Auto-Sync Works</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-sub" style="white-space:normal;line-height:1.8;color:var(--text-2);">
+          ✅ App ဖွင့်တိုင်း — auto sync<br>
+          ✅ 3 မိနစ်တစ်ခါ — background sync<br>
+          ✅ Internet ပြန်ရလာရင် — auto sync<br>
+          ✅ App ပြန်ဖွင့်တိုင်း — sync<br>
+          ✅ Manual — topbar indicator tap or "Sync Now" button
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (async function() {
+    function updateNetwork() {
+      var el = document.getElementById('network-status');
+      if (!el) return;
+      el.textContent = navigator.onLine ? '🟢 Online' : '⚪ Offline (cached)';
+    }
+
+    function updateStatus() {
+      var status = document.getElementById('sync-status');
+      var sub = document.getElementById('sync-sub');
+      if (navigator.onLine) {
+        status.textContent = 'Online';
+        sub.textContent = 'Synced with server';
+      } else {
+        status.textContent = 'Offline';
+        sub.textContent = 'Using cached data';
+      }
+    }
+
+    async function loadMeta() {
+      if (!window.MH || !window.MH.db) return;
+      try {
+        var lv = await window.MH.db.getMeta('local_version', 0);
+        var last = await window.MH.db.getMeta('last_sync');
+        document.getElementById('local-version').textContent = 'v' + lv;
+        if (last) {
+          document.getElementById('last-sync-time').textContent = new Date(last).toLocaleString();
+        }
+      } catch (e) {}
+    }
+
+    updateNetwork();
+    updateStatus();
+    await loadMeta();
+
+    window.addEventListener('online', function() { updateNetwork(); updateStatus(); loadMeta(); });
+    window.addEventListener('offline', function() { updateNetwork(); updateStatus(); });
+  })();
+</script>
+
+{% endblock %}

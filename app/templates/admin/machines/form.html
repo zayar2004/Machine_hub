@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Edit' if mode == 'edit' else 'New' }} Machine — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{{ 'Edit' if mode == 'edit' else 'New' }} Machine</h1>
+    <p class="page-sub">Machine code is unique within a shop</p>
+  </div>
+</div>
+
+<div style="max-width:520px;">
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      {{ form.shop_id.label(class_="field-label") }}
+      {{ form.shop_id(class_="field-select", autofocus=true) }}
+      {% for e in form.shop_id.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.machine_code.label(class_="field-label") }}
+      {{ form.machine_code(class_="field-input", placeholder="e.g. DC001") }}
+      {% for e in form.machine_code.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.machine_name.label(class_="field-label") }}
+      {{ form.machine_name(class_="field-input", placeholder="e.g. Dream Castle") }}
+      {% for e in form.machine_name.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.description.label(class_="field-label") }}
+      {{ form.description(class_="field-textarea", rows=3, placeholder="Optional notes") }}
+    </div>
+
+    <div class="field">
+      {{ form.status.label(class_="field-label") }}
+      {{ form.status(class_="field-select") }}
+    </div>
+
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" type="submit">Save</button>
+      <a class="btn btn-secondary" href="{{ url_for('admin.machine_list') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

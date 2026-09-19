@@ -1,0 +1,138 @@
+{% extends "user/base.html" %}
+{% block title %}Help Center — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  Help Center
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;">
+  Machine Hub ကို အသုံးပြုနည်း လမ်းညွှန်။
+</p>
+
+<!-- Quick links -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+  <a href="{{ url_for('user.search', type='machine') }}"
+     style="display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;color:var(--text);text-decoration:none;">
+    <div style="width:36px;height:36px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;">
+      <svg class="icon"><use href="#i-package"/></svg>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:14px;">Machines</div>
+      <div style="font-size:12px;color:var(--text-2);margin-top:2px;">Browse machines</div>
+    </div>
+  </a>
+  <a href="{{ url_for('user.search', type='error') }}"
+     style="display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;color:var(--text);text-decoration:none;">
+    <div style="width:36px;height:36px;border-radius:10px;background:var(--warning-soft);color:var(--warning);display:flex;align-items:center;justify-content:center;">
+      <svg class="icon"><use href="#i-alert"/></svg>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:14px;">Errors</div>
+      <div style="font-size:12px;color:var(--text-2);margin-top:2px;">Find error fixes</div>
+    </div>
+  </a>
+</div>
+
+<!-- How to -->
+<section class="detail-section">
+  <h2 class="detail-section-title">ဘယ်လိုရှာမလဲ</h2>
+
+  <div class="list">
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg class="icon icon-sm"><use href="#i-search"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Search Box သုံးပါ</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.6;">
+          Home page ရဲ့ search box မှာ machine code, name, or error code ရိုက်ပါ။
+          Partial match ဖြစ်တဲ့အတွက် "Dre" ရိုက်ရင် "Dream" ရှာတွေ့မယ်။
+        </div>
+      </div>
+    </div>
+
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--warning-soft);color:var(--warning);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg class="icon icon-sm"><use href="#i-alert"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Error Code ရိုက်ပါ</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.6;">
+          E81 or "Screen" ရိုက်ရင် error fix ရှာတွေ့မယ်။
+          Error knowledge က ဆိုင်အားလုံး share လုပ်ထားတယ်။
+        </div>
+      </div>
+    </div>
+
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--success-soft);color:var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg class="icon icon-sm"><use href="#i-copy"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Code Copy လုပ်ပါ</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.6;">
+          Result ထဲက 📋 button ကို နှိပ်ပါ။ "Copied" toast ပေါ်လာမယ်။
+          Phone မှာ သိမ်းထားဖို့ အလွယ်ဆုံးနည်း။
+        </div>
+      </div>
+    </div>
+
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg class="icon icon-sm"><use href="#i-wifi-off"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Offline အသုံးပြုပါ</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.6;">
+          Internet မရှိလည်း ရှာလို့ရတယ်။ Cached data ကနေ auto ရှာပေးမယ်။
+          Internet ပြန်ရလာရင် auto sync ဖြစ်မယ်။
+        </div>
+      </div>
+    </div>
+
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--warning-soft);color:var(--warning);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg class="icon icon-sm"><use href="#i-star"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Favorite သိမ်းပါ</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.6;">
+          Machine or Error detail မှာ ☆ Favorite ကို နှိပ်ပါ။
+          Sheet menu → Favorites မှာ ပြန်ကြည့်နိုင်တယ်။
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Links -->
+<section class="detail-section">
+  <h2 class="detail-section-title">အခြား</h2>
+  <div class="list">
+    <a class="list-item" href="{{ url_for('user.docs') }}">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-book"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Documentation</div>
+        <div class="list-item-sub">အပြည့်အစုံ လမ်းညွှန်</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </a>
+    <a class="list-item" href="{{ url_for('user.about') }}">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-info"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">About</div>
+        <div class="list-item-sub">App version & info</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </a>
+  </div>
+</section>
+
+{% endblock %}

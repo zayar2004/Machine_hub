@@ -1,0 +1,86 @@
+{% extends "admin/base.html" %}
+{% block title %}Preview Import — Errors{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Import Preview — Errors</h1>
+    <p class="page-sub">Global error knowledge base</p>
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat"><div class="stat-label">Total</div><div class="stat-value">{{ parsed.total }}</div></div>
+  <div class="stat"><div class="stat-label">New</div><div class="stat-value" style="color:var(--success);">{{ new_rows|length }}</div></div>
+  <div class="stat"><div class="stat-label">Update</div><div class="stat-value" style="color:var(--warning);">{{ update_rows|length }}</div></div>
+  <div class="stat"><div class="stat-label">Invalid</div><div class="stat-value" style="color:var(--danger);">{{ invalid_rows|length }}</div></div>
+</div>
+
+{% if invalid_rows %}
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title" style="color:var(--danger);">Invalid ({{ invalid_rows|length }})</h2>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Row</th><th>Code</th><th>Name</th><th>Errors</th></tr></thead>
+      <tbody>
+        {% for r in invalid_rows %}
+        <tr>
+          <td>{{ r.row_num }}</td>
+          <td>{{ r.data.error_code or '—' }}</td>
+          <td>{{ r.data.error_name or '—' }}</td>
+          <td style="color:var(--danger);">{{ r.errors|join('; ') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+{% if new_rows %}
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">New ({{ new_rows|length }})</h2>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Row</th><th>Code</th><th>Name</th></tr></thead>
+      <tbody>
+        {% for r in new_rows[:20] %}
+        <tr>
+          <td>{{ r.row_num }}</td>
+          <td><strong class="mono">{{ r.data.error_code }}</strong></td>
+          <td>{{ r.data.error_name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if new_rows|length > 20 %}<p class="text-xs text-muted mt-2">... and {{ new_rows|length - 20 }} more</p>{% endif %}
+</section>
+{% endif %}
+
+<div class="card" style="margin-top:20px;">
+  <form method="POST" action="{{ url_for('admin.import_errors_confirm') }}"
+        enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <input type="hidden" name="import_mode" value="{{ request.form.get('import_mode', 'update') }}">
+    <p class="field-help" style="margin-bottom:12px;">
+      Re-select the file to confirm.
+    </p>
+
+    <div class="field">
+      {{ form.excel_file.label(class_="field-label") }}
+      {{ form.excel_file(class_="field-input", accept=".xlsx") }}
+    </div>
+
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" type="submit">Import Now</button>
+      <a class="btn btn-secondary" href="{{ url_for('admin.import_errors_upload') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,272 @@
+{% extends "user/base.html" %}
+{% block title %}Home — Machine Hub{% endblock %}
+{% block content %}
+
+<!-- ==================== GREETING ==================== -->
+<div class="home-v2-hero">
+  <div class="greeting" id="greeting">{{ greeting }}</div>
+  <div class="subtitle">ရှာဖွေရန် — machine code, name, or error</div>
+</div>
+
+<!-- ==================== SEARCH TIPS (first-time only) ==================== -->
+<div class="search-tips" id="search-tips" hidden>
+  <button type="button" class="search-tips-close" id="tips-close" aria-label="Dismiss">
+    <svg class="icon icon-xs"><use href="#i-x"/></svg>
+  </button>
+  <div class="search-tips-head">
+    <span>💡</span>
+    <span>Search Tips</span>
+  </div>
+  <div class="search-tips-body">
+    Try: <strong>Dream</strong> · <strong>DC001</strong> · <strong>E81</strong> — or any part of machine/error name
+  </div>
+</div>
+
+<!-- ==================== BIG SEARCH (HERO) ==================== -->
+<form method="GET" action="{{ url_for('user.search') }}" class="search-hero-wrap">
+  <div class="search search-hero">
+    <svg class="icon search-icon"><use href="#i-search"/></svg>
+    <input type="text" name="q" class="search-input" id="search-input"
+           placeholder="ရှာရန် — Dream, DC001, E81..."
+           autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+    <button type="button" class="search-clear" id="search-clear" aria-label="Clear">
+      <svg class="icon icon-sm"><use href="#i-x"/></svg>
+    </button>
+  </div>
+</form>
+
+<!-- ==================== SEARCH CHIPS (dynamic) ==================== -->
+<div class="chip-row" id="chip-row" hidden></div>
+
+<!-- ==================== QUICK ACCESS ==================== -->
+<section class="section">
+  <div class="section-label">QUICK ACCESS</div>
+
+  <a href="{{ url_for('user.search', type='machine') }}" class="quick-item">
+    <div class="quick-icon quick-icon-machine">
+      <svg class="icon"><use href="#i-package"/></svg>
+    </div>
+    <div class="quick-body">
+      <div class="quick-title">Machines</div>
+      <div class="quick-sub">{{ machine_count }} · သင့် shop machines</div>
+    </div>
+    <svg class="icon icon-sm quick-arrow"><use href="#i-chevron-right"/></svg>
+  </a>
+
+  <a href="{{ url_for('user.search', type='error') }}" class="quick-item">
+    <div class="quick-icon quick-icon-error">
+      <svg class="icon"><use href="#i-alert"/></svg>
+    </div>
+    <div class="quick-body">
+      <div class="quick-title">Error Knowledge</div>
+      <div class="quick-sub">{{ error_count }} · ဖြေရှင်းနည်း + ဓာတ်ပုံ</div>
+    </div>
+    <svg class="icon icon-sm quick-arrow"><use href="#i-chevron-right"/></svg>
+  </a>
+
+  <a href="{{ url_for('user.favorites') }}" class="quick-item">
+    <div class="quick-icon quick-icon-fav">
+      <svg class="icon"><use href="#i-star"/></svg>
+    </div>
+    <div class="quick-body">
+      <div class="quick-title">Favorites</div>
+      <div class="quick-sub">{{ favorite_count }} saved</div>
+    </div>
+    <svg class="icon icon-sm quick-arrow"><use href="#i-chevron-right"/></svg>
+  </a>
+</section>
+
+<!-- ==================== RECENT SEARCHES ==================== -->
+<section class="section" id="recent-section">
+  <div class="section-head-row">
+    <div class="section-label">RECENT</div>
+    <button type="button" id="clear-recents" class="section-action">Clear</button>
+  </div>
+  <div id="home-recents"></div>
+</section>
+
+<!-- ==================== SYNC STATUS BAR ==================== -->
+<div class="sync-bar" id="sync-bar">
+  <span class="status-dot" id="sync-dot-bar"></span>
+  <span id="sync-label-bar">Up to date</span>
+</div>
+
+{% endblock %}
+
+{% block body_extra %}
+<script>
+(function () {
+  'use strict';
+
+  var input = document.getElementById('search-input');
+  var clearBtn = document.getElementById('search-clear');
+
+  // ---------- Clear button ----------
+  if (clearBtn && input) {
+    function updateClear() {
+      if (input.value.length > 0) clearBtn.classList.add('visible');
+      else clearBtn.classList.remove('visible');
+    }
+    input.addEventListener('input', updateClear);
+    clearBtn.addEventListener('click', function () {
+      input.value = '';
+      input.focus();
+      updateClear();
+    });
+    updateClear();
+  }
+
+  // ---------- Recent searches ----------
+  (async function renderRecents() {
+    var el = document.getElementById('home-recents');
+    if (!el) return;
+
+    if (!window.MH || !window.MH.recent) {
+      el.innerHTML = '<div class="recent-empty">No recent searches yet.</div>';
+      return;
+    }
+
+    try {
+      var items = await window.MH.recent.list(6);
+      if (!items || !items.length) {
+        el.innerHTML = '<div class="recent-empty">No recent searches yet.<br>Start by searching for a machine or error.</div>';
+        return;
+      }
+      el.innerHTML = items.map(function (it) {
+        var href = '/search?q=' + encodeURIComponent(it.query) + '&type=' + (it.type || 'all');
+        return '<a class="recent-item" href="' + href + '">' +
+          '<div class="icon-wrap"><svg class="icon icon-sm"><use href="#i-history"/></svg></div>' +
+          '<div class="text">' +
+            '<div class="title">' + esc(it.query) + '</div>' +
+            '<div class="sub">' + esc(it.type || 'all') + '</div>' +
+          '</div>' +
+          '<svg class="icon icon-sm" style="color:var(--text-3);"><use href="#i-chevron-right"/></svg>' +
+        '</a>';
+      }).join('');
+    } catch (e) {
+      el.innerHTML = '<div class="recent-empty">No recent searches yet.</div>';
+    }
+
+    var clearBtn2 = document.getElementById('clear-recents');
+    if (clearBtn2) {
+      clearBtn2.addEventListener('click', async function () {
+        if (!confirm('Clear recent searches?')) return;
+        try {
+          await window.MH.recent.clear();
+          el.innerHTML = '<div class="recent-empty">No recent searches yet.</div>';
+          if (window.MH.toast) window.MH.toast('Cleared');
+        } catch (err) {}
+      });
+    }
+  })();
+
+  // ---------- Dynamic chips (recent + fallback) ----------
+  (async function renderChips() {
+    var row = document.getElementById('chip-row');
+    if (!row) return;
+
+    var chips = [];
+    try {
+      if (window.MH && window.MH.recent) {
+        var recents = await window.MH.recent.list(4);
+        chips = recents.map(function (r) { return r.query; });
+      }
+    } catch (e) {}
+
+    // Fallback defaults
+    if (chips.length < 2) {
+      var fallback = ['Dream', 'Aladdin', 'E81', 'Claw'];
+      fallback.forEach(function (f) {
+        if (chips.indexOf(f) === -1) chips.push(f);
+      });
+    }
+    chips = chips.slice(0, 5);
+
+    if (!chips.length) {
+      row.hidden = true;
+      return;
+    }
+
+    row.innerHTML = chips.map(function (c) {
+      return '<button type="button" class="hint-chip" data-search="' + esc(c) + '">' + esc(c) + '</button>';
+    }).join('');
+    row.hidden = false;
+
+    row.querySelectorAll('[data-search]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var q = b.getAttribute('data-search');
+        if (input) {
+          input.value = q;
+          input.form.submit();
+        } else {
+          location.href = '/search?q=' + encodeURIComponent(q);
+        }
+      });
+    });
+  })();
+
+  // ---------- Sync status bar ----------
+  (function wireSyncBar() {
+    var dot = document.getElementById('sync-dot-bar');
+    var label = document.getElementById('sync-label-bar');
+    if (!dot || !label) return;
+
+    function update() {
+      if (!navigator.onLine) {
+        dot.classList.add('offline');
+        dot.classList.remove('syncing');
+        label.textContent = 'Offline · Using saved data';
+      } else {
+        dot.classList.remove('offline');
+        label.textContent = 'Up to date';
+      }
+    }
+    window.addEventListener('online', update);
+    window.addEventListener('offline', update);
+    update();
+
+    // Hook into MH sync status if available
+    var obs = setInterval(function () {
+      var mainDot = document.getElementById('sync-dot');
+      if (!mainDot) return;
+      if (mainDot.classList.contains('syncing')) {
+        dot.classList.add('syncing');
+        label.textContent = 'Syncing…';
+      } else if (mainDot.classList.contains('error')) {
+        dot.classList.add('offline');
+        label.textContent = 'Sync error';
+      } else if (mainDot.classList.contains('synced')) {
+        dot.classList.remove('syncing', 'offline');
+        label.textContent = 'Up to date';
+      }
+    }, 2000);
+    setTimeout(function () { clearInterval(obs); }, 60000);
+  })();
+
+  // ---------- Search Tips (first-time only) ----------
+  (function wireTips() {
+    var tips = document.getElementById('search-tips');
+    var close = document.getElementById('tips-close');
+    if (!tips || !close) return;
+
+    var KEY = 'mh_tips_dismissed_v1';
+    var dismissed = false;
+    try { dismissed = localStorage.getItem(KEY) === '1'; } catch (e) {}
+    if (!dismissed) tips.hidden = false;
+
+    close.addEventListener('click', function () {
+      tips.hidden = true;
+      try { localStorage.setItem(KEY, '1'); } catch (e) {}
+      if (window.MH && window.MH.toast) window.MH.toast('Tip dismissed');
+    });
+  })();
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]);
+    });
+  }
+})();
+</script>
+{% endblock %}
+

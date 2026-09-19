@@ -1,0 +1,149 @@
+{% extends "user/base.html" %}
+{% block title %}Offline Data — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  Offline Data
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;">
+  Phone မှာ သိမ်းထားတဲ့ data အခြေအနေ။ Internet မရှိလည်း အလုပ်လုပ်မယ်။
+</p>
+
+<!-- Status -->
+<div id="status-card" style="background:var(--success-soft);border:1.5px solid var(--success);border-radius:14px;padding:16px;margin-bottom:20px;">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="width:44px;height:44px;border-radius:12px;background:var(--success);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg class="icon"><use href="#i-check"/></svg>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div style="font-weight:700;font-size:14px;color:var(--success);">Ready for offline</div>
+      <div style="font-size:12px;color:var(--success);" id="last-sync">Last sync: checking…</div>
+    </div>
+  </div>
+</div>
+
+<!-- Cached data -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Cached Data</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon accent">
+        <svg class="icon"><use href="#i-package"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Machines</div>
+        <div class="list-item-sub">Available offline</div>
+      </div>
+      <span class="chip chip-accent" id="machine-count">—</span>
+    </div>
+
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-alert"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Errors</div>
+        <div class="list-item-sub">Available offline</div>
+      </div>
+      <span class="chip chip-warning" id="error-count">—</span>
+    </div>
+
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-image"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Photos</div>
+        <div class="list-item-sub">Cached after viewing</div>
+      </div>
+      <span class="chip" id="photo-count">—</span>
+    </div>
+  </div>
+</section>
+
+<!-- Actions -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Actions</h2>
+  <div class="list">
+    <button type="button" class="list-item" data-sync-now>
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-refresh"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Sync Now</div>
+        <div class="list-item-sub">Download latest changes</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </button>
+
+    <button type="button" class="list-item" id="clear-cache-btn"
+            style="color:var(--danger);">
+      <div class="list-item-icon" style="color:var(--danger);">
+        <svg class="icon"><use href="#i-trash"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Clear Cache</div>
+        <div class="list-item-sub">Remove all offline data</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- Info -->
+<section class="detail-section">
+  <h2 class="detail-section-title">How it works</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div class="list-item-main">
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;color:var(--text-2);">
+          <strong>Auto sync</strong> — App ဖွင့်တိုင်း server နဲ့ sync လုပ်တယ်။<br>
+          <strong>Incremental</strong> — ပြောင်းလဲတဲ့ data ပဲ download လုပ်တယ်။<br>
+          <strong>Photos</strong> — တစ်ခါကြည့်ပြီးရင် offline မှာ ပြန်ကြည့်နိုင်။
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (async function() {
+    if (!window.MH || !window.MH.db) return;
+    try {
+      var mc = await window.MH.db.count('machines');
+      var ec = await window.MH.db.count('errors');
+      document.getElementById('machine-count').textContent = mc;
+      document.getElementById('error-count').textContent = ec;
+
+      var last = await window.MH.db.getMeta('last_sync');
+      var el = document.getElementById('last-sync');
+      if (last) {
+        var d = new Date(last);
+        el.textContent = 'Last sync: ' + d.toLocaleString();
+      } else {
+        el.textContent = 'Not synced yet';
+      }
+    } catch (e) {}
+  })();
+
+  var clearBtn = document.getElementById('clear-cache-btn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', async function () {
+      if (!confirm('Clear all offline data? You will need internet to reload.')) return;
+      if (window.MH && window.MH.db) {
+        await window.MH.db.clearAll();
+        if (window.MH.toast) window.MH.toast('Cache cleared');
+        setTimeout(function () { location.reload(); }, 800);
+      }
+    });
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#09090b">
+  <title>{% block title %}Admin — Machine Hub{% endblock %}</title>
+
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('mh_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+
+  <style>
+    /* Admin topbar */
+    .admin-topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-topbar-inner {
+      max-width: 1200px; margin: 0 auto;
+      height: 56px; padding: 0 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    /* Hamburger */
+    .admin-burger {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: var(--r-sm);
+      color: var(--text-2); flex-shrink: 0;
+      transition: all var(--t);
+    }
+    .admin-burger:hover { background: var(--surface-2); color: var(--text); }
+
+    /* Nav — desktop only */
+    .admin-nav {
+      display: none; gap: 2px; flex: 1;
+      justify-content: center; overflow-x: auto;
+    }
+    .admin-nav a {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 12px; border-radius: var(--r-sm);
+      font-size: 13px; font-weight: 500;
+      color: var(--text-2); text-decoration: none;
+      white-space: nowrap; transition: all var(--t);
+    }
+    .admin-nav a:hover { background: var(--surface-2); color: var(--text); }
+    .admin-nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+    @media (min-width: 900px) {
+      .admin-burger { display: none; }
+      .admin-nav { display: flex; }
+    }
+
+    /* Content */
+    .admin-content {
+      max-width: 1200px; margin: 0 auto;
+      padding: 16px 12px 80px;
+    }
+    @media (min-width: 640px) {
+      .admin-content { padding: 24px 16px 80px; }
+    }
+
+    /* Tables */
+    .table-wrap {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table th, .table td {
+      padding: 12px 14px; text-align: left;
+      border-bottom: 1px solid var(--border); vertical-align: middle;
+    }
+    .table th {
+      background: var(--surface-2); font-size: 11px; font-weight: 700;
+      color: var(--text-2); text-transform: uppercase; letter-spacing: .04em;
+      white-space: nowrap;
+    }
+    .table tr:last-child td { border-bottom: none; }
+    .table tbody tr:hover { background: var(--surface-2); }
+
+    .actions { display: flex; gap: 4px; flex-wrap: wrap; }
+
+    /* Stats */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 10px; margin-bottom: 20px;
+    }
+    @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
+    @media (min-width: 900px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .stat {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 14px;
+    }
+    @media (min-width: 640px) { .stat { padding: 18px; } }
+
+    .stat-label {
+      color: var(--text-3); font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .05em;
+      margin-bottom: 6px; display: flex; align-items: center; gap: 5px;
+    }
+    @media (min-width: 640px) { .stat-label { font-size: 11px; margin-bottom: 8px; } }
+
+    .stat-value {
+      font-size: 22px; font-weight: 800; color: var(--text);
+      letter-spacing: -.02em; line-height: 1.1;
+    }
+    @media (min-width: 640px) { .stat-value { font-size: 26px; } }
+
+    .stat-sub { color: var(--text-3); font-size: 10px; margin-top: 4px; }
+    @media (min-width: 640px) { .stat-sub { font-size: 11px; } }
+
+    /* Page head */
+    .page-head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    @media (min-width: 640px) { .page-head { margin-bottom: 20px; } }
+
+    .page-title {
+      font-size: 20px; font-weight: 800; color: var(--text);
+      letter-spacing: -.02em;
+    }
+    @media (min-width: 640px) { .page-title { font-size: 22px; } }
+
+    .page-sub { font-size: 12px; color: var(--text-2); margin-top: 3px; }
+    @media (min-width: 640px) { .page-sub { font-size: 13px; } }
+
+    /* Filter bar */
+    .filter-bar {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      background: var(--surface); border: 1.5px solid var(--border);
+      padding: 12px; border-radius: var(--r-lg); margin-bottom: 16px;
+      align-items: end;
+    }
+    .filter-bar .field { margin: 0; flex: 1; min-width: 130px; }
+
+    @media (max-width: 640px) {
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .filter-bar .field { width: 100%; min-width: 0; }
+      .filter-bar .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="admin-topbar">
+  <div class="admin-topbar-inner">
+
+    <!-- Hamburger (mobile only) -->
+    <button class="admin-burger" type="button" id="admin-burger"
+            aria-label="Menu">
+      <svg class="icon" width="22" height="22" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="4" y1="6" x2="20" y2="6"/>
+        <line x1="4" y1="12" x2="20" y2="12"/>
+        <line x1="4" y1="18" x2="20" y2="18"/>
+      </svg>
+    </button>
+
+    <!-- Brand -->
+    <a href="{{ url_for('admin.dashboard') }}" class="brand" style="text-decoration:none;">
+      <span class="brand-mark">MH</span>
+      <span class="brand-name" style="display:flex;align-items:center;gap:6px;">
+        Machine Hub
+        <span class="chip chip-warning" style="font-size:10px;height:20px;">ADMIN</span>
+      </span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="admin-nav">
+      <a href="{{ url_for('admin.dashboard') }}" class="{% if request.endpoint == 'admin.dashboard' %}active{% endif %}">Dashboard</a>
+      <a href="{{ url_for('admin.shop_list') }}" class="{% if 'shop' in (request.endpoint or '') %}active{% endif %}">Shops</a>
+      <a href="{{ url_for('admin.user_list') }}" class="{% if 'user' in (request.endpoint or '') and 'pending' not in (request.endpoint or '') %}active{% endif %}">Users</a>
+      <a href="{{ url_for('admin.pending_users') }}" class="{% if 'pending' in (request.endpoint or '') %}active{% endif %}">Pending</a>
+      <a href="{{ url_for('admin.machine_list') }}" class="{% if 'machine' in (request.endpoint or '') %}active{% endif %}">Machines</a>
+      <a href="{{ url_for('admin.error_list') }}" class="{% if 'error' in (request.endpoint or '') %}active{% endif %}">Errors</a>
+      <a href="{{ url_for('admin.admin_search') }}" class="{% if request.endpoint == 'admin.admin_search' %}active{% endif %}">Search</a>
+      <a href="{{ url_for('admin.activity_log') }}" class="{% if 'activity' in (request.endpoint or '') %}active{% endif %}">Activity</a>
+      <a href="{{ url_for('admin.change_logs') }}" class="{% if request.endpoint == 'admin.change_logs' %}active{% endif %}">Logs</a>
+    </nav>
+
+    <!-- Right actions -->
+    <div style="display:flex;align-items:center;gap:2px;flex-shrink:0;margin-left:auto;">
+      <a href="{{ url_for('user.home') }}" class="icon-btn" title="User view">
+        <svg class="icon icon-sm"><use href="#i-user"/></svg>
+      </a>
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Theme"></button>
+      <a href="{{ url_for('auth.logout') }}" class="icon-btn" title="Logout">
+        <svg class="icon icon-sm"><use href="#i-log-out"/></svg>
+      </a>
+    </div>
+
+  </div>
+</header>
+
+<!-- Mobile drawer -->
+<div class="sheet-backdrop" id="admin-backdrop"></div>
+<aside class="sheet" id="admin-sheet" style="max-width:340px;">
+  <div class="sheet-handle"></div>
+
+  <div class="sheet-header">
+    <h3 class="sheet-title">Menu</h3>
+    <button type="button" class="icon-btn" id="admin-sheet-close">
+      <svg class="icon"><use href="#i-x"/></svg>
+    </button>
+  </div>
+
+  <div class="sheet-body">
+
+    <!-- User card -->
+    <div class="sheet-user">
+      <div class="sheet-user-name">{{ current_user.name }}</div>
+      <div class="sheet-user-sub">@{{ current_user.username }} · Admin</div>
+    </div>
+
+    <!-- MAIN -->
+    <div style="padding:12px 18px 4px;font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:.06em;">MAIN</div>
+
+    <a class="sheet-item" href="{{ url_for('admin.dashboard') }}">
+      <svg class="icon"><use href="#i-grid"/></svg><span>Dashboard</span>
+    </a>
+    <a class="sheet-item" href="{% if menu_shops and menu_shops|length > 0 %}{{ url_for('admin.shop_detail', shop_id=menu_shops[0].id) }}{% else %}{{ url_for('admin.shop_list') }}{% endif %}">
+      <svg class="icon"><use href="#i-shop"/></svg><span>Shops</span>
+    </a>
+    {% if menu_shops %}
+      <div class="sheet-sub">
+        {% for s in menu_shops %}
+          <a class="sheet-subitem{% if request.endpoint == 'admin.shop_detail' and request.view_args and request.view_args.get('shop_id') == s.id %} active{% endif %}"
+             href="{{ url_for('admin.shop_detail', shop_id=s.id) }}">
+            <span class="sheet-subcode">{{ s.shop_code }}</span>
+            <span class="sheet-subname">{{ s.shop_name }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <a class="sheet-item" href="{{ url_for('admin.user_list') }}">
+      <svg class="icon"><use href="#i-users"/></svg><span>Users</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('admin.pending_users') }}">
+      <svg class="icon"><use href="#i-user"/></svg><span>Pending Users</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('admin.machine_list') }}">
+      <svg class="icon"><use href="#i-package"/></svg><span>Machines</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('admin.error_list') }}">
+      <svg class="icon"><use href="#i-alert"/></svg><span>Errors</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('admin.admin_search') }}">
+      <svg class="icon"><use href="#i-search"/></svg><span>Search</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('admin.change_logs') }}">
+      <svg class="icon"><use href="#i-activity"/></svg><span>Change Logs</span>
+    </a>
+
+    <!-- TOOLS -->
+    <div style="padding:12px 18px 4px;font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:.06em;">TOOLS</div>
+
+    <a class="sheet-item" href="{{ url_for('admin.import_machines_upload') }}">
+      <svg class="icon"><use href="#i-upload"/></svg><span>Import Machines</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('admin.import_errors_upload') }}">
+      <svg class="icon"><use href="#i-upload"/></svg><span>Import Errors</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('admin.setup_guide') }}">
+      <svg class="icon"><use href="#i-book"/></svg><span>Setup Guide</span>
+    </a>
+
+    <!-- ACCOUNT -->
+    <div style="padding:12px 18px 4px;font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:.06em;">ACCOUNT</div>
+
+    <a class="sheet-item" href="{{ url_for('user.home') }}">
+      <svg class="icon"><use href="#i-home"/></svg><span>User View</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('auth.logout') }}">
+      <svg class="icon"><use href="#i-log-out"/></svg><span>Logout</span>
+    </a>
+
+  </div>
+</aside>
+
+<main class="admin-content">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">
+        <svg class="icon icon-sm"><use href="#i-info"/></svg>
+        <span>{{ message }}</span>
+      </div>
+    {% endfor %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<script src="{{ url_for('static', filename='js/icons.js') }}"></script>
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+<script>
+  (function () {
+    'use strict';
+
+    function openSheet() {
+      document.getElementById('admin-sheet').classList.add('open');
+      document.getElementById('admin-backdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSheet() {
+      document.getElementById('admin-sheet').classList.remove('open');
+      document.getElementById('admin-backdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var b = document.getElementById('admin-burger');
+      if (b) b.addEventListener('click', openSheet);
+
+      var c = document.getElementById('admin-sheet-close');
+      if (c) c.addEventListener('click', closeSheet);
+
+      var bk = document.getElementById('admin-backdrop');
+      if (bk) bk.addEventListener('click', closeSheet);
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeSheet();
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

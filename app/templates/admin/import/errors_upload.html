@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+{% block title %}Import Errors — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Import Errors</h1>
+    <p class="page-sub">Upload an Excel file (.xlsx) to import errors</p>
+  </div>
+</div>
+
+<div class="banner" style="padding:14px;background:var(--accent-soft);color:var(--accent);border-radius:var(--r);font-size:13px;margin-bottom:20px;line-height:1.6;">
+  <strong>Excel format (row 1 = headers):</strong><br>
+  • <code>error_code</code> (required)<br>
+  • <code>error_name</code> (required)<br>
+  • <code>error_fix</code> (optional)<br>
+  • <code>explanation</code> (optional)<br>
+  • <code>status</code> (optional)<br>
+  <br>
+  ℹ️ Errors are <strong>global</strong> — not shop-specific.
+</div>
+
+<div style="max-width:520px;">
+  <form method="POST" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      {{ form.import_mode.label(class_="field-label") }}
+      {{ form.import_mode(class_="field-select") }}
+      <p class="field-help">
+        • <strong>Update</strong> — code ရှိပြီးသားဆိုရင် overwrite<br>
+        • <strong>Skip</strong> — code ရှိပြီးသားဆိုရင် မထိ<br>
+        • <strong>Error</strong> — code ရှိပြီးသားဆိုရင် abort
+      </p>
+    </div>
+
+    <div class="field">
+      {{ form.excel_file.label(class_="field-label") }}
+      {{ form.excel_file(class_="field-input", accept=".xlsx") }}
+      {% for e in form.excel_file.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      <p class="field-help">Max 5 MB. Only .xlsx files.</p>
+    </div>
+
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" type="submit">Preview</button>
+      <a class="btn btn-secondary" href="{{ url_for('admin.error_list') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

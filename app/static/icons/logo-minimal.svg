@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <!-- Cube (machine) -->
+  <g transform="translate(256, 240)">
+    <polygon points="0,-120 104,-60 104,60 0,120 -104,60 -104,-60"
+             fill="url(#blue)"/>
+    <polygon points="0,-120 104,-60 0,0 -104,-60" fill="#60a5fa" opacity="0.9"/>
+    <polygon points="104,-60 104,60 0,120 0,0" fill="#1e40af" opacity="0.7"/>
+    <polygon points="-104,-60 0,0 0,120 -104,60" fill="#1e3a8a" opacity="0.9"/>
+  </g>
+
+  <!-- Wrench overlay -->
+  <g transform="translate(256, 240) rotate(-45)" fill="#ffffff">
+    <path d="M-12,-70 L12,-70 L12,-30 C18,-28 22,-22 22,-16 L22,20
+             C22,28 18,34 12,38 L12,70 L-12,70 L-12,38
+             C-18,34 -22,28 -22,20 L-22,-16
+             C-22,-22 -18,-28 -12,-30 Z"/>
+  </g>
+
+  <!-- Green dot -->
+  <circle cx="410" cy="102" r="22" fill="#22c55e"/>
+  <circle cx="410" cy="102" r="10" fill="#ffffff" opacity="0.4"/>
+</svg>

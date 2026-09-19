@@ -1,0 +1,129 @@
+{% extends "user/base.html" %}
+{% block title %}Recent Searches — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  Recent Searches
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;">
+  သင်ရှာခဲ့တဲ့ နောက်ဆုံး 30 ခု။ Item ကို နှိပ်ရင် ပြန် ရှာပေးမယ်။
+</p>
+
+<div id="recent-list">
+  <div class="empty">
+    <div class="empty-icon">
+      <svg class="icon icon-lg"><use href="#i-history"/></svg>
+    </div>
+    <h2 class="empty-title">Loading…</h2>
+  </div>
+</div>
+
+<button type="button" class="btn btn-secondary btn-block" id="clear-all"
+        style="margin-top:20px;display:none;color:var(--danger);">
+  <svg class="icon icon-sm"><use href="#i-trash"/></svg>
+  Clear History
+</button>
+
+<script>
+  (function () {
+    var el = document.getElementById('recent-list');
+    var clearBtn = document.getElementById('clear-all');
+
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);
+      });
+    }
+
+    function typeLabel(t) {
+      if (t === 'machine') return 'Machines';
+      if (t === 'error') return 'Errors';
+      return 'All';
+    }
+
+    function typeIcon(t) {
+      if (t === 'machine') return 'i-package';
+      if (t === 'error') return 'i-alert';
+      return 'i-search';
+    }
+
+    function typeBg(t) {
+      if (t === 'machine') return 'accent';
+      if (t === 'error') return 'warning';
+      return 'default';
+    }
+
+    function render() {
+      // Wait for MH.recent to be ready
+      var tries = 0;
+      function tryRender() {
+        if (window.MH && window.MH.recent && window.MH.recent.list) {
+          doRender();
+        } else if (tries++ < 20) {
+          setTimeout(tryRender, 100);
+        } else {
+          el.innerHTML = '<div class="empty"><div class="empty-icon"><svg class="icon icon-lg"><use href="#i-history"/></svg></div><h2 class="empty-title">Not available</h2><p class="empty-desc">Recent search module မဖွင့်နိုင်ပါ။ Page ကို refresh လုပ်ပါ။</p></div>';
+        }
+      }
+      tryRender();
+    }
+
+    function doRender() {
+      window.MH.recent.list(30).then(function (items) {
+        if (!items || items.length === 0) {
+          el.innerHTML = '<div class="empty"><div class="empty-icon"><svg class="icon icon-lg"><use href="#i-history"/></svg></div><h2 class="empty-title">No recent searches</h2><p class="empty-desc">ရှာခဲ့တဲ့ keyword တွေ ဒီမှာ ပေါ်လာမယ်။ Search box မှာ machine name or error code ရိုက်ပါ။</p></div>';
+          clearBtn.style.display = 'none';
+          return;
+        }
+        clearBtn.style.display = 'flex';
+
+        var html = '<div class="list">';
+        for (var i = 0; i < items.length; i++) {
+          var it = items[i];
+          var bg = typeBg(it.type);
+          var iconColor = bg === 'accent' ? 'var(--accent)' :
+                          bg === 'warning' ? 'var(--warning)' :
+                          'var(--text-2)';
+          var iconBg = bg === 'accent' ? 'var(--accent-soft)' :
+                       bg === 'warning' ? 'var(--warning-soft)' :
+                       'var(--surface-2)';
+          html += '<a class="list-item" href="/search?q=' + encodeURIComponent(it.query) + '&type=' + it.type + '">' +
+            '<div class="list-item-icon" style="background:' + iconBg + ';color:' + iconColor + ';">' +
+              '<svg class="icon"><use href="#' + typeIcon(it.type) + '"/></svg>' +
+            '</div>' +
+            '<div class="list-item-main">' +
+              '<div class="list-item-title">' + esc(it.query) + '</div>' +
+              '<div class="list-item-sub">' + typeLabel(it.type) + ' · ' + new Date(it.at).toLocaleString() + '</div>' +
+            '</div>' +
+            '<svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>' +
+          '</a>';
+        }
+        html += '</div>';
+        el.innerHTML = html;
+      }).catch(function (e) {
+        console.error('[Recent] list error:', e);
+        el.innerHTML = '<div class="empty"><p class="empty-title">Error loading</p></div>';
+      });
+    }
+
+    clearBtn.addEventListener('click', function () {
+      if (!confirm('Clear all recent searches?')) return;
+      if (window.MH && window.MH.recent) {
+        window.MH.recent.clear().then(function () {
+          render();
+        });
+      }
+    });
+
+    render();
+  })();
+</script>
+
+{% endblock %}

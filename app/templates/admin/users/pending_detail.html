@@ -1,0 +1,98 @@
+{% extends "admin/base.html" %}
+{% block title %}Review {{ user.name }} — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Review User</h1>
+    <p class="page-sub">
+      {{ user.name }} · <span class="code">@{{ user.username }}</span>
+    </p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.pending_users') }}">
+    ← Pending
+  </a>
+</div>
+
+<!-- User info -->
+<div class="card" style="margin-bottom:20px;">
+  <div style="display:grid;grid-template-columns:auto 1fr;gap:12px 16px;align-items:center;">
+    <span class="text-sm text-muted">Name</span>
+    <span style="font-weight:600;">{{ user.name }}</span>
+
+    <span class="text-sm text-muted">Username</span>
+    <span class="mono">{{ user.username }}</span>
+
+    <span class="text-sm text-muted">Registered</span>
+    <span>{{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+
+    <span class="text-sm text-muted">Status</span>
+    <span><span class="chip chip-warning">PENDING</span></span>
+  </div>
+</div>
+
+<!-- Step 1: Assign shop + Approve -->
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">1. Assign Shop & Approve</h2>
+  </div>
+
+  <div class="card">
+    <form method="POST"
+          action="{{ url_for('admin.approve_user', user_id=user.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <div class="field">
+        <label class="field-label">Shop</label>
+        <select name="shop_id" class="field-select" required>
+          <option value="">— Select shop —</option>
+          {% for s in shops %}
+            <option value="{{ s.id }}">{{ s.shop_code }} — {{ s.shop_name }}</option>
+          {% endfor %}
+        </select>
+        <p class="field-help">
+          User ကို ဒီ shop အောက်မှာ assign လုပ်ပါမယ်။
+        </p>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" type="submit">
+          <svg class="icon icon-sm"><use href="#i-check"/></svg>
+          Approve & Activate
+        </button>
+      </div>
+    </form>
+
+    <form method="POST"
+          action="{{ url_for('admin.reject_user', user_id=user.id) }}"
+          style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);"
+          onsubmit="return confirm('Reject and delete this user?');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn btn-secondary btn-sm" type="submit"
+              style="color:var(--danger);">
+        <svg class="icon icon-sm"><use href="#i-trash"/></svg>
+        Reject
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- Step 2 (optional): Import machines -->
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">2. Import Machines (Optional)</h2>
+  </div>
+
+  <div class="card">
+    <p class="text-sm text-muted" style="margin-bottom:12px;">
+      Excel file ကနေ machine တွေ တစ်ခါတည်း import လုပ်နိုင်ပါတယ်။
+      Import ပြီးရင် Shop ကို အလိုအလျောက် သုံးပါမယ်။
+    </p>
+    <a class="btn btn-secondary" href="{{ url_for('admin.import_machines_upload') }}">
+      <svg class="icon icon-sm"><use href="#i-upload"/></svg>
+      Import Machines →
+    </a>
+  </div>
+</section>
+
+{% endblock %}

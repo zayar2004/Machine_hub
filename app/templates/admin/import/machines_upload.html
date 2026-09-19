@@ -1,0 +1,56 @@
+{% extends "admin/base.html" %}
+{% block title %}Import Machines — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Import Machines</h1>
+    <p class="page-sub">Upload an Excel file (.xlsx) to import machines</p>
+  </div>
+</div>
+
+<div class="banner" style="padding:14px;background:var(--accent-soft);color:var(--accent);border-radius:var(--r);font-size:13px;margin-bottom:20px;line-height:1.6;">
+  <strong>Excel format (row 1 = headers):</strong><br>
+  • <code>machine_code</code> (required)<br>
+  • <code>machine_name</code> (required)<br>
+  • <code>description</code> (optional)<br>
+  • <code>status</code> (optional: ACTIVE / INACTIVE / ARCHIVED)<br>
+  <br>
+  ⚠️ The selected shop applies to <strong>all</strong> imported rows.
+</div>
+
+<div style="max-width:520px;">
+  <form method="POST" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      {{ form.shop_id.label(class_="field-label") }}
+      {{ form.shop_id(class_="field-select") }}
+      {% for e in form.shop_id.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.import_mode.label(class_="field-label") }}
+      {{ form.import_mode(class_="field-select") }}
+      <p class="field-help">
+        • <strong>Update</strong> — code ရှိပြီးသားဆိုရင် overwrite (empty cells kept)<br>
+        • <strong>Skip</strong> — code ရှိပြီးသားဆိုရင် မထိ — အသစ်ပဲ ထည့်<br>
+        • <strong>Error</strong> — code ရှိပြီးသားဆိုရင် abort
+      </p>
+    </div>
+
+    <div class="field">
+      {{ form.excel_file.label(class_="field-label") }}
+      {{ form.excel_file(class_="field-input", accept=".xlsx") }}
+      {% for e in form.excel_file.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      <p class="field-help">Max 5 MB. Only .xlsx files.</p>
+    </div>
+
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" type="submit">Preview</button>
+      <a class="btn btn-secondary" href="{{ url_for('admin.machine_list') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,411 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ shop.shop_name }} — Admin{% endblock %}
+{% block content %}
+
+<!-- ==================== HEADER ==================== -->
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{{ shop.shop_name }}</h1>
+    <p class="page-sub">
+      <span class="mono">{{ shop.shop_code }}</span>
+      <span class="chip {% if shop.status == 'ACTIVE' %}chip-success{% else %}chip-warning{% endif %}" style="margin-left:8px;">{{ shop.status }}</span>
+    </p>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+    <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.shop_list') }}">← All Shops</a>
+    <a class="btn btn-primary btn-sm" href="{{ url_for('admin.shop_edit', shop_id=shop.id) }}">Edit Shop</a>
+  </div>
+</div>
+
+<!-- ==================== STATS ==================== -->
+<div class="stats-grid">
+  <div class="stat">
+    <div class="stat-label">
+      <svg class="icon icon-xs"><use href="#i-package"/></svg>
+      Machines
+    </div>
+    <div class="stat-value">{{ machines|length }}</div>
+    <div class="stat-sub">{{ machines|selectattr('status', 'equalto', 'ACTIVE')|list|length }} active</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">
+      <svg class="icon icon-xs"><use href="#i-users"/></svg>
+      Users
+    </div>
+    <div class="stat-value">{{ users|length }}</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">
+      <svg class="icon icon-xs"><use href="#i-upload"/></svg>
+      Import Batches
+    </div>
+    <div class="stat-value">{{ batches|length }}</div>
+  </div>
+</div>
+
+<!-- ==================== IMPORT BATCHES ==================== -->
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Import Batches ({{ batches|length }})</h2>
+    <a class="btn btn-primary btn-sm" href="{{ url_for('admin.import_machines_upload') }}">
+      <svg class="icon icon-sm"><use href="#i-plus"/></svg>
+      New Import
+    </a>
+  </div>
+
+  {% if batches %}
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      {% for batch in batches %}
+      <div class="card" style="padding:16px;border:1.5px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <div style="width:44px;height:44px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg class="icon"><use href="#i-upload"/></svg>
+          </div>
+
+          <div style="flex:1;min-width:200px;">
+            <div style="font-weight:700;font-size:15px;">
+              {{ batch.filename or 'Excel Import' }}
+            </div>
+            <div class="text-sm text-muted">
+              {{ batch.created_at.strftime('%Y-%m-%d %H:%M') }}
+              · {{ batch.machine_count }} machines
+              {% if batch.user %} · @{{ batch.user.username }}{% endif %}
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-danger btn-sm"
+                  onclick="deleteBatch({{ batch.id }}, '{{ batch.filename|default('Excel file')|e }}', {{ batch.machine_count }})">
+            <svg class="icon icon-sm"><use href="#i-trash"/></svg>
+            Delete All
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="padding:20px;text-align:center;background:var(--surface-2);">
+      <p class="text-sm text-muted" style="margin-bottom:12px;">
+        Excel File ဖျက်ဖို့ — Import လုပ်ထားတဲ့ File တွေ ဒီမှာ ပေါ်လာမယ်။
+      </p>
+      <p class="text-xs text-subtle">
+        (V5.4 မတိုင်ခင် import လုပ်ခဲ့တဲ့ machines တွေ — batch မှာ မပါဘူး)
+      </p>
+    </div>
+  {% endif %}
+</section>
+
+<!-- ==================== USERS ==================== -->
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Users ({{ users|length }})</h2>
+    <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.user_create') }}">
+      <svg class="icon icon-sm"><use href="#i-plus"/></svg>
+      Add User
+    </a>
+  </div>
+
+  {% if users %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Last Login</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in users %}
+          <tr>
+            <td><strong>@{{ u.username }}</strong></td>
+            <td>{{ u.name }}</td>
+            <td>
+              {% if u.role == 'ADMIN' %}<span class="chip chip-warning">ADMIN</span>
+              {% else %}<span class="chip">USER</span>{% endif %}
+            </td>
+            <td>
+              {% if u.status == 'ACTIVE' %}<span class="chip chip-success">Active</span>
+              {% elif u.status == 'PENDING' %}<span class="chip chip-warning">Pending</span>
+              {% else %}<span class="chip">Inactive</span>{% endif %}
+            </td>
+            <td class="text-xs text-muted">
+              {% if u.last_login %}{{ u.last_login.strftime('%Y-%m-%d %H:%M') }}{% else %}—{% endif %}
+            </td>
+            <td>
+              <div class="actions">
+                <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.user_edit', user_id=u.id) }}">Edit</a>
+                <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.user_password', user_id=u.id) }}">Password</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-sm text-muted">No users in this shop.</p>
+  {% endif %}
+</section>
+
+<!-- ==================== MACHINES ==================== -->
+<section class="section">
+  <div class="section-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+    <h2 class="section-title">Machines ({{ machines|length }})</h2>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <a class="btn btn-primary btn-sm" href="{{ url_for('admin.machine_create') }}">
+        <svg class="icon icon-sm"><use href="#i-plus"/></svg>
+        Add
+      </a>
+      <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.import_machines_upload') }}">
+        <svg class="icon icon-sm"><use href="#i-upload"/></svg>
+        Import
+      </a>
+    </div>
+  </div>
+
+  {% if machines %}
+    <form method="POST" action="{{ url_for('admin.machines_bulk_delete', shop_id=shop.id) }}" id="bulk-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <!-- Bulk action bar -->
+      <div id="bulk-bar" style="display:none;padding:12px 16px;background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:12px;margin-bottom:12px;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="flex:1;font-size:13px;font-weight:600;color:var(--accent);">
+          <span id="selected-count">0</span> machine(s) selected
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="select-all">Select All</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="clear-selection">Clear</button>
+        <button type="submit" class="btn btn-danger btn-sm"
+                onclick="return confirm('Archive selected machines? They can be restored later.');">
+          <svg class="icon icon-sm"><use href="#i-trash"/></svg>
+          Archive Selected
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:40px;">
+                <input type="checkbox" id="check-all" style="width:18px;height:18px;accent-color:var(--accent);">
+              </th>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Batch</th>
+              <th>Errors</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for m in machines %}
+            <tr>
+              <td>
+                <input type="checkbox" name="machine_ids" value="{{ m.id }}"
+                       class="row-checkbox"
+                       style="width:18px;height:18px;accent-color:var(--accent);">
+              </td>
+              <td><strong class="mono">{{ m.machine_code }}</strong></td>
+              <td>{{ m.machine_name }}</td>
+              <td>
+                {% if m.status == 'ACTIVE' %}<span class="chip chip-success">Active</span>
+                {% elif m.status == 'INACTIVE' %}<span class="chip chip-warning">Inactive</span>
+                {% else %}<span class="chip">Archived</span>{% endif %}
+              </td>
+              <td class="text-xs text-muted">
+                {% if m.batch %}#{{ m.batch.id }}{% else %}—{% endif %}
+              </td>
+              <td>{{ m.errors|length }}</td>
+              <td>
+                <div class="actions">
+                  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.machine_edit', machine_id=m.id) }}">Edit</a>
+                  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.machine_errors', machine_id=m.id) }}">Errors</a>
+                  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.machine_repairs', machine_id=m.id) }}">Repairs</a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </form>
+
+    <script>
+      (function() {
+        var checkAll = document.getElementById('check-all');
+        var checkboxes = document.querySelectorAll('.row-checkbox');
+        var bulkBar = document.getElementById('bulk-bar');
+        var countEl = document.getElementById('selected-count');
+        var selectAllBtn = document.getElementById('select-all');
+        var clearBtn = document.getElementById('clear-selection');
+
+        function updateBar() {
+          var checked = Array.prototype.filter.call(checkboxes, function (cb) { return cb.checked; });
+          countEl.textContent = checked.length;
+          bulkBar.style.display = checked.length > 0 ? 'flex' : 'none';
+          if (checkAll) checkAll.checked = checked.length === checkboxes.length && checkboxes.length > 0;
+        }
+
+        if (checkAll) {
+          checkAll.addEventListener('change', function () {
+            checkboxes.forEach(function (cb) { cb.checked = checkAll.checked; });
+            updateBar();
+          });
+        }
+        checkboxes.forEach(function (cb) { cb.addEventListener('change', updateBar); });
+        if (selectAllBtn) selectAllBtn.addEventListener('click', function () {
+          checkboxes.forEach(function (cb) { cb.checked = true; });
+          updateBar();
+        });
+        if (clearBtn) clearBtn.addEventListener('click', function () {
+          checkboxes.forEach(function (cb) { cb.checked = false; });
+          updateBar();
+        });
+        updateBar();
+      })();
+    </script>
+
+  {% else %}
+    <div class="empty">
+      <div class="empty-icon"><svg class="icon icon-lg"><use href="#i-package"/></svg></div>
+      <h2 class="empty-title">No machines yet</h2>
+      <p class="empty-desc">Excel File import လုပ်ပြီး machine တွေ ထည့်ပါ။</p>
+      <a class="btn btn-primary" href="{{ url_for('admin.import_machines_upload') }}">
+        <svg class="icon icon-sm"><use href="#i-upload"/></svg>
+        Import Excel
+      </a>
+    </div>
+  {% endif %}
+</section>
+
+<!-- ==================== DELETE BATCH MODAL ==================== -->
+<div id="delete-batch-modal" class="mh-modal" aria-hidden="true">
+  <div class="mh-modal-backdrop" onclick="closeDeleteBatch()"></div>
+  <div class="mh-modal-panel" role="dialog" aria-modal="true">
+    <div class="mh-modal-header">
+      <div class="mh-modal-icon mh-modal-icon-danger">
+        <svg class="icon"><use href="#i-alert"/></svg>
+      </div>
+      <div class="mh-modal-title-wrap">
+        <h3 class="mh-modal-title">Delete All Machines</h3>
+        <p class="mh-modal-sub">This action cannot be undone</p>
+      </div>
+      <button type="button" class="mh-modal-close" onclick="closeDeleteBatch()" aria-label="Close">
+        <svg class="icon"><use href="#i-x"/></svg>
+      </button>
+    </div>
+
+    <div class="mh-modal-body">
+      <div class="mh-modal-info">
+        <div class="mh-modal-info-row">
+          <span class="mh-modal-info-label">File</span>
+          <span class="mh-modal-info-value" id="db-filename">—</span>
+        </div>
+        <div class="mh-modal-info-row">
+          <span class="mh-modal-info-label">Machines</span>
+          <span class="mh-modal-info-value" id="db-count">0</span>
+        </div>
+      </div>
+
+      <p class="mh-modal-warn" id="db-warn">
+        All <strong id="db-count-2">0</strong> machine(s) in this batch will be
+        <strong>permanently deleted</strong>. They cannot be restored.
+      </p>
+
+      <label class="mh-modal-label">
+        Type <code class="mh-code">DELETE</code> to confirm
+      </label>
+      <input type="text" id="db-input" class="mh-modal-input"
+             placeholder="DELETE" autocomplete="off" autocapitalize="characters"
+             spellcheck="false">
+
+      <div class="mh-modal-error" id="db-error" style="display:none;">
+        <svg class="icon icon-sm"><use href="#i-alert"/></svg>
+        <span>You must type DELETE exactly.</span>
+      </div>
+    </div>
+
+    <div class="mh-modal-footer">
+      <button type="button" class="btn btn-secondary" onclick="closeDeleteBatch()">Cancel</button>
+      <button type="button" class="btn btn-danger" id="db-confirm" disabled>
+        <svg class="icon icon-sm"><use href="#i-trash"/></svg>
+        Delete All
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var pendingBatch = null;
+
+    var modal = document.getElementById('delete-batch-modal');
+    var input = document.getElementById('db-input');
+    var confirmBtn = document.getElementById('db-confirm');
+    var errBox = document.getElementById('db-error');
+
+    window.deleteBatch = function(batchId, filename, count) {
+      pendingBatch = { id: batchId, filename: filename, count: count };
+
+      document.getElementById('db-filename').textContent = filename;
+      document.getElementById('db-count').textContent = count;
+      document.getElementById('db-count-2').textContent = count;
+
+      input.value = '';
+      errBox.style.display = 'none';
+      confirmBtn.disabled = true;
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      setTimeout(function() { input.focus(); }, 150);
+    };
+
+    window.closeDeleteBatch = function() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      pendingBatch = null;
+    };
+
+    function updateState() {
+      var ok = input.value.trim().toUpperCase() === 'DELETE';
+      confirmBtn.disabled = !ok;
+      if (ok) errBox.style.display = 'none';
+    }
+
+    input.addEventListener('input', updateState);
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !confirmBtn.disabled) {
+        confirmBtn.click();
+      }
+      if (e.key === 'Escape') {
+        closeDeleteBatch();
+      }
+    });
+
+    confirmBtn.addEventListener('click', function() {
+      if (!pendingBatch) return;
+      if (input.value.trim().toUpperCase() !== 'DELETE') {
+        errBox.style.display = 'flex';
+        return;
+      }
+
+      var form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/admin/shops/{{ shop.id }}/batches/' + pendingBatch.id + '/delete';
+      form.innerHTML =
+        '<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">' +
+        '<input type="hidden" name="confirm" value="DELETE">';
+      document.body.appendChild(form);
+      form.submit();
+    });
+  })();
+</script>
+
+{% endblock %}

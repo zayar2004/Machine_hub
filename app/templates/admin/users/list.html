@@ -1,0 +1,105 @@
+{% extends "admin/base.html" %}
+{% block title %}Users — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Users</h1>
+    <p class="page-sub">Staff accounts and permissions</p>
+  </div>
+  <a class="btn btn-primary btn-sm" href="{{ url_for('admin.user_create') }}">
+    <svg class="icon icon-sm"><use href="#i-plus"/></svg>
+    New User
+  </a>
+</div>
+
+<form method="GET" action="{{ url_for('admin.user_list') }}" class="filter-bar">
+  <div class="field">
+    <label class="field-label">Shop</label>
+    <select name="shop_id" class="field-select">
+      <option value="0">All shops</option>
+      {% for s in shops %}
+        <option value="{{ s.id }}" {% if filters.shop_id == s.id %}selected{% endif %}>{{ s.shop_code }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="field">
+    <label class="field-label">Role</label>
+    <select name="role" class="field-select">
+      <option value="">All</option>
+      <option value="ADMIN" {% if filters.role == 'ADMIN' %}selected{% endif %}>Admin</option>
+      <option value="USER" {% if filters.role == 'USER' %}selected{% endif %}>User</option>
+    </select>
+  </div>
+  <div class="field">
+    <label class="field-label">Status</label>
+    <select name="status" class="field-select">
+      <option value="">All</option>
+      <option value="ACTIVE" {% if filters.status == 'ACTIVE' %}selected{% endif %}>Active</option>
+      <option value="INACTIVE" {% if filters.status == 'INACTIVE' %}selected{% endif %}>Inactive</option>
+    </select>
+  </div>
+  <button class="btn btn-primary btn-sm" type="submit">Filter</button>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.user_list') }}">Reset</a>
+</form>
+
+{% if users %}
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Shop</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Last Login</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td><strong>@{{ u.username }}</strong></td>
+        <td>{{ u.name }}</td>
+        <td>{% if u.shop %}<span class="chip chip-accent">{{ u.shop.shop_code }}</span>{% else %}—{% endif %}</td>
+        <td>
+          {% if u.role == 'ADMIN' %}<span class="chip chip-warning">Admin</span>
+          {% else %}<span class="chip">User</span>{% endif %}
+        </td>
+        <td>
+          {% if u.status == 'ACTIVE' %}<span class="chip chip-success">Active</span>
+          {% else %}<span class="chip chip-warning">Inactive</span>{% endif %}
+        </td>
+        <td class="text-xs text-muted">
+          {% if u.last_login %}{{ u.last_login.strftime('%Y-%m-%d %H:%M') }}{% else %}—{% endif %}
+        </td>
+        <td>
+          <div class="actions">
+            <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.user_edit', user_id=u.id) }}">Edit</a>
+            <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.user_password', user_id=u.id) }}">Password</a>
+            <form method="POST" style="display:inline;"
+                  action="{{ url_for('admin.user_toggle_status', user_id=u.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              {% if u.status == 'ACTIVE' %}
+                <button class="btn btn-secondary btn-sm" type="submit">Deactivate</button>
+              {% else %}
+                <button class="btn btn-primary btn-sm" type="submit">Activate</button>
+              {% endif %}
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">
+  <div class="empty-icon"><svg class="icon icon-lg"><use href="#i-users"/></svg></div>
+  <h2 class="empty-title">No users found</h2>
+  <p class="empty-desc">Try adjusting your filters or create a new user.</p>
+</div>
+{% endif %}
+
+{% endblock %}

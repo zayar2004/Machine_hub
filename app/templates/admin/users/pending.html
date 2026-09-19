@@ -1,0 +1,50 @@
+{% extends "admin/base.html" %}
+{% block title %}Pending Users — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Pending Users</h1>
+    <p class="page-sub">
+      Registration requests waiting for approval
+    </p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.user_list') }}">
+    ← All Users
+  </a>
+</div>
+
+{% if pending %}
+<div class="list">
+  {% for u in pending %}
+  <div class="list-item" style="align-items:flex-start;cursor:default;">
+    <div class="list-item-icon" style="background:var(--warning-soft);color:var(--warning);">
+      <svg class="icon"><use href="#i-user"/></svg>
+    </div>
+    <div class="list-item-main">
+      <div class="list-item-title">{{ u.name }}</div>
+      <div class="list-item-sub">
+        <span class="code">@{{ u.username }}</span>
+        <span>· {{ u.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+      </div>
+    </div>
+    <a class="btn btn-primary btn-sm"
+       href="{{ url_for('admin.pending_user_detail', user_id=u.id) }}">
+      Review →
+    </a>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty">
+  <div class="empty-icon">
+    <svg class="icon icon-lg"><use href="#i-check"/></svg>
+  </div>
+  <h2 class="empty-title">No pending users</h2>
+  <p class="empty-desc">
+    All registration requests have been handled.
+  </p>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "user/base.html" %}
+{% block title %}About — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  About
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:24px;line-height:1.6;">
+  Machine Hub အကြောင်း — version, features, contact။
+</p>
+
+<!-- Logo card -->
+<div style="background:linear-gradient(135deg,var(--accent) 0%,#8b5cf6 100%);border-radius:20px;padding:32px 20px;text-align:center;color:#fff;margin-bottom:24px;">
+  <div style="width:72px;height:72px;margin:0 auto 16px;border-radius:18px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;letter-spacing:-.03em;">
+    MH
+  </div>
+  <h2 style="font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;">Machine Hub</h2>
+  <p style="font-size:13px;color:rgba(255,255,255,0.85);">Version 5.3</p>
+</div>
+
+<!-- Info -->
+<section class="detail-section">
+  <h2 class="detail-section-title">App Info</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon accent"><svg class="icon"><use href="#i-info"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Version</div>
+        <div class="list-item-sub">5.3.0</div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon accent"><svg class="icon"><use href="#i-activity"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Built with</div>
+        <div class="list-item-sub">Flask + Vanilla JS + PWA</div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon accent"><svg class="icon"><use href="#i-user"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Purpose</div>
+        <div class="list-item-sub">Machine knowledge for arcade staff</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Features</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon accent"><svg class="icon"><use href="#i-search"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Universal Search</div>
+        <div class="list-item-sub">Machine + Error in one</div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-image"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Photos</div>
+        <div class="list-item-sub">Visual fix reference</div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-wifi-off"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Offline-First</div>
+        <div class="list-item-sub">Works without internet</div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-refresh"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Auto Sync</div>
+        <div class="list-item-sub">Background data updates</div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-star"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Favorites</div>
+        <div class="list-item-sub">Save frequently used</div>
+      </div>
+    </div>
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon"><svg class="icon"><use href="#i-history"/></svg></div>
+      <div class="list-item-main">
+        <div class="list-item-title">Recent & History</div>
+        <div class="list-item-sub">Track your usage</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<p style="font-size:12px;color:var(--text-3);text-align:center;margin-top:24px;line-height:1.6;">
+  © 2026 Machine Hub<br>
+  Offline-first · Mobile-first · PWA
+</p>
+
+{% endblock %}

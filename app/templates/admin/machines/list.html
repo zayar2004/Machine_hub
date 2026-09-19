@@ -1,0 +1,138 @@
+{% extends "admin/base.html" %}
+{% block title %}Machines — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Machines</h1>
+    <p class="page-sub">All machines across shops</p>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+    <a class="btn btn-secondary btn-sm"
+       href="{{ url_for('admin.machines_export', q=filters.q, shop_id=filters.shop_id or None, status=filters.status or None) }}">
+      <svg class="icon icon-sm"><use href="#i-download"/></svg>
+      Export
+    </a>
+    <a class="btn btn-primary btn-sm" href="{{ url_for('admin.machine_create') }}">
+      <svg class="icon icon-sm"><use href="#i-plus"/></svg>
+      New Machine
+    </a>
+  </div>
+</div>
+
+<form method="GET" action="{{ url_for('admin.machine_list') }}" class="filter-bar">
+  <div class="field">
+    <label class="field-label">Search</label>
+    <input type="text" name="q" value="{{ filters.q }}" class="field-input" placeholder="Name or code">
+  </div>
+  <div class="field">
+    <label class="field-label">Shop</label>
+    <select name="shop_id" class="field-select">
+      <option value="0">All shops</option>
+      {% for s in shops %}
+        <option value="{{ s.id }}" {% if filters.shop_id == s.id %}selected{% endif %}>{{ s.shop_code }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="field">
+    <label class="field-label">Status</label>
+    <select name="status" class="field-select">
+      <option value="">All</option>
+      <option value="ACTIVE" {% if filters.status == 'ACTIVE' %}selected{% endif %}>Active</option>
+      <option value="INACTIVE" {% if filters.status == 'INACTIVE' %}selected{% endif %}>Inactive</option>
+      <option value="ARCHIVED" {% if filters.status == 'ARCHIVED' %}selected{% endif %}>Archived</option>
+    </select>
+  </div>
+
+  <div class="field" style="flex:0 0 auto;">
+    <label class="field-label">Sort</label>
+    <select name="sort" class="field-select" onchange="this.form.submit()">
+      <option value="code" {% if filters.sort == 'code' or not filters.sort %}selected{% endif %}>Code</option>
+      <option value="name" {% if filters.sort == 'name' %}selected{% endif %}>Name</option>
+      <option value="date" {% if filters.sort == 'date' %}selected{% endif %}>Newest</option>
+    </select>
+  </div>
+  <button class="btn btn-primary btn-sm" type="submit">Filter</button>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.machine_list') }}">Reset</a>
+</form>
+
+{% if machines %}
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Shop</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Errors</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in machines %}
+      <tr>
+        <td>{% if m.shop %}<span class="chip chip-accent">{{ m.shop.shop_code }}</span>{% endif %}</td>
+        <td><strong class="mono">{{ m.machine_code }}</strong></td>
+        <td>{{ m.machine_name }}</td>
+        <td>
+          {% if m.status == 'ACTIVE' %}<span class="chip chip-success">Active</span>
+          {% elif m.status == 'INACTIVE' %}<span class="chip chip-warning">Inactive</span>
+          {% else %}<span class="chip">Archived</span>{% endif %}
+        </td>
+        <td>{{ m.errors|length }}</td>
+        <td>
+          <div class="actions">
+            <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.machine_edit', machine_id=m.id) }}">Edit</a>
+            <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.machine_errors', machine_id=m.id) }}">Errors</a>
+            <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.machine_repairs', machine_id=m.id) }}">Repairs</a>
+            {% if m.status == 'ARCHIVED' %}
+              <form method="POST" style="display:inline;"
+                    action="{{ url_for('admin.machine_restore', machine_id=m.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn btn-primary btn-sm" type="submit">Restore</button>
+              </form>
+              <button class="btn btn-danger btn-sm" type="button"
+                      onclick="permanentDelete({{ m.id }}, '{{ m.machine_code }}')">
+                Permanent Delete
+              </button>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">
+  <div class="empty-icon"><svg class="icon icon-lg"><use href="#i-package"/></svg></div>
+  <h2 class="empty-title">No machines found</h2>
+  <p class="empty-desc">Try adjusting your filters or create a new machine.</p>
+</div>
+{% endif %}
+
+
+    <script>
+      function permanentDelete(id, code) {
+        const input = prompt(
+          'PERMANENT DELETE — Cannot be undone!\n\n' +
+          'Type the machine code to confirm:\n' +
+          '  ' + code
+        );
+        if (input === null) return;
+        if (input.trim().toUpperCase() !== code.toUpperCase()) {
+          alert('Code does not match. Delete cancelled.');
+          return;
+        }
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/admin/machines/' + id + '/permanent-delete';
+        form.innerHTML = '<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">' +
+                         '<input type="hidden" name="confirm_code" value="' + code + '">';
+        document.body.appendChild(form);
+        form.submit();
+      }
+    </script>
+    
+{% endblock %}

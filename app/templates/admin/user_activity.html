@@ -1,0 +1,115 @@
+{% extends "admin/base.html" %}
+{% block title %}@{{ user.username }} — Activity{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{{ user.name }}</h1>
+    <p class="page-sub">
+      @{{ user.username }}
+      {% if user.shop %} · {{ user.shop.shop_code }}{% endif %}
+      {% if user.role == 'ADMIN' %} · ADMIN{% endif %}
+    </p>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+    <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.activity_log') }}">← Activity</a>
+    <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.user_edit', user_id=user.id) }}">Edit User</a>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+  <div class="stat">
+    <div class="stat-label">Total Actions</div>
+    <div class="stat-value">{{ total_logs }}</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Searches</div>
+    <div class="stat-value">{{ searches }}</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Machine Views</div>
+    <div class="stat-value">{{ machine_views }}</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Error Views</div>
+    <div class="stat-value">{{ error_views }}</div>
+  </div>
+</div>
+
+{% if last_login %}
+<div class="card" style="margin-bottom:20px;background:var(--success-soft);">
+  <div style="font-size:12px;color:var(--success);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">
+    Last Login
+  </div>
+  <div style="font-size:14px;color:var(--success);">
+    {{ last_login.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+    {% if last_login.ip_address %} · IP: {{ last_login.ip_address }}{% endif %}
+  </div>
+</div>
+{% endif %}
+
+<!-- Top Searches -->
+{% if top_searches %}
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Top Searches ({{ top_searches|length }})</h2>
+  </div>
+  <div class="list">
+    {% for query, count in top_searches %}
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-search"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">{{ query }}</div>
+        <div class="list-item-sub">{{ count }} time(s)</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- Recent Activity -->
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Recent Activity ({{ logs|length }})</h2>
+  </div>
+  {% if logs %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Action</th>
+            <th>Target</th>
+            <th>Details</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in logs %}
+          <tr>
+            <td class="text-xs text-muted" style="white-space:nowrap;">
+              {{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+            </td>
+            <td><span class="chip" style="font-size:10px;">{{ log.action }}</span></td>
+            <td>
+              {% if log.target_label %}
+                <span class="mono text-sm">{{ log.target_label }}</span>
+              {% else %}—{% endif %}
+            </td>
+            <td class="text-xs text-muted">{{ log.meta or '—' }}</td>
+            <td class="text-xs text-muted">{{ log.ip_address or '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-sm text-muted">No activity recorded yet.</p>
+  {% endif %}
+</section>
+
+{% endblock %}

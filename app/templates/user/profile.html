@@ -1,0 +1,135 @@
+{% extends "user/base.html" %}
+{% block title %}Profile — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  Profile
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;">
+  သင့် account အချက်အလက် + shop + statistics တွေ။
+</p>
+
+<!-- Profile card -->
+<div style="background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:28px 20px;text-align:center;margin-bottom:20px;">
+  <div style="width:80px;height:80px;margin:0 auto 16px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:30px;">
+    {{ current_user.name[0]|upper if current_user.name else 'U' }}
+  </div>
+  <div style="font-weight:800;font-size:19px;color:var(--text);margin-bottom:4px;">
+    {{ current_user.name }}
+  </div>
+  <div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">
+    @{{ current_user.username }}
+  </div>
+  {% if current_user.is_admin %}
+    <span class="chip chip-warning">Admin</span>
+  {% else %}
+    <span class="chip chip-success">Active User</span>
+  {% endif %}
+</div>
+
+<!-- Info -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Account Info</h2>
+  <div class="list">
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon accent">
+        <svg class="icon"><use href="#i-shop"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Shop</div>
+        <div class="list-item-sub">
+          {% if shop %}{{ shop.shop_code }} — {{ shop.shop_name }} 🔒{% else %}Admin (no shop){% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-user"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Role</div>
+        <div class="list-item-sub">{{ current_user.role }}</div>
+      </div>
+    </div>
+
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-star"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Favorites</div>
+        <div class="list-item-sub">{{ fav_count }} saved item(s)</div>
+      </div>
+    </div>
+
+    {% if current_user.last_login %}
+    <div class="list-item" style="cursor:default;">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-history"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Last Login</div>
+        <div class="list-item-sub">{{ current_user.last_login.strftime('%Y-%m-%d %H:%M') }}</div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Quick links -->
+<section class="detail-section">
+  <h2 class="detail-section-title">Quick Links</h2>
+  <div class="list">
+    <a class="list-item" href="{{ url_for('user.favorites') }}">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-star"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Favorites</div>
+        <div class="list-item-sub">Saved items</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </a>
+
+    <a class="list-item" href="{{ url_for('user.recent') }}">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-history"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Recent Searches</div>
+        <div class="list-item-sub">Your search history</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </a>
+
+    <a class="list-item" href="{{ url_for('user.settings') }}">
+      <div class="list-item-icon">
+        <svg class="icon"><use href="#i-settings"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Settings</div>
+        <div class="list-item-sub">App preferences</div>
+      </div>
+      <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- Logout -->
+<section class="detail-section">
+  <a class="btn btn-secondary btn-block" href="{{ url_for('auth.logout') }}"
+     style="color:var(--danger);">
+    <svg class="icon icon-sm"><use href="#i-log-out"/></svg>
+    Logout
+  </a>
+</section>
+
+{% endblock %}

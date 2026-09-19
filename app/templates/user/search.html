@@ -1,0 +1,284 @@
+{% extends "user/base.html" %}
+{% block title %}Search — Machine Hub{% endblock %}
+{% block content %}
+
+<!-- Back -->
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back>
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<!-- Search box -->
+<form method="GET" action="{{ url_for('user.search') }}" class="search" style="margin-bottom:16px;">
+  <input type="text" class="search-input" id="search-input" name="q"
+         value="{{ query }}"
+         placeholder="ရှာရန် — Dream, DC001, E81..."
+         autocomplete="off" autofocus>
+  <svg class="icon search-icon"><use href="#i-search"/></svg>
+  <button type="button" class="search-clear {% if query %}visible{% endif %}" id="search-clear">
+    <svg class="icon icon-sm"><use href="#i-x"/></svg>
+  </button>
+</form>
+
+<!-- Filter chips -->
+{% if query %}
+<div class="chip-row" style="margin-bottom:16px;">
+  <a class="chip {% if search_type == 'all' %}chip-accent{% endif %}"
+     href="{{ url_for('user.search', q=query, type='all') }}">All</a>
+  <a class="chip {% if search_type == 'machine' %}chip-accent{% endif %}"
+     href="{{ url_for('user.search', q=query, type='machine') }}">Machines</a>
+  <a class="chip {% if search_type == 'error' %}chip-accent{% endif %}"
+     href="{{ url_for('user.search', q=query, type='error') }}">Errors</a>
+</div>
+{% endif %}
+
+<!-- ==================== EMPTY STATES ==================== -->
+{% if not query %}
+  <div class="empty">
+    <div class="empty-icon"><svg class="icon icon-lg"><use href="#i-search"/></svg></div>
+    <h2 class="empty-title">Search</h2>
+    <p class="empty-desc">Type a machine name, code, or error to begin.</p>
+  </div>
+
+{% elif not machines and not errors %}
+  <div class="empty">
+    <div class="empty-icon"><svg class="icon icon-lg"><use href="#i-search"/></svg></div>
+    <h2 class="empty-title">No results for "{{ query }}"</h2>
+    <p class="empty-desc">Try a shorter keyword or different spelling.</p>
+
+    <div style="margin-top:20px;padding:16px;background:var(--surface-2);border-radius:var(--r);text-align:left;max-width:340px;margin-left:auto;margin-right:auto;">
+      <div style="font-size:12px;font-weight:700;color:var(--text-2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em;">Try</div>
+      <ul style="list-style:none;padding:0;margin:0;font-size:13px;color:var(--text-2);line-height:1.9;">
+        <li>· Shorter machine name — <code style="color:var(--accent);">Dream</code></li>
+        <li>· Machine code — <code style="color:var(--accent);">DC001</code></li>
+        <li>· Error code — <code style="color:var(--accent);">E81</code></li>
+        <li>· Error name — <code style="color:var(--accent);">Coin</code></li>
+      </ul>
+    </div>
+  </div>
+
+{% else %}
+
+  <p style="font-size:13px;color:var(--text-3);margin-bottom:14px;">
+    {{ (machines|length) + (errors|length) }} result{{ 's' if (machines|length + errors|length) != 1 else '' }} for "<strong style="color:var(--text);">{{ query }}</strong>"
+  </p>
+
+  <!-- ==================== MACHINES ==================== -->
+  {% if machines %}
+  <section class="section">
+    <div class="section-label">MACHINES ({{ machines|length }})</div>
+
+    {% for m in machines %}
+    <div class="result-row">
+      <a href="{{ url_for('user.machine_detail', machine_id=m.id) }}" class="result-main">
+        <div class="result-icon result-icon-machine">
+          <svg class="icon"><use href="#i-package"/></svg>
+        </div>
+
+        <div class="result-body">
+          <div class="result-code">{{ m.machine_code }}</div>
+          <div class="result-name">{{ m.machine_name }}</div>
+
+          {% if m.all_errors %}
+          <div class="result-meta">
+            {% for e in m.all_errors[:3] %}
+              <span class="result-badge result-badge-error">{{ e.error_code }}</span>
+            {% endfor %}
+            {% if m.all_errors|length > 3 %}
+              <span class="result-badge-more">+{{ m.all_errors|length - 3 }}</span>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+
+        {% if m.shop %}
+        <span class="result-shop">{{ m.shop.shop_code }}</span>
+        {% endif %}
+      </a>
+
+      <button type="button" class="result-copy-btn"
+              data-copy="{{ m.machine_code }}"
+              aria-label="Copy machine code"
+              title="Copy code">
+        <svg class="icon icon-sm"><use href="#i-copy"/></svg>
+      </button>
+
+      <a href="{{ url_for('user.machine_detail', machine_id=m.id) }}"
+         class="result-arrow-btn" aria-label="View details">
+        <svg class="icon icon-sm"><use href="#i-chevron-right"/></svg>
+      </a>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <!-- ==================== ERRORS ==================== -->
+  {% if errors %}
+  <section class="section">
+    <div class="section-label">
+      {% if machines %}RELATED ERRORS{% else %}ERRORS{% endif %} ({{ errors|length }})
+    </div>
+
+    {% for e in errors %}
+    <div class="result-row result-row-error">
+      <a href="{{ url_for('user.error_detail', error_id=e.id) }}" class="result-main">
+        <div class="result-icon result-icon-error">
+          <svg class="icon"><use href="#i-alert"/></svg>
+        </div>
+
+        <div class="result-body">
+          <div class="result-code result-code-error">{{ e.error_code }}</div>
+          <div class="result-name">{{ e.error_name }}</div>
+
+          {% if e.error_fix %}
+          <div class="result-fix">{{ e.error_fix[:100] }}{% if e.error_fix|length > 100 %}…{% endif %}</div>
+          {% endif %}
+
+          {% if e.photo_previews %}
+          <div class="result-photos">
+            {% for p in e.photo_previews[:3] %}
+            <button type="button" class="result-photo"
+                    data-photo-url="{{ p.url }}"
+                    data-photo-caption="{{ p.caption or '' }}"
+                    aria-label="View photo">
+              <img src="{{ p.url }}" alt="" loading="lazy">
+            </button>
+            {% endfor %}
+            {% if e.photo_total > 3 %}
+            <div class="result-photo-more">+{{ e.photo_total - 3 }}</div>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+      </a>
+
+      <button type="button" class="result-copy-btn"
+              data-copy="{{ e.error_code }}"
+              aria-label="Copy error code"
+              title="Copy code">
+        <svg class="icon icon-sm"><use href="#i-copy"/></svg>
+      </button>
+
+      <a href="{{ url_for('user.error_detail', error_id=e.id) }}"
+         class="result-arrow-btn" aria-label="View details">
+        <svg class="icon icon-sm"><use href="#i-chevron-right"/></svg>
+      </a>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block body_extra %}
+<script>
+(function () {
+  var input = document.getElementById('search-input');
+  var clear = document.getElementById('search-clear');
+  if (input && clear) {
+    input.addEventListener('input', function () {
+      if (input.value.length > 0) clear.classList.add('visible');
+      else clear.classList.remove('visible');
+    });
+    clear.addEventListener('click', function () {
+      input.value = '';
+      input.focus();
+      clear.classList.remove('visible');
+    });
+  }
+
+  // Copy buttons — inline (search results)
+  document.querySelectorAll('.result-copy-btn[data-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var text = btn.getAttribute('data-copy');
+
+      function flash() {
+        btn.classList.add('copied');
+        setTimeout(function () { btn.classList.remove('copied'); }, 900);
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          if (window.MH && window.MH.toast) window.MH.toast('✓ Copied: ' + text);
+          flash();
+        }).catch(function () {
+          fallbackCopy(text, flash);
+        });
+      } else {
+        fallbackCopy(text, flash);
+      }
+    });
+  });
+
+  // ---------- Photo tap → full-screen viewer ----------
+  document.querySelectorAll('.result-photo[data-photo-url]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var url = btn.getAttribute('data-photo-url');
+      var caption = btn.getAttribute('data-photo-caption') || '';
+      if (url) openPhotoViewer(url, caption);
+    });
+  });
+
+  function openPhotoViewer(url, caption) {
+    var existing = document.getElementById('photo-viewer');
+    if (existing) existing.remove();
+
+    var viewer = document.createElement('div');
+    viewer.id = 'photo-viewer';
+    viewer.className = 'photo-viewer';
+    viewer.innerHTML =
+      '<div class="photo-viewer-backdrop"></div>' +
+      '<div class="photo-viewer-body">' +
+        '<button type="button" class="photo-viewer-close" aria-label="Close">' +
+          '<svg class="icon"><use href="#i-x"/></svg>' +
+        '</button>' +
+        '<img src="' + url + '" alt="" class="photo-viewer-img">' +
+        (caption ? '<div class="photo-viewer-caption">' + caption + '</div>' : '') +
+      '</div>';
+
+    document.body.appendChild(viewer);
+    document.body.style.overflow = 'hidden';
+
+    function close() {
+      viewer.classList.add('out');
+      setTimeout(function () {
+        viewer.remove();
+        document.body.style.overflow = '';
+      }, 200);
+    }
+
+    viewer.querySelector('.photo-viewer-backdrop').addEventListener('click', close);
+    viewer.querySelector('.photo-viewer-close').addEventListener('click', close);
+
+    document.addEventListener('keydown', function esc(e) {
+      if (e.key === 'Escape') {
+        close();
+        document.removeEventListener('keydown', esc);
+      }
+    });
+  }
+
+  function fallbackCopy(text, cb) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;top:-1000px;opacity:0;';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (window.MH && window.MH.toast) window.MH.toast('✓ Copied: ' + text);
+      if (cb) cb();
+    } catch (err) {
+      if (window.MH && window.MH.toast) window.MH.toast('Copy failed');
+    }
+  }
+})();
+</script>
+{% endblock %}

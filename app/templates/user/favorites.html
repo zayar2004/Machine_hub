@@ -1,0 +1,81 @@
+{% extends "user/base.html" %}
+{% block title %}Favorites — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  Favorites
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;">
+  ☆ Favorite လုပ်ထားတဲ့ machines + errors တွေ ဒီမှာ စုစည်းထားတယ်။
+</p>
+
+{% if not machine_favs and not error_favs %}
+  <div class="empty">
+    <div class="empty-icon">
+      <svg class="icon icon-lg"><use href="#i-star"/></svg>
+    </div>
+    <h2 class="empty-title">No favorites yet</h2>
+    <p class="empty-desc">
+      Machine သို့မဟုတ် Error detail မှာ ☆ Favorite ကို နှိပ်ပါ။
+      သိမ်းထားတဲ့ items တွေ ဒီမှာ ပေါ်လာမယ်။
+    </p>
+  </div>
+{% else %}
+
+  {% if machine_favs %}
+    <section class="detail-section">
+      <h2 class="detail-section-title">Machines ({{ machine_favs|length }})</h2>
+      <div class="list">
+        {% for f in machine_favs %}
+          {% if f.machine %}
+          <a class="list-item" href="{{ url_for('user.machine_detail', machine_id=f.machine.id) }}">
+            <div class="list-item-icon accent">
+              <svg class="icon"><use href="#i-package"/></svg>
+            </div>
+            <div class="list-item-main">
+              <div class="list-item-title">{{ f.machine.machine_name }}</div>
+              <div class="list-item-sub">
+                <span class="code">{{ f.machine.machine_code }}</span>
+                {% if f.machine.shop %}<span>· {{ f.machine.shop.shop_code }}</span>{% endif %}
+              </div>
+            </div>
+            <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+          </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if error_favs %}
+    <section class="detail-section">
+      <h2 class="detail-section-title">Errors ({{ error_favs|length }})</h2>
+      <div class="list">
+        {% for f in error_favs %}
+          {% if f.error %}
+          <a class="list-item" href="{{ url_for('user.error_detail', error_id=f.error.id) }}">
+            <div class="list-item-icon" style="background:var(--warning-soft);color:var(--warning);">
+              <svg class="icon"><use href="#i-alert"/></svg>
+            </div>
+            <div class="list-item-main">
+              <div class="list-item-title">{{ f.error.error_name }}</div>
+              <div class="list-item-sub"><span class="code">{{ f.error.error_code }}</span></div>
+            </div>
+            <svg class="icon icon-sm list-item-arrow"><use href="#i-chevron-right"/></svg>
+          </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+{% endif %}
+
+{% endblock %}
