@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: machine-hub
+    env: python
+    region: singapore
+    plan: free
+    branch: main
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      pip install psycopg2-binary==2.9.9
+    startCommand: gunicorn "app:create_app()" --bind 0.0.0.0:$PORT --workers 2 --timeout 60
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: machine-hub-db
+          property: connectionString
+    healthCheckPath: /health
+
+databases:
+  - name: machine-hub-db
+    plan: free
+    region: singapore

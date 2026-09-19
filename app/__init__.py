@@ -19,6 +19,7 @@ def create_app(config_name: str | None = None) -> Flask:
     _ensure_runtime_dirs(app)
     _bind_extensions(app)
     _register_models()
+    _auto_migrate(app)
     _register_blueprints(app)
     _register_core_routes(app)
 
@@ -49,6 +50,21 @@ def _bind_extensions(app: Flask) -> None:
 
 def _register_models() -> None:
     from . import models  # noqa: F401
+
+
+def _auto_migrate(app: Flask) -> None:
+    """Create tables on first run (for fresh Postgres on Render).
+
+    For existing deployments with data, use flask db upgrade manually.
+    """
+    if app.config.get("ENV") != "production":
+        return
+    try:
+        from .extensions import db
+        with app.app_context():
+            db.create_all()
+    except Exception as e:
+        app.logger.warning(f"[auto-migrate] {e}")
 
 
 def _register_blueprints(app: Flask) -> None:
