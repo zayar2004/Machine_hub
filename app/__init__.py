@@ -109,13 +109,34 @@ def _register_core_routes(app: Flask) -> None:
     @app.route("/api/db-info")
     def db_info():
         from flask import jsonify
+        from sqlalchemy import text
+        from .extensions import db
         db_url = app.config.get("SQLALCHEMY_DATABASE_URI", "")
         host = db_url.split("@")[1].split("/")[0] if "@" in db_url else "?"
-        driver = "pg8000" if "pg8000" in db_url else ("psycopg2" if "postgresql://" in db_url else "?")
-        return jsonify({
-            "host": host,
-            "driver": driver,
-        })
+        driver = "pg8000" if "pg8000" in db_url else "psycopg2"
+        info = {"host": host, "driver": driver, "uri_prefix": db_url[:50]}
+        try:
+            r = db.session.execute(text("SELECT current_database(), current_schema(), current_user")).fetchone()
+            info["database"] = r[0]
+            info["schema"] = r[1]
+            info["user"] = r[2]
+        except Exception as e:
+            info["db_meta_error"] = str(e)[:120]
+        for tbl in ["shops", "users", "machines", "errors", "error_images"]:
+            try:
+                c = db.session.execute(text(f"SELECT COUNT(*) FROM {tbl}")).scalar()
+                info[f"count_{tbl}"] = c
+            except Exception as e:
+                info[f"count_{tbl}"] = f"ERR: {str(e)[:40]}"
+        try:
+            tbls = db.session.execute(text(
+                "SELECT tablename FROM pg_tables WHERE schemaname='public' ORDER BY tablename"
+            )).fetchall()
+            info["tables"] = [t[0] for t in tbls]
+        except Exception as e:
+            info["tables_error"] = str(e)[:80]
+        return jsonify(info)
+
 
     @app.route("/health")
     def health():
