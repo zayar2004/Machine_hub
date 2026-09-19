@@ -1,5 +1,5 @@
 /* Machine Hub — Service Worker v6 */
-const VERSION = 'mh-v26';
+const VERSION = 'mh-v27';
 const STATIC = VERSION + '-static';
 const RUNTIME = VERSION + '-runtime';
 const PHOTOS = VERSION + '-photos';

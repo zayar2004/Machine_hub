@@ -4,19 +4,9 @@
 
   let deferredPrompt = null;
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    const btn = document.getElementById('mh-install-btn');
-    if (btn) btn.style.display = 'flex';
-  });
+  // Install prompt — disabled (PWA banner removed)
 
-  window.addEventListener('appinstalled', () => {
-    deferredPrompt = null;
-    const btn = document.getElementById('mh-install-btn');
-    if (btn) btn.style.display = 'none';
-    toast('Installed');
-  });
+  // appinstalled — disabled
 
   function isStandalone() {
     return (window.matchMedia('(display-mode: standalone)').matches) ||
@@ -24,17 +14,8 @@
   }
 
   async function doInstall() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const c = await deferredPrompt.userChoice;
-      if (c.outcome === 'accepted') {
-        deferredPrompt = null;
-        const btn = document.getElementById('mh-install-btn');
-        if (btn) btn.style.display = 'none';
-      }
-    } else {
-      toast('Chrome → Add to Home screen');
-    }
+    // Install disabled
+    return;
   }
 
   function openSheet() {
@@ -122,12 +103,9 @@
       if (e.key === 'Escape') closeSheet();
     });
 
+    // Install button — disabled (hide if present)
     const ib = document.getElementById('mh-install-btn');
-    if (ib) {
-      ib.addEventListener('click', (e) => { e.preventDefault(); doInstall(); });
-      if (isStandalone()) ib.style.display = 'none';
-      else ib.style.display = 'flex';
-    }
+    if (ib) ib.style.display = 'none';
 
     wireCopy();
     wireSearchClear();
