@@ -28,41 +28,41 @@ class Config:
     if _db_url.startswith("postgres://"):
         _db_url = _db_url.replace("postgres://", "postgresql://", 1)
 
-    # Strip query params incompatible with pg8000
-    if _db_url.startswith("postgresql") and "?" in _db_url:
-        _db_url = _db_url.split("?")[0]
-
     # Auto-select driver:
     #   - pg8000   → pure Python (Termux)
     #   - psycopg2 → compiled (Render/Linux) if available
+    _is_remote_pg = _db_url.startswith("postgresql") and (
+        "neon.tech" in _db_url or "supabase" in _db_url
+    )
+
     if _db_url.startswith("postgresql://"):
         try:
             import psycopg2  # noqa: F401
-            # psycopg2 available — leave as-is
             _db_driver = "psycopg2"
+            # psycopg2 — needs sslmode=require for Neon/Supabase
+            if _is_remote_pg:
+                base = _db_url.split("?")[0]
+                _db_url = base + "?sslmode=require"
         except ImportError:
-            # Fall back to pg8000
+            # Termux — pg8000 — strip query params
+            if "?" in _db_url:
+                _db_url = _db_url.split("?")[0]
             _db_url = _db_url.replace(
                 "postgresql://", "postgresql+pg8000://", 1
             )
             _db_driver = "pg8000"
-        # Remove query (already done above; safety)
-        if "?" in _db_url:
-            _db_url = _db_url.split("?")[0]
 
     SQLALCHEMY_DATABASE_URI = _db_url
 
-    # SSL context — required for Neon / Supabase — via pg8000
-    if _db_url.startswith("postgresql+pg8000://") and (
-        "neon.tech" in _db_url or "supabase" in _db_url
-    ):
-        SQLALCHEMY_ENGINE_OPTIONS = {
-            "pool_pre_ping": True,
-            "pool_recycle": 280,
-            "future": True,
-            "connect_args": {
-                "ssl_context": ssl.create_default_context(),
-            },
+    # Engine options — SSL context for pg8000
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_recycle": 280,
+        "future": True,
+    }
+    if _db_url.startswith("postgresql+pg8000://") and _is_remote_pg:
+        SQLALCHEMY_ENGINE_OPTIONS["connect_args"] = {
+            "ssl_context": ssl.create_default_context(),
         }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
