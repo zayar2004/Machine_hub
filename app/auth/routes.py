@@ -64,15 +64,21 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         full_name = form.name.data.strip()
+        username = form.username.data.strip().lower()
 
-        # Generate unique username
-        username = User.generate_username(full_name)
+        # Duplicate check (safety — form also validates)
+        if User.query.filter_by(username=username).first():
+            flash(
+                "ဒီ username ရှိပြီးသား — တခြား သုံးပါ",
+                "error",
+            )
+            return render_template("auth/register.html", form=form)
 
         user = User(
             name=full_name,
             username=username,
             role=User.ROLE_USER,
-            shop_id=None,  # will be set by admin
+            shop_id=None,  # admin will assign
             status=User.STATUS_PENDING,
         )
         user.set_password(form.password.data)
@@ -82,6 +88,7 @@ def register():
         flash(
             f"Account ဖန်တီးပြီးပါပြီ။\n"
             f"Username: {username}\n"
+            f"Password: (သင်ရွေးထားတဲ့ password)\n"
             f"Admin အတည်ပြုပြီးရင် login လုပ်နိုင်ပါမယ်။",
             "success",
         )

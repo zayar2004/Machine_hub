@@ -48,9 +48,18 @@
       <div class="field">
         {{ form.name.label(class_="field-label") }}
         {{ form.name(class_="field-input", autofocus=true, placeholder="Your full name") }}
-        <p class="field-help">Username ကို သင့်နာမည်ကနေ အလိုအလျောက် ဖန်တီးပါမယ်။</p>
         {% for err in form.name.errors %}<p class="field-error">{{ err }}</p>{% endfor %}
       </div>
+
+      <div class="field">
+        {{ form.username.label(class_="field-label") }}
+        {{ form.username(class_="field-input", placeholder="zayar (login အတွက်)",
+                         autocomplete="username", autocapitalize="none",
+                         spellcheck="false") }}
+        <p class="field-help">Letters, numbers, underscore (_) — ၃ လုံးမှ ၃၀ လုံး။ ဒါကို login မှာ သုံးရမယ် — မှတ်ထားပါ။</p>
+        {% for err in form.username.errors %}<p class="field-error">{{ err }}</p>{% endfor %}
+      </div>
+
 
       <div class="field">
         {{ form.password.label(class_="field-label") }}
