@@ -178,7 +178,21 @@ def apply_package(zip_path: Path, target_app, *, shop_ids=None):
             ErrorImage.query.delete()
             Error.query.delete()
             Machine.query.delete()
-            User.query.filter(User.username != "admin").delete()
+            # Keep current session user + admin
+            # (Avoid deleting the logged-in user account)
+            from flask_login import current_user
+            keep_usernames = {"admin"}
+            try:
+                if current_user and current_user.is_authenticated:
+                    keep_usernames.add(current_user.username)
+            except Exception:
+                pass
+            pkg_usernames = {u.get("username") for u in data.get("users", []) if u.get("username")}
+            keep_usernames.update(pkg_usernames)
+
+            User.query.filter(
+                ~User.username.in_(keep_usernames)
+            ).delete(synchronize_session=False)
             # Keep admin
             Shop.query.delete()
 

@@ -19,7 +19,7 @@ from datetime import datetime
 
 # === Config ===
 LOCAL_DB = Path.home() / "machine_hub" / "instance" / "machine_hub.db"
-NEON_URL_FILE = Path.home() / "neon_db_url.txt"
+NEON_URL_FILE = Path.home() / "supabase_db_url.txt"
 
 if not LOCAL_DB.exists():
     print(f"❌ Local DB not found: {LOCAL_DB}")
