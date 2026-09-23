@@ -1,0 +1,112 @@
+{% extends "admin/base.html" %}
+{% block title %}Create Package — Admin{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Create Update Package</h1>
+    <p class="page-sub">Data ကို User ဆီ offline ဖြန့်ဝေဖို့ package ဖန်တီး</p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('admin_updates.index') }}">
+    <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+    Back
+  </a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for cat, msg in messages %}
+      <div class="alert alert-{{ cat }}" style="margin-bottom:12px;">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <!-- Shops -->
+  <div class="card" style="padding:16px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <svg class="icon icon-sm" style="color:var(--accent);"><use href="#i-shop"/></svg>
+      <strong style="font-size:14px;">Shops</strong>
+    </div>
+    <p style="color:var(--text-3);font-size:12px;margin:0 0 10px;">
+      Package ထဲ ထည့်မယ့် shop ကို ရွေးပါ (မရွေးရင် အားလုံး)
+    </p>
+
+    {% if shops %}
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        {% for s in shops %}
+          <label style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface-2);border-radius:8px;cursor:pointer;">
+            <input type="checkbox" name="shop_ids" value="{{ s.id }}" checked>
+            <div>
+              <div style="font-weight:600;font-size:13px;">{{ s.shop_code }}</div>
+              <div style="font-size:11px;color:var(--text-3);">{{ s.shop_name }}</div>
+            </div>
+          </label>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="padding:20px;text-align:center;color:var(--text-3);font-size:13px;">
+        Shop မရှိသေး — Admin → Shops မှာ ထည့်ပါ
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Options -->
+  <div class="card" style="padding:16px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <svg class="icon icon-sm" style="color:var(--accent);"><use href="#i-settings"/></svg>
+      <strong style="font-size:14px;">Options</strong>
+    </div>
+
+    <label style="display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;">
+      <input type="checkbox" name="include_errors" checked>
+      <div>
+        <div style="font-weight:600;font-size:13px;">Include Errors</div>
+        <div style="font-size:11px;color:var(--text-3);">Error knowledge (global)</div>
+      </div>
+    </label>
+
+    <label style="display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;">
+      <input type="checkbox" name="include_images" checked>
+      <div>
+        <div style="font-weight:600;font-size:13px;">Include Images</div>
+        <div style="font-size:11px;color:var(--text-3);">Error photos (base64)</div>
+      </div>
+    </label>
+
+    <label style="display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;">
+      <input type="checkbox" name="include_users">
+      <div>
+        <div style="font-weight:600;font-size:13px;">Include Users</div>
+        <div style="font-size:11px;color:var(--text-3);">⚠️ Admin → Admin only</div>
+      </div>
+    </label>
+  </div>
+
+  <!-- Info -->
+  <div class="card" style="padding:16px;margin-bottom:16px;background:var(--surface-2);">
+    <div style="display:flex;align-items:flex-start;gap:10px;">
+      <svg class="icon icon-sm" style="color:var(--warn,#f59e0b);flex-shrink:0;margin-top:2px;"><use href="#i-info"/></svg>
+      <div style="font-size:12px;color:var(--text-2);line-height:1.6;">
+        Package ဖန်တီးပြီးရင် <code>app/static/updates/</code> မှာ သိမ်းထားမယ်။<br>
+        User ကို <strong>Download</strong> ချပြီး — User APK → More → Data Update → Import
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div style="display:flex;gap:10px;">
+    <button type="submit" class="btn btn-primary" style="flex:1;">
+      <svg class="icon icon-sm"><use href="#i-package"/></svg>
+      Create Package
+    </button>
+    <a class="btn btn-secondary" href="{{ url_for('admin_updates.index') }}">
+      Cancel
+    </a>
+  </div>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "user/base.html" %}
+{% block title %}Confirm Update — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user_updates.import_package') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;">
+  Confirm Update
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;">
+  Package ကို validate လုပ်ပြီးပါပြီ။ Changes ကို စစ်ပြီး Apply နှိပ်ပါ။
+</p>
+
+<!-- Package info -->
+<div style="padding:16px;background:var(--surface);border:1px solid var(--border);
+            border-radius:12px;margin-bottom:16px;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+    <svg class="icon" style="width:24px;height:24px;color:var(--accent);"><use href="#i-file"/></svg>
+    <div style="font-weight:700;font-size:15px;color:var(--text);">Package Info</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
+    <div style="color:var(--text-3);">Version</div>
+    <div style="color:var(--text);font-weight:600;">{{ manifest.package_version }}</div>
+    <div style="color:var(--text-3);">Data Version</div>
+    <div style="color:var(--text);">{{ manifest.data_version }}</div>
+    <div style="color:var(--text-3);">Created By</div>
+    <div style="color:var(--text);">{{ manifest.created_by }}</div>
+    <div style="color:var(--text-3);">Created At</div>
+    <div style="color:var(--text);font-size:12px;">{{ manifest.created_at[:19] }}</div>
+    <div style="color:var(--text-3);">File Size</div>
+    <div style="color:var(--text);">{{ (zip_size / 1024) | round(1) }} KB</div>
+  </div>
+</div>
+
+<!-- Counts -->
+<div style="padding:16px;background:var(--surface);border:1px solid var(--border);
+            border-radius:12px;margin-bottom:16px;">
+  <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:12px;">
+    Data Changes
+  </div>
+  <div style="display:grid;grid-template-columns:1fr auto;gap:8px;font-size:13px;">
+    <div style="color:var(--text-2);">Shops</div>
+    <div style="color:var(--text);font-weight:700;">{{ counts.shops }}</div>
+    <div style="color:var(--text-2);">Machines</div>
+    <div style="color:var(--text);font-weight:700;">{{ counts.machines }}</div>
+    <div style="color:var(--text-2);">Errors</div>
+    <div style="color:var(--text);font-weight:700;">{{ counts.errors }}</div>
+    <div style="color:var(--text-2);">Error Images</div>
+    <div style="color:var(--text);font-weight:700;">{{ counts.error_images }}</div>
+    <div style="color:var(--text-2);">Machine-Errors Links</div>
+    <div style="color:var(--text);font-weight:700;">{{ counts.machine_errors }}</div>
+    <div style="color:var(--text-2);">Users</div>
+    <div style="color:var(--text);font-weight:700;">{{ counts.users }}</div>
+    <div style="color:var(--text-2);">Images</div>
+    <div style="color:var(--text);font-weight:700;">{{ images_count }}</div>
+  </div>
+</div>
+
+<!-- Shops -->
+{% if manifest.shop_ids %}
+<div style="padding:12px 14px;background:var(--surface-2);border-radius:10px;
+            font-size:12px;color:var(--text-2);margin-bottom:16px;">
+  <strong>Shops in package:</strong> {{ manifest.shop_ids | join(', ') }}
+</div>
+{% endif %}
+
+<!-- Warning -->
+<div style="padding:12px 14px;background:#fef3c7;color:#92400e;
+            border-radius:10px;font-size:12px;margin-bottom:16px;line-height:1.6;">
+  <strong>⚠️ Warning:</strong> Apply နှိပ်ရင် လက်ရှိ data ကို replace လုပ်မယ်။
+  Admin account ကတော့ ကျန်ပါတယ်။
+</div>
+
+<!-- Actions -->
+<form method="post" action="{{ url_for('user_updates.apply') }}"
+      style="display:flex;gap:10px;">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="zip_name" value="{{ zip_name }}">
+
+  <button type="submit"
+          style="flex:1;padding:14px;background:var(--accent);color:#fff;
+                 border:none;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;"
+          onclick="this.disabled=true;this.textContent='Applying...';this.form.submit();">
+    <svg class="icon icon-sm" style="vertical-align:middle;"><use href="#i-check"/></svg>
+    Apply Update
+  </button>
+
+  <a href="{{ url_for('user_updates.index') }}"
+     style="padding:14px 20px;background:var(--surface);color:var(--text);
+            border:1px solid var(--border);border-radius:10px;
+            text-decoration:none;font-weight:600;font-size:14px;">
+    Cancel
+  </a>
+</form>
+
+{% endblock %}

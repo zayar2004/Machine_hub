@@ -1,0 +1,66 @@
+{% extends "user/base.html" %}
+{% block title %}Update Complete — Machine Hub{% endblock %}
+{% block content %}
+
+<div style="text-align:center;padding:30px 0 20px;">
+  <div style="display:inline-flex;align-items:center;justify-content:center;
+              width:72px;height:72px;background:#dcfce7;border-radius:50%;
+              margin-bottom:16px;">
+    <svg class="icon" style="width:36px;height:36px;color:#16a34a;">
+      <use href="#i-check"/>
+    </svg>
+  </div>
+  <h1 style="font-size:22px;font-weight:800;color:var(--text);margin:0 0 6px;">
+    Update Complete
+  </h1>
+  <p style="font-size:13px;color:var(--text-2);margin:0;">
+    Data အောင်မြင်စွာ apply ဖြစ်သွားပါပြီ
+  </p>
+</div>
+
+<!-- Result counts -->
+<div style="padding:16px;background:var(--surface);border:1px solid var(--border);
+            border-radius:12px;margin-bottom:16px;">
+  <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:12px;">
+    Applied Data
+  </div>
+  <div style="display:grid;grid-template-columns:1fr auto;gap:8px;font-size:13px;">
+    <div style="color:var(--text-2);">Shops</div>
+    <div style="color:var(--text);font-weight:700;">{{ result.counts.shops }}</div>
+    <div style="color:var(--text-2);">Machines</div>
+    <div style="color:var(--text);font-weight:700;">{{ result.counts.machines }}</div>
+    <div style="color:var(--text-2);">Errors</div>
+    <div style="color:var(--text);font-weight:700;">{{ result.counts.errors }}</div>
+    <div style="color:var(--text-2);">Error Images</div>
+    <div style="color:var(--text);font-weight:700;">{{ result.counts.error_images }}</div>
+    <div style="color:var(--text-2);">Machine-Errors Links</div>
+    <div style="color:var(--text);font-weight:700;">{{ result.counts.machine_errors }}</div>
+  </div>
+</div>
+
+<!-- Package info -->
+<div style="padding:12px 14px;background:var(--surface-2);border-radius:10px;
+            font-size:12px;color:var(--text-2);margin-bottom:20px;line-height:1.7;">
+  <strong>Package version:</strong> {{ result.manifest.package_version }}<br>
+  <strong>Data version:</strong> {{ result.manifest.data_version }}<br>
+  <strong>Applied at:</strong> {{ result.applied_at[:19] }} UTC
+</div>
+
+<!-- Actions -->
+<div style="display:flex;flex-direction:column;gap:10px;">
+  <a href="{{ url_for('user.home') }}"
+     style="padding:14px;background:var(--accent);color:#fff;
+            border-radius:10px;text-decoration:none;font-weight:600;
+            font-size:14px;text-align:center;">
+    <svg class="icon icon-sm" style="vertical-align:middle;"><use href="#i-home"/></svg>
+    Go to Home
+  </a>
+  <a href="{{ url_for('user_updates.index') }}"
+     style="padding:14px;background:var(--surface);color:var(--text);
+            border:1px solid var(--border);border-radius:10px;
+            text-decoration:none;font-weight:600;font-size:14px;text-align:center;">
+    Import Another Package
+  </a>
+</div>
+
+{% endblock %}

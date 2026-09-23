@@ -90,19 +90,21 @@ def _auto_seed(app: Flask) -> None:
 
 def _register_blueprints(app: Flask) -> None:
     from .auth import auth_bp
-    from .admin import admin_bp
+    from .admin import admin_bp, admin_updates_bp
     from .routes import search_bp
     from .routes.sync import sync_bp
     from .routes.favorites import favorites_bp
     from .routes.repair_history import repair_bp
-    from .user import user_bp
+    from .user import user_bp, user_updates_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(admin_updates_bp)
     app.register_blueprint(search_bp)
     app.register_blueprint(sync_bp)
     app.register_blueprint(favorites_bp)
     app.register_blueprint(repair_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(user_updates_bp)
 
 
 def _register_core_routes(app: Flask) -> None:

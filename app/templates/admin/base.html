@@ -189,6 +189,7 @@
       <a href="{{ url_for('admin.admin_search') }}" class="{% if request.endpoint == 'admin.admin_search' %}active{% endif %}">Search</a>
       <a href="{{ url_for('admin.activity_log') }}" class="{% if 'activity' in (request.endpoint or '') %}active{% endif %}">Activity</a>
       <a href="{{ url_for('admin.change_logs') }}" class="{% if request.endpoint == 'admin.change_logs' %}active{% endif %}">Logs</a>
+      <a href="{{ url_for('admin_updates.index') }}" class="{% if 'admin_updates' in (request.endpoint or '') %}active{% endif %}">Updates</a>
     </nav>
 
     <!-- Right actions -->
@@ -262,6 +263,9 @@
     </a>
     <a class="sheet-item" href="{{ url_for('admin.change_logs') }}">
       <svg class="icon"><use href="#i-activity"/></svg><span>Change Logs</span>
+    </a>
+    <a class="sheet-item" href="{{ url_for('admin_updates.index') }}">
+      <svg class="icon"><use href="#i-download"/></svg><span>Updates</span>
     </a>
 
     <!-- TOOLS -->

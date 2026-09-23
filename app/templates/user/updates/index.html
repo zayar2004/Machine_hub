@@ -1,0 +1,66 @@
+{% extends "user/base.html" %}
+{% block title %}Data Update — Machine Hub{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('user.home') }}" class="detail-back" data-smart-back
+   style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;margin-bottom:16px;padding:4px 0;">
+  <svg class="icon icon-sm"><use href="#i-arrow-left"/></svg>
+  <span>Back</span>
+</a>
+
+<h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;">
+  Data Update
+</h1>
+
+<p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;">
+  Admin ဖန်တီးထားတဲ့ Knowledge Package ကို Import လုပ်ပါ။
+  Internet မလိုဘဲ offline update လုပ်နိုင်တယ်။
+</p>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for cat, msg in messages %}
+      <div style="padding:12px 14px;background:{% if cat == 'error' %}#fee2e2{% else %}#dcfce7{% endif %};
+                  color:{% if cat == 'error' %}#991b1b{% else %}#166534{% endif %};
+                  border-radius:10px;font-size:13px;margin-bottom:12px;">
+        {{ msg }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<!-- Import CTA -->
+<div style="padding:20px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent-hover) 100%);
+            border-radius:16px;color:#fff;margin-bottom:20px;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+    <svg class="icon" style="width:32px;height:32px;opacity:0.9;"><use href="#i-upload"/></svg>
+    <div>
+      <div style="font-weight:700;font-size:16px;">Import Package</div>
+      <div style="font-size:12px;opacity:0.85;">.zip file ရွေးပြီး update လုပ်ပါ</div>
+    </div>
+  </div>
+  <a href="{{ url_for('user_updates.import_package') }}"
+     style="display:flex;align-items:center;justify-content:center;gap:8px;
+            padding:12px;background:rgba(255,255,255,0.95);color:var(--accent);
+            border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;">
+    <svg class="icon icon-sm"><use href="#i-file"/></svg>
+    Select Package File
+  </a>
+</div>
+
+<!-- How it works -->
+<div style="padding:16px;background:var(--surface);border:1px solid var(--border);
+            border-radius:12px;">
+  <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:10px;">
+    ဘယ်လို အလုပ်လုပ်လဲ?
+  </div>
+  <ol style="margin:0;padding-left:20px;font-size:13px;color:var(--text-2);line-height:1.8;">
+    <li>Admin က Update Package (.zip) ဖန်တီးတယ်</li>
+    <li>Package ကို user ဆီ ပို့ (USB / Email / WhatsApp)</li>
+    <li>User က Select Package File နှိပ်</li>
+    <li>Validate → Show Changes → Apply</li>
+    <li>✅ Data update ဖြစ်သွားမယ်</li>
+  </ol>
+</div>
+
+{% endblock %}
