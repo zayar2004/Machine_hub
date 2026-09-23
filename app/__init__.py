@@ -239,4 +239,13 @@ def _register_core_routes(app: Flask) -> None:
             )
             response.headers["Pragma"] = "no-cache"
             response.headers["Expires"] = "0"
+
+        # Service Worker scope: allow /static/js/service-worker.js to control "/"
+        if "service-worker" in path:
+            response.headers["Service-Worker-Allowed"] = "/"
+            # Ensure no-cache so SW updates take effect
+            response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            response.headers["Pragma"] = "no-cache"
+            response.headers["Expires"] = "0"
+
         return response
