@@ -60,3 +60,6 @@ ios/
 !www/
 !www/index.html
 
+
+# Update packages (generated — not source)
+app/static/updates/*.zip
