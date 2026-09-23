@@ -90,7 +90,7 @@ def _auto_seed(app: Flask) -> None:
 
 def _register_blueprints(app: Flask) -> None:
     from .auth import auth_bp
-    from .admin import admin_bp, admin_updates_bp
+    from .admin import admin_bp
     from .routes import search_bp
     from .routes.sync import sync_bp
     from .routes.favorites import favorites_bp
@@ -98,7 +98,6 @@ def _register_blueprints(app: Flask) -> None:
     from .user import user_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
-    app.register_blueprint(admin_updates_bp)
     app.register_blueprint(search_bp)
     app.register_blueprint(sync_bp)
     app.register_blueprint(favorites_bp)
