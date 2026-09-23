@@ -1,5 +1,5 @@
 /* Machine Hub — Service Worker v7 (offline-first) */
-const VERSION = 'mh-v28';
+const VERSION = 'mh-v29';
 const STATIC = VERSION + '-static';
 const RUNTIME = VERSION + '-runtime';
 const PHOTOS = VERSION + '-photos';
@@ -87,15 +87,15 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // API: network-first with cache fallback
+  // API: cache-first with background update (offline-first)
   if (url.pathname.startsWith('/api/')) {
-    e.respondWith(networkFirst(req, RUNTIME));
+    e.respondWith(staleWhileRevalidate(req, RUNTIME));
     return;
   }
 
-  // HTML navigation: network-first → cache → offline page
+  // HTML navigation: cache-first → network → offline page (offline-first)
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
-    e.respondWith(networkFirstHTML(req));
+    e.respondWith(staleWhileRevalidateHTML(req));
     return;
   }
 });
@@ -113,15 +113,25 @@ async function cacheFirst(req, cacheName) {
   }
 }
 
-async function networkFirst(req, cacheName) {
+async function staleWhileRevalidate(req, cacheName) {
+  // CACHE-FIRST: return cached immediately, update in background
   const c = await caches.open(cacheName);
+  const hit = await c.match(req);
+
+  if (hit) {
+    // Background revalidate (non-blocking)
+    fetch(req).then(res => {
+      if (res && res.ok) c.put(req, res.clone());
+    }).catch(() => {});
+    return hit;
+  }
+
+  // Cache miss — network
   try {
     const res = await fetch(req);
     if (res.ok) c.put(req, res.clone());
     return res;
   } catch (e) {
-    const hit = await c.match(req);
-    if (hit) return hit;
     return new Response(
       JSON.stringify({ error: 'offline' }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
@@ -129,23 +139,30 @@ async function networkFirst(req, cacheName) {
   }
 }
 
-async function networkFirstHTML(req) {
+async function staleWhileRevalidateHTML(req) {
+  // CACHE-FIRST for HTML — offline-first navigation
   const c = await caches.open(SHELL);
+  const hit = await c.match(req);
+
+  if (hit) {
+    // Background revalidate (non-blocking)
+    fetch(req).then(res => {
+      if (res && res.ok) c.put(req, res.clone());
+    }).catch(() => {});
+    return hit;
+  }
+
+  // Cache miss — network
   try {
     const res = await fetch(req);
     if (res.ok) c.put(req, res.clone());
     return res;
   } catch (e) {
-    // Try exact match
-    const hit = await c.match(req);
-    if (hit) return hit;
-    // Try homepage shell
+    // Fallback chain: / → /offline → inline
     const root = await c.match('/');
     if (root) return root;
-    // Fallback offline page
     const offline = await c.match('/offline');
     if (offline) return offline;
-    // Last resort — inline offline response
     return new Response(
       '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline</title><style>body{font-family:system-ui;background:#09090b;color:#fafafa;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:24px;text-align:center}h1{font-size:20px;margin-bottom:12px;font-weight:700}p{color:#a1a1aa;font-size:14px}</style></head><body><div><h1>📡 Offline</h1><p>Internet ပြန်ရလာရင် ပြန် ကြည့်ပါ။</p></div></body></html>',
       { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
