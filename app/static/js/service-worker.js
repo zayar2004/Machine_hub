@@ -28,9 +28,12 @@ const PRECACHE = [
 
 // App shell pages — precache for offline
 const SHELL_PAGES = [
-  '/',
   '/offline',
+  '/static/manifest.json',
 ];
+// NOTE: Auth-required pages (/, /favorites, /recent, /history)
+// are cached dynamically via staleWhileRevalidateHTML after login.
+// They can't be precached at install time (no session).
 
 self.addEventListener('install', (e) => {
   e.waitUntil(

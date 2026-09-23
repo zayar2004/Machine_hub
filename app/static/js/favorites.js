@@ -10,10 +10,15 @@
     if (!type || !id) return;
     const url = `/api/favorites/${type}/${id}`;
     try {
+      const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+      const csrf = csrfMeta ? csrfMeta.getAttribute('content') : '';
       const res = await fetch(url, {
         method: 'POST',
         credentials: 'same-origin',
-        headers: { 'Accept': 'application/json' },
+        headers: {
+          'Accept': 'application/json',
+          'X-CSRFToken': csrf,
+        },
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
