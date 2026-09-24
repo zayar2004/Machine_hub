@@ -415,30 +415,35 @@
           syncNow(false);
           localStorage.setItem('mh_first_sync', '1');
         } else {
-          // Already synced — background check
-          backgroundSync();
+          // ⚠️ Option A: Already synced — NO auto sync (manual only)
+          // Just update status — server မချိတ်
+          setStatus(navigator.onLine ? 'online' : 'offline');
         }
       } catch (e) {}
     }, 1500);
 
     window.addEventListener('online', function () {
       setStatus('online');
-      try { syncNow(false); } catch (e) {}
+      // ⚠️ Option A: No auto-sync on online — manual only
     });
 
     window.addEventListener('offline', function () {
       setStatus('offline');
     });
 
-    setInterval(function () {
-      if (navigator.onLine) {
-        try { backgroundSync(); } catch (e) {}
-      }
-    }, AUTO_SYNC_INTERVAL);
+    // ⚠️ Option A: Background sync DISABLED (manual only)
+    // To re-enable: uncomment setInterval block below
+    // setInterval(function () {
+    //   if (navigator.onLine) {
+    //     try { backgroundSync(); } catch (e) {}
+    //   }
+    // }, AUTO_SYNC_INTERVAL);
 
     document.addEventListener('visibilitychange', function () {
-      if (document.visibilityState === 'visible' && navigator.onLine) {
-        try { syncNow(true); } catch (e) {}
+      // ⚠️ Option A: No auto-sync on visibility change
+      // Just update status
+      if (document.visibilityState === 'visible') {
+        setStatus(navigator.onLine ? 'online' : 'offline');
       }
     });
 
