@@ -65,6 +65,44 @@
   <script src="{{ url_for('static', filename='js/pull-refresh.js') }}"></script>
 
 <script>
+  // Prefetch user pages for offline (after SW ready)
+  (function prefetchPages() {
+    if (!('serviceWorker' in navigator)) return;
+    if (localStorage.getItem('mh_prefetch_pages')) return;
+
+    var pages = ['/search', '/machines', '/errors', '/favorites', '/recent', '/history'];
+
+    function doPrefetch() {
+      Promise.all(
+        pages.map(function(url) {
+          return fetch(url, { credentials: 'same-origin' })
+            .then(function(res) {
+              if (res.ok) {
+                return caches.open('mh-v30-shell').then(function(c) {
+                  return c.put(url, res.clone());
+                });
+              }
+            })
+            .catch(function() {});
+        })
+      ).then(function() {
+        try { localStorage.setItem('mh_prefetch_pages', '1'); } catch (e) {}
+        console.log('[PWA] Pages prefetched for offline');
+      });
+    }
+
+    // Wait for SW controller
+    if (navigator.serviceWorker.controller) {
+      setTimeout(doPrefetch, 2000);
+    } else {
+      navigator.serviceWorker.ready.then(function() {
+        setTimeout(doPrefetch, 2000);
+      });
+    }
+  })();
+</script>
+
+<script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/static/js/service-worker.js', { scope: '/' })

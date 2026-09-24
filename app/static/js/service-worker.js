@@ -161,11 +161,35 @@ async function staleWhileRevalidateHTML(req) {
     if (res.ok) c.put(req, res.clone());
     return res;
   } catch (e) {
-    // Fallback chain: / → /offline → inline
+    // === Offline fallback chain ===
+    const url = new URL(req.url);
+    const path = url.pathname;
+
+    // 1. Search — fallback to base /search template
+    if (path === '/search' || path.startsWith('/search')) {
+      const baseSearch = await c.match('/search');
+      if (baseSearch) return baseSearch;
+    }
+
+    // 2. Machine detail — fallback to machines list
+    if (path.startsWith('/machine/')) {
+      const machines = await c.match('/machines');
+      if (machines) return machines;
+    }
+
+    // 3. Error detail — fallback to errors list
+    if (path.startsWith('/error/')) {
+      const errors = await c.match('/errors');
+      if (errors) return errors;
+    }
+
+    // 4. Generic — try root / offline
     const root = await c.match('/');
     if (root) return root;
     const offline = await c.match('/offline');
     if (offline) return offline;
+
+    // 5. Last resort — inline
     return new Response(
       '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline</title><style>body{font-family:system-ui;background:#09090b;color:#fafafa;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:24px;text-align:center}h1{font-size:20px;margin-bottom:12px;font-weight:700}p{color:#a1a1aa;font-size:14px}</style></head><body><div><h1>📡 Offline</h1><p>Internet ပြန်ရလာရင် ပြန် ကြည့်ပါ။</p></div></body></html>',
       { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
