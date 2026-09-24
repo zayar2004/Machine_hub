@@ -69,9 +69,23 @@ def create():
     shops = Shop.query.order_by(Shop.id).all()
 
     if request.method == "GET":
+        # Add machine count + codes preview per shop
+        shop_info = []
+        for s in shops:
+            machine_count = Machine.query.filter_by(shop_id=s.id).count()
+            machine_codes = [
+                m.machine_code for m in
+                Machine.query.filter_by(shop_id=s.id).order_by(Machine.machine_code).limit(10).all()
+            ]
+            shop_info.append({
+                "shop": s,
+                "machine_count": machine_count,
+                "machine_codes_preview": machine_codes,
+            })
         return render_template(
             "admin/updates/create.html",
             shops=shops,
+            shop_info=shop_info,
             version=PACKAGE_VERSION,
         )
 
