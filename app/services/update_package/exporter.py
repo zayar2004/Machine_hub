@@ -44,6 +44,7 @@ def create_package(
     error_images,
     machine_errors,
     users,
+    import_batches=None,
     output_path: Path,
     created_by: str = "admin",
     include_images: bool = True,
@@ -90,6 +91,12 @@ def create_package(
         [_serialize_row(img) for img in error_images],
         indent=2, ensure_ascii=False,
     ).encode("utf-8")
+
+    if import_batches:
+        data_files["import_batches.json"] = json.dumps(
+            [_serialize_row(ib) for ib in import_batches],
+            indent=2, ensure_ascii=False,
+        ).encode("utf-8")
 
     data_files["machine_errors.json"] = json.dumps(
         [{"machine_id": mid, "error_id": eid} for mid, eid in machine_errors],
@@ -145,6 +152,7 @@ def create_package(
             "error_images": len(error_images),
             "machine_errors": len(machine_errors),
             "users": len(users) if users else 0,
+            "import_batches": len(import_batches) if import_batches else 0,
         },
         "checksums": checksums,
     }

@@ -154,7 +154,7 @@ def apply_package(zip_path: Path, target_app, *, shop_ids=None):
         ImportError on failure (DB unchanged — rollback)
     """
     from app.extensions import db
-    from app.models import Shop, Machine, Error, ErrorImage, User
+    from app.models import Shop, Machine, Error, ErrorImage, User, ImportBatch
     from app.models import machine_errors as me_table
 
     info = validate_package(zip_path)
@@ -177,6 +177,8 @@ def apply_package(zip_path: Path, target_app, *, shop_ids=None):
             db.session.execute(me_table.delete())
             ErrorImage.query.delete()
             Error.query.delete()
+            # ImportBatch — must delete before machines (FK)
+            ImportBatch.query.delete()
             Machine.query.delete()
             # Keep current session user + admin
             # (Avoid deleting the logged-in user account)
@@ -210,6 +212,13 @@ def apply_package(zip_path: Path, target_app, *, shop_ids=None):
                 u = User(**_parse_row(row))
                 db.session.add(u)
             db.session.flush()
+
+            # ImportBatch (must be BEFORE machines — FK)
+            for row in data.get("import_batches", []):
+                ib = ImportBatch(**_parse_row(row))
+                db.session.add(ib)
+            db.session.flush()
+            print(f"  import_batches: {len(data.get('import_batches', []))} inserted")
 
             # Machines
             for row in data.get("machines", []):

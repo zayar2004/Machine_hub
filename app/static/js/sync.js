@@ -7,7 +7,7 @@
   var LOCAL_VERSION_KEY = 'local_version';
   var LAST_SYNC_KEY = 'last_sync';
   var MAX_ITERATIONS = 20;
-  var AUTO_SYNC_INTERVAL = 60 * 1000;  // 1 min (was 3 min)
+  var AUTO_SYNC_INTERVAL = 15 * 60 * 1000;  // 15 min (background check)
 
   var syncing = false;
 
@@ -382,6 +382,20 @@
     });
   }
 
+  function backgroundSync() {
+    // Check version only — data fetch only if changed
+    fetchVersion().then(function(v) {
+      var localVer = parseInt(localStorage.getItem(LOCAL_VERSION_KEY) || '0', 10);
+      var serverVer = (v && v.server_version) || 0;
+      if (serverVer > localVer) {
+        syncNow(true);  // Data changed — silent sync
+      }
+      // else skip — save battery/data
+    }).catch(function() {
+      // Silent fail
+    });
+  }
+
   function initSync() {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function () {
@@ -394,7 +408,17 @@
     }
 
     setTimeout(function () {
-      try { syncNow(false); } catch (e) {}
+      try {
+        var firstSync = localStorage.getItem('mh_first_sync');
+        if (!firstSync) {
+          // First open — full sync (visible)
+          syncNow(false);
+          localStorage.setItem('mh_first_sync', '1');
+        } else {
+          // Already synced — background check
+          backgroundSync();
+        }
+      } catch (e) {}
     }, 1500);
 
     window.addEventListener('online', function () {
@@ -408,7 +432,7 @@
 
     setInterval(function () {
       if (navigator.onLine) {
-        try { syncNow(true); } catch (e) {}
+        try { backgroundSync(); } catch (e) {}
       }
     }, AUTO_SYNC_INTERVAL);
 

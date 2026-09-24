@@ -8,7 +8,7 @@ from flask import (
 from flask_login import login_required, current_user
 
 from app.extensions import db
-from app.models import Shop, Machine, Error, ErrorImage, User
+from app.models import Shop, Machine, Error, ErrorImage, User, ImportBatch
 from app.models import machine_errors as me_table
 from app.services.update_package import create_package, PACKAGE_VERSION
 from app.utils.decorators import admin_required
@@ -133,6 +133,7 @@ def create():
             errors=errors,
             error_images=error_images,
             machine_errors=me_rows,
+            import_batches=ImportBatch.query.all(),
             users=users,
             output_path=out_path,
             created_by=current_user.username,
