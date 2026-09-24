@@ -112,6 +112,80 @@
   </div>
 </section>
 
+<!-- Sync & Offline -->
+<section class="detail-section">
+  <h2 class="detail-section-title">🔄 Sync & Offline အသုံးပြုနည်း</h2>
+
+  <div class="list">
+    <!-- Sync behavior -->
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg class="icon icon-sm"><use href="#i-refresh"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Sync ဘယ်လို အလုပ်လုပ်လဲ?</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          1. App ဖွင့်တာနဲ့ — <strong>first sync</strong> (auto) ဖြစ်တယ်<br>
+          2. Data အားလုံး ဖုန်းထဲ (IndexedDB) သိမ်းတယ်<br>
+          3. Internet မရှိလည်း သုံးလို့ရ<br>
+          4. Data အသစ် လိုရင် — <strong>"Sync Now"</strong> နှိပ်ပါ
+        </div>
+      </div>
+    </div>
+
+    <!-- Manual Sync -->
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--success-soft);color:var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg class="icon icon-sm"><use href="#i-download"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Data အသစ် လိုရင် Sync နှိပ်</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          Menu → <strong>Sync Status</strong> → <strong>Sync Now</strong> နှိပ်ပါ။<br>
+          Server ကနေ data အသစ်တွေ ဆွဲချပေးမယ်။
+        </div>
+        <a href="{{ url_for('user.sync') }}" class="btn btn-primary btn-sm" style="margin-top:8px;">
+          <svg class="icon icon-sm"><use href="#i-refresh"/></svg>
+          Sync Now
+        </a>
+      </div>
+    </div>
+
+    <!-- Offline tips -->
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--warning-soft);color:var(--warning);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg class="icon icon-sm"><use href="#i-wifi-off"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Offline မှာ ဘာတွေ ရလဲ?</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          ✅ Search (cached data)<br>
+          ✅ Machines & Errors ကြည့်နိုင်<br>
+          ✅ Photos (cached ရှိရင်)<br>
+          ✅ Favorites & History<br>
+          ❌ Data အသစ် (Sync လိုတယ်)
+        </div>
+      </div>
+    </div>
+
+    <!-- Sync status dot -->
+    <div class="list-item" style="cursor:default;align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg class="icon icon-sm"><use href="#i-info"/></svg>
+      </div>
+      <div class="list-item-main">
+        <div class="list-item-title">Sync Status အရောင်များ</div>
+        <div class="list-item-sub" style="white-space:normal;line-height:1.7;">
+          🟢 <strong>Green</strong> — Synced, ကောင်း<br>
+          🟡 <strong>Amber</strong> — Sync လိုတယ် (data ဟောင်း)<br>
+          ⚫ <strong>Gray</strong> — Offline<br>
+          🔴 <strong>Red</strong> — Sync error
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Links -->
 <section class="detail-section">
   <h2 class="detail-section-title">အခြား</h2>

@@ -396,6 +396,27 @@
     });
   }
 
+  function checkStaleSync() {
+    var lastSync = parseInt(localStorage.getItem(LAST_SYNC_KEY) || '0', 10);
+    var age = Date.now() - lastSync;
+    var ONE_DAY = 24 * 60 * 60 * 1000;
+
+    var dot = document.getElementById('sync-dot');
+    var label = document.getElementById('sync-label');
+    if (!dot || !label) return;
+
+    // Don't override syncing/error states
+    if (dot.classList.contains('syncing') || dot.classList.contains('error')) return;
+
+    // Offline → let setStatus handle
+    if (!navigator.onLine) return;
+
+    if (!lastSync || age > ONE_DAY) {
+      dot.className = 'status-dot stale';
+      label.textContent = 'Sync';
+    }
+  }
+
   function initSync() {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function () {
@@ -406,6 +427,10 @@
       bindTopbarChip();
       bindRetryButton();
     }
+
+    // Check stale sync status
+    checkStaleSync();
+    setInterval(checkStaleSync, 5 * 60 * 1000);
 
     setTimeout(function () {
       try {

@@ -1,0 +1,95 @@
+<!-- ==================== ONBOARDING MODAL ==================== -->
+<div class="mh-onboard" id="mh-onboard" aria-hidden="true">
+  <div class="mh-onboard-panel" role="dialog" aria-modal="true" aria-labelledby="mh-onboard-title">
+
+    <!-- Slide 1 — Welcome -->
+    <div class="mh-onboard-slide" data-slide="0">
+      <div class="mh-onboard-icon">👋</div>
+      <h2 class="mh-onboard-title" id="mh-onboard-title">
+        Machine Hub မှ ကြိုဆိုပါတယ်
+      </h2>
+      <p class="mh-onboard-text">
+        Arcade စက်တွေ ရှာဖွေဖို့၊ error fix တွေ ကြည့်ဖို့
+        အသုံးပြုနိုင်တဲ့ app တစ်ခု ဖြစ်ပါတယ်။
+      </p>
+      <div class="mh-onboard-dots">
+        <span class="mh-onboard-dot active"></span>
+        <span class="mh-onboard-dot"></span>
+        <span class="mh-onboard-dot"></span>
+      </div>
+      <button type="button" class="mh-onboard-btn" data-onboard-next>
+        ဆက်လုပ်မယ် →
+      </button>
+      <button type="button" class="mh-onboard-skip" data-onboard-skip>
+        ကျော်လိုက်မယ်
+      </button>
+    </div>
+
+    <!-- Slide 2 — Auto Sync -->
+    <div class="mh-onboard-slide" data-slide="1" hidden>
+      <div class="mh-onboard-icon">📥</div>
+      <h2 class="mh-onboard-title">Data အားလုံး ဖုန်းထဲ သိမ်း</h2>
+      <p class="mh-onboard-text">
+        App ဖွင့်တာနဲ့ Data အားလုံး (machines, errors, photos)
+        ကို ဖုန်းထဲ မှာ auto သိမ်းထားပါတယ်။
+      </p>
+      <ul class="mh-onboard-steps">
+        <li>
+          <span class="step-num">1</span>
+          <span>Internet ရှိရင် — auto sync</span>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <span>Data အားလုံး — IndexedDB မှာ သိမ်း</span>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <span>Internet မရှိလည်း — offline သုံးလို့ရ</span>
+        </li>
+      </ul>
+      <div class="mh-onboard-dots">
+        <span class="mh-onboard-dot"></span>
+        <span class="mh-onboard-dot active"></span>
+        <span class="mh-onboard-dot"></span>
+      </div>
+      <button type="button" class="mh-onboard-btn" data-onboard-next>
+        ဆက်လုပ်မယ် →
+      </button>
+      <button type="button" class="mh-onboard-skip" data-onboard-skip>
+        ကျော်လိုက်မယ်
+      </button>
+    </div>
+
+    <!-- Slide 3 — Manual Sync -->
+    <div class="mh-onboard-slide" data-slide="2" hidden>
+      <div class="mh-onboard-icon">🔄</div>
+      <h2 class="mh-onboard-title">Sync နှိပ်ဖို့ မမေ့ပါနဲ့</h2>
+      <p class="mh-onboard-text">
+        Data အသစ် လိုချင်တဲ့အခါ "Sync Now" ကို နှိပ်ပါ။
+      </p>
+      <ul class="mh-onboard-steps">
+        <li>
+          <span class="step-num">1</span>
+          <span>Topbar — 🟡 amber dot မြင်ရင် — sync လိုတယ်</span>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <span>Home page — "Sync Now" button နှိပ်</span>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <span>Menu → Sync Status → "Sync Now"</span>
+        </li>
+      </ul>
+      <div class="mh-onboard-dots">
+        <span class="mh-onboard-dot"></span>
+        <span class="mh-onboard-dot"></span>
+        <span class="mh-onboard-dot active"></span>
+      </div>
+      <button type="button" class="mh-onboard-btn" data-onboard-finish>
+        နားလည်ပါပြီ ✅
+      </button>
+    </div>
+
+  </div>
+</div>
