@@ -1,7 +1,7 @@
 """Auth forms."""
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Length, EqualTo, Regexp
+from wtforms.validators import DataRequired, Length, EqualTo, Regexp, ValidationError
 
 
 class LoginForm(FlaskForm):
